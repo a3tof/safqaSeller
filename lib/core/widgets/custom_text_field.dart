@@ -14,6 +14,7 @@ class CustomTextFormField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.enabled = true,
+    this.controller,
   });
 
   final String hintText;
@@ -23,15 +24,18 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final String? Function(String?)? validator;
   final bool enabled;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       enabled: enabled,
       textInputAction: TextInputAction.next,
       obscureText: obscureText,
       onSaved: onSaved,
-      validator: validator ??
+      validator:
+          validator ??
           (value) {
             if (value == null || value.isEmpty) {
               return S.of(context).fieldRequired;

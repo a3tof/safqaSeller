@@ -22,9 +22,41 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "birthdate": MessageLookupByLibrary.simpleMessage("تاريخ الميلاد"),
+        "confirmPassword":
+            MessageLookupByLibrary.simpleMessage("تأكيد كلمة المرور"),
+        "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+        "createPassword":
+            MessageLookupByLibrary.simpleMessage("إنشاء كلمة المرور"),
+        "createPasswordDescription": MessageLookupByLibrary.simpleMessage(
+            "أنشئ كلمة مرور جديدة لحسابك"),
+        "dontHaveAccount":
+            MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
+        "dontReceiveCode":
+            MessageLookupByLibrary.simpleMessage("لم تستلم الرمز؟"),
+        "email":
+            MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
+        "emailConfirmedSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "تم تأكيد البريد الإلكتروني بنجاح"),
+        "female": MessageLookupByLibrary.simpleMessage("أنثى"),
         "fieldRequired":
             MessageLookupByLibrary.simpleMessage("هذا الحقل مطلوب"),
+        "forgetPasswordDescription": MessageLookupByLibrary.simpleMessage(
+            "أدخل عنوان بريدك الإلكتروني وسنرسل لك رمزاً لإعادة تعيين كلمة المرور"),
+        "forgetPasswordTitle":
+            MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور"),
+        "forgotPassword":
+            MessageLookupByLibrary.simpleMessage("نسيت كلمة المرور؟"),
+        "fullName": MessageLookupByLibrary.simpleMessage("الاسم الكامل"),
+        "gender": MessageLookupByLibrary.simpleMessage("الجنس"),
+        "haveAccount":
+            MessageLookupByLibrary.simpleMessage("هل لديك حساب بالفعل؟"),
+        "invalidOtp":
+            MessageLookupByLibrary.simpleMessage("رمز التحقق غير صالح"),
         "logIn": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
+        "male": MessageLookupByLibrary.simpleMessage("ذكر"),
+        "newPassword":
+            MessageLookupByLibrary.simpleMessage("كلمة المرور الجديدة"),
         "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
             "صفقة تحوّل عملية المزادات الطويلة إلى تجربة رقمية سريعة ومضمونة، أدر مزاداتك من أي مكان."),
         "onBoardingSubtitle2": MessageLookupByLibrary.simpleMessage(
@@ -33,9 +65,144 @@ class MessageLookup extends MessageLookupByLibrary {
             "تصميم عصري ثنائي اللغة (عربي/إنجليزي) يتيح لك التنقل والمزايدة بسلاسة من أي جهاز."),
         "onBoardingTitle1":
             MessageLookupByLibrary.simpleMessage("توقف عن إضاعة الوقت!"),
-        "onBoardingTitle2": MessageLookupByLibrary.simpleMessage("مزايدة ذكية"),
+        "onBoardingTitle2":
+            MessageLookupByLibrary.simpleMessage("مزايدة ذكية"),
         "onBoardingTitle3":
             MessageLookupByLibrary.simpleMessage("تجربة مصمّمة لك"),
-        "signUp": MessageLookupByLibrary.simpleMessage("إنشاء حساب")
+        "or": MessageLookupByLibrary.simpleMessage("أو"),
+        "otpExpired": MessageLookupByLibrary.simpleMessage(
+            "انتهت صلاحية رمز التحقق"),
+        "otpResentSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "تم إعادة إرسال رمز التحقق بنجاح"),
+        "otpSentToEmail": MessageLookupByLibrary.simpleMessage(
+            "تم إرسال رمز التحقق إلى بريدك الإلكتروني"),
+        "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
+        "passwordResetSuccessfully": MessageLookupByLibrary.simpleMessage(
+            "تم إعادة تعيين كلمة المرور بنجاح"),
+        "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
+            "كلمتا المرور غير متطابقتين"),
+        "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
+        "resend": MessageLookupByLibrary.simpleMessage("إعادة الإرسال"),
+        "sendCode": MessageLookupByLibrary.simpleMessage("إرسال الرمز"),
+        "signIn": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
+        "signInWithApple": MessageLookupByLibrary.simpleMessage(
+            "تسجيل الدخول بـ Apple"),
+        "signInWithFacebook": MessageLookupByLibrary.simpleMessage(
+            "تسجيل الدخول بـ Facebook"),
+        "signInWithGoogle": MessageLookupByLibrary.simpleMessage(
+            "تسجيل الدخول بـ Google"),
+        "signUp": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+        "termsAndConditions":
+            MessageLookupByLibrary.simpleMessage("الشروط والأحكام"),
+        "termsAndConditionsPrefix":
+            MessageLookupByLibrary.simpleMessage("بالتسجيل، أنت توافق على"),
+        "verificationCode":
+            MessageLookupByLibrary.simpleMessage("رمز التحقق"),
+        "verificationCodeDescription": MessageLookupByLibrary.simpleMessage(
+            "أدخل رمز التحقق المرسل إلى بريدك الإلكتروني"),
+        "verify": MessageLookupByLibrary.simpleMessage("تحقق"),
+        "termsAccountUsageTitle":
+            MessageLookupByLibrary.simpleMessage("استخدام الحساب"),
+        "termsAccurateInfo": MessageLookupByLibrary.simpleMessage(
+            "يُلزَم المستخدمون بتقديم معلومات دقيقة وصادقة عند استخدام المنصة."),
+        "termsAuctionMgmtTitle":
+            MessageLookupByLibrary.simpleMessage("إدارة المزادات"),
+        "termsAuctionRules": MessageLookupByLibrary.simpleMessage(
+            "يجب على البائعين الالتزام بجميع قواعد مزادات المنصة، بما في ذلك إرشادات الحد الأدنى للأسعار."),
+        "termsBiddingRulesTitle":
+            MessageLookupByLibrary.simpleMessage("قواعد المزايدة"),
+        "termsBindingBids": MessageLookupByLibrary.simpleMessage(
+            "جميع العروض المقدمة على المنصة ملزمة قانونيًا ولا يمكن سحبها."),
+        "termsBuyerAge": MessageLookupByLibrary.simpleMessage(
+            "يجب أن يكون عمر المشتري 18 عامًا على الأقل لإنشاء حساب والمشاركة في المزادات."),
+        "termsBuyerAppTitle":
+            MessageLookupByLibrary.simpleMessage("تطبيق المشتري"),
+        "termsBuyerCredentials": MessageLookupByLibrary.simpleMessage(
+            "يتحمل المشترون مسؤولية الحفاظ على سرية بيانات اعتماد حساباتهم."),
+        "termsBuyerMultipleAccounts": MessageLookupByLibrary.simpleMessage(
+            "يُحظر تمامًا إنشاء حسابات متعددة لنفس الشخص."),
+        "termsChangesTitle":
+            MessageLookupByLibrary.simpleMessage("التغييرات على الشروط"),
+        "termsContinuedUse": MessageLookupByLibrary.simpleMessage(
+            "يُعد الاستمرار في استخدام المنصة بعد أي تغييرات قبولًا للشروط المحدثة."),
+        "termsDataCollected": MessageLookupByLibrary.simpleMessage(
+            "تجمع صفقة البيانات الشخصية بما في ذلك الاسم والبريد الإلكتروني ورقم الهاتف وسجل المعاملات."),
+        "termsDataProtected": MessageLookupByLibrary.simpleMessage(
+            "يتم تخزين جميع البيانات المجمعة بأمان وحمايتها من الوصول غير المصرح به."),
+        "termsDeliveryInfo": MessageLookupByLibrary.simpleMessage(
+            "يجب توفير معلومات توصيل دقيقة لضمان سلامة الشحنات وتوصيلها في الوقت المناسب."),
+        "termsDeliveryTitle":
+            MessageLookupByLibrary.simpleMessage("التسليم"),
+        "termsDisputeDecisions": MessageLookupByLibrary.simpleMessage(
+            "سيراجع فريق تسوية النزاعات في صفقة جميع الأدلة المقدمة ويتخذ القرار النهائي."),
+        "termsDisputesTitle":
+            MessageLookupByLibrary.simpleMessage("النزاعات"),
+        "termsDowntime": MessageLookupByLibrary.simpleMessage(
+            "قد تعاني المنصة من توقف مجدول أو غير مجدول لأغراض الصيانة."),
+        "termsFailureToDeliver": MessageLookupByLibrary.simpleMessage(
+            "قد يؤدي الإخفاق في تسليم المنتجات إلى تعليق الحساب وفرض غرامات مالية."),
+        "termsFeesTitle": MessageLookupByLibrary.simpleMessage("الرسوم"),
+        "termsHighestBidWins": MessageLookupByLibrary.simpleMessage(
+            "يفوز بالعنصر أعلى عرض سعر عند إغلاق المزاد."),
+        "termsHonestDescriptions": MessageLookupByLibrary.simpleMessage(
+            "يجب على البائعين تقديم أوصاف صادقة ودقيقة لجميع العناصر المدرجة للمزاد."),
+        "termsIntermediary": MessageLookupByLibrary.simpleMessage(
+            "تعمل صفقة كوسيط فقط بين المشترين والبائعين ولا تضمن نتائج المعاملات."),
+        "termsLiabilityTitle":
+            MessageLookupByLibrary.simpleMessage("المسؤولية"),
+        "termsManipulateBids": MessageLookupByLibrary.simpleMessage(
+            "يُحظر تمامًا أي محاولة للتلاعب في العروض أو التواطؤ مع مزايدين آخرين."),
+        "termsMonitored": MessageLookupByLibrary.simpleMessage(
+            "تتم مراقبة جميع الأنشطة على المنصة لضمان الامتثال والأمان."),
+        "termsNoModifyActive": MessageLookupByLibrary.simpleMessage(
+            "لا يمكن تعديل قوائم المزادات النشطة بعد بدء عملية المزايدة."),
+        "termsNoShareData": MessageLookupByLibrary.simpleMessage(
+            "لا تشارك صفقة البيانات الشخصية للمستخدمين مع أطراف ثالثة دون موافصة صريحة من المستخدم."),
+        "termsNotifGenerated": MessageLookupByLibrary.simpleMessage(
+            "تُنشأ الإشعارات تلقائيًا للأحداث الرئيسية كالعروض الجديدة ونهايات المزادات والمدفوعات."),
+        "termsNotifInformational": MessageLookupByLibrary.simpleMessage(
+            "الإشعارات لأغراض إعلامية فقط ولا تشكل نصيحة قانونية أو مالية."),
+        "termsNotifPolicyTitle":
+            MessageLookupByLibrary.simpleMessage("سياسة الإشعارات"),
+        "termsNotResponsible": MessageLookupByLibrary.simpleMessage(
+            "لا تتحمل صفقة المسؤولية عن الخسائر الناجمة عن أخطاء المستخدمين أو إخفاقات الخدمات الخارجية."),
+        "termsPaymentsTitle":
+            MessageLookupByLibrary.simpleMessage("المدفوعات"),
+        "termsPlatformCompliance": MessageLookupByLibrary.simpleMessage(
+            "يجب على جميع المستخدمين الالتزام بقواعد وأنظمة المنصة في جميع الأوقات."),
+        "termsPlatformFees": MessageLookupByLibrary.simpleMessage(
+            "تفرض صفقة رسومًا على المنصة على جميع معاملات المزاد المكتملة بنجاح."),
+        "termsPrivacyDataTitle":
+            MessageLookupByLibrary.simpleMessage("الخصوصية والبيانات"),
+        "termsProxyBiddingRules": MessageLookupByLibrary.simpleMessage(
+            "تتيح المزايدة التلقائية للنظام تقديم العروض نيابةً عنك حتى حدك الأقصى."),
+        "termsRaiseDisputes": MessageLookupByLibrary.simpleMessage(
+            "يمكن للمشترين رفع نزاع خلال 48 ساعة من استلام منتج لا يطابق الوصف."),
+        "termsRefundsPolicy": MessageLookupByLibrary.simpleMessage(
+            "تتم معالجة المبالغ المستردة في غضون 7 أيام عمل بعد حل نزاع صالح لصالح المشتري."),
+        "termsReviewNotif": MessageLookupByLibrary.simpleMessage(
+            "يتحمل المستخدمون مسؤولية مراجعة جميع الإشعارات واتخاذ الإجراء المناسب في الوقت المناسب."),
+        "termsSecurityDeposits": MessageLookupByLibrary.simpleMessage(
+            "قد يُطلب تأمين مالي لبعض المزادات عالية القيمة."),
+        "termsSellerAccuracy": MessageLookupByLibrary.simpleMessage(
+            "يتحمل البائعون مسؤولية دقة واكتمال قوائم منتجاتهم."),
+        "termsSellerApproval": MessageLookupByLibrary.simpleMessage(
+            "تخضع حسابات البائعين لموافقة فريق صفقة قبل تفعيلها."),
+        "termsSellerAppTitle":
+            MessageLookupByLibrary.simpleMessage("تطبيق البائع"),
+        "termsSellerRegTitle":
+            MessageLookupByLibrary.simpleMessage("تسجيل البائع"),
+        "termsSellerVerification": MessageLookupByLibrary.simpleMessage(
+            "يجب على جميع البائعين إكمال التحقق من الهوية قبل إدراج المنتجات للمزاد."),
+        "termsSuspendAccounts": MessageLookupByLibrary.simpleMessage(
+            "تحتفظ صفقة بالحق في تعليق أو إنهاء الحسابات التي تنتهك هذه الشروط."),
+        "termsTimelyDelivery": MessageLookupByLibrary.simpleMessage(
+            "يلتزم البائعون بتسليم العناصر للمشترين الفائزين في الإطار الزمني المتفق عليه."),
+        "termsTrackEarnings": MessageLookupByLibrary.simpleMessage(
+            "يمكن للبائعين تتبع أرباحهم وخصومات الرسوم في الوقت الفعلي من خلال لوحة تحكم البائع."),
+        "termsUpdatedAnytime": MessageLookupByLibrary.simpleMessage(
+            "تحتفظ صفقة بالحق في تحديث هذه الشروط والأحكام في أي وقت دون إشعار مسبق."),
+        "termsWalletBalance": MessageLookupByLibrary.simpleMessage(
+            "يجب على المشترين الحفاظ على رصيد محفظة كافٍ لتغطية عروضهم ومشترياتهم.")
       };
 }

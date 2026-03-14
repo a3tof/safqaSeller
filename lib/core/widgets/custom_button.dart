@@ -3,7 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key, required this.onPressed, required this.text, required this.textColor, required this.backgroundColor});
+  const CustomButton({
+    super.key,
+    required this.onPressed,
+    required this.text,
+    required this.textColor,
+    required this.backgroundColor,
+  });
 
   final VoidCallback onPressed;
   final String text;
@@ -13,20 +19,18 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 54.h,
+      height: 54.sp,
       child: TextButton(
         style: TextButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(16.sp),
           ),
           backgroundColor: backgroundColor,
         ),
         onPressed: onPressed,
         child: Text(
           text,
-          style: TextStyles.semiBold19(context).copyWith(
-            color: textColor,
-          ),
+          style: TextStyles.semiBold19(context).copyWith(color: textColor),
         ),
       ),
     );

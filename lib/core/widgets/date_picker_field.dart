@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
-import 'package:safqaseller/generated/l10n.dart';
 
 class DatePickerField extends StatefulWidget {
   const DatePickerField({
@@ -72,7 +71,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
       onSaved: widget.onSaved,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return S.of(context).fieldRequired;
+          return 'هذا الحقل مطلوب';
         }
         return null;
       },

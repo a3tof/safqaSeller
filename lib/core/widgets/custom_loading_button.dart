@@ -9,7 +9,7 @@ class CustomLoadingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 54.h,
+      height: 54.sp,
       child: TextButton(
         style: TextButton.styleFrom(
           backgroundColor: AppColors.lightPrimaryColor,

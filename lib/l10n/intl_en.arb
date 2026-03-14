@@ -34,5 +34,365 @@
   "onBoardingSubtitle3": "A modern, bilingual (Arabic/English) design that allows you to navigate and bid seamlessly from any device.",
   "@onBoardingSubtitle3": {
     "description": "Onboarding page 3 subtitle"
+  },
+  "signIn": "Sign In",
+  "@signIn": {
+    "description": "Sign in button label"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {
+    "description": "Forgot password link label"
+  },
+  "signInWithGoogle": "Sign in with Google",
+  "@signInWithGoogle": {
+    "description": "Sign in with Google button label"
+  },
+  "signInWithApple": "Sign in with Apple",
+  "@signInWithApple": {
+    "description": "Sign in with Apple button label"
+  },
+  "signInWithFacebook": "Sign in with Facebook",
+  "@signInWithFacebook": {
+    "description": "Sign in with Facebook button label"
+  },
+  "fullName": "Full Name",
+  "@fullName": {
+    "description": "Full name field label"
+  },
+  "phoneNumber": "Phone Number",
+  "@phoneNumber": {
+    "description": "Phone number field label"
+  },
+  "birthdate": "Birthdate",
+  "@birthdate": {
+    "description": "Birthdate field label"
+  },
+  "gender": "Gender",
+  "@gender": {
+    "description": "Gender field label"
+  },
+  "male": "Male",
+  "@male": {
+    "description": "Male gender option"
+  },
+  "female": "Female",
+  "@female": {
+    "description": "Female gender option"
+  },
+  "otpSentToEmail": "OTP sent to your email",
+  "@otpSentToEmail": {
+    "description": "Message shown when OTP is sent to email"
+  },
+  "termsAndConditionsPrefix": "By signing up, you agree to our",
+  "@termsAndConditionsPrefix": {
+    "description": "Prefix text before terms and conditions link"
+  },
+  "termsAndConditions": "Terms and Conditions",
+  "@termsAndConditions": {
+    "description": "Terms and conditions link label"
+  },
+  "or": "Or",
+  "@or": {
+    "description": "Divider text between sign in options"
+  },
+  "haveAccount": "Already have an account?",
+  "@haveAccount": {
+    "description": "Text shown when user already has an account"
+  },
+  "dontHaveAccount": "Don't have an account?",
+  "@dontHaveAccount": {
+    "description": "Text shown when user does not have an account"
+  },
+  "createAccount": "Create Account",
+  "@createAccount": {
+    "description": "Create account button label"
+  },
+  "verificationCode": "Verification Code",
+  "@verificationCode": {
+    "description": "Verification code screen title"
+  },
+  "verificationCodeDescription": "Enter the verification code sent to your email",
+  "@verificationCodeDescription": {
+    "description": "Verification code screen description"
+  },
+  "emailConfirmedSuccessfully": "Email confirmed successfully",
+  "@emailConfirmedSuccessfully": {
+    "description": "Message shown when email is confirmed successfully"
+  },
+  "otpResentSuccessfully": "OTP resent successfully",
+  "@otpResentSuccessfully": {
+    "description": "Message shown when OTP is resent successfully"
+  },
+  "otpExpired": "OTP has expired",
+  "@otpExpired": {
+    "description": "Message shown when OTP has expired"
+  },
+  "invalidOtp": "Invalid OTP",
+  "@invalidOtp": {
+    "description": "Message shown when OTP is invalid"
+  },
+  "verify": "Verify",
+  "@verify": {
+    "description": "Verify button label"
+  },
+  "dontReceiveCode": "Didn't receive a code?",
+  "@dontReceiveCode": {
+    "description": "Text shown when user did not receive verification code"
+  },
+  "resend": "Resend",
+  "@resend": {
+    "description": "Resend button label"
+  },
+  "forgetPasswordTitle": "Forgot Password",
+  "@forgetPasswordTitle": {
+    "description": "Forgot password screen title"
+  },
+  "forgetPasswordDescription": "Enter your email address and we'll send you a code to reset your password",
+  "@forgetPasswordDescription": {
+    "description": "Forgot password screen description"
+  },
+  "sendCode": "Send Code",
+  "@sendCode": {
+    "description": "Send code button label"
+  },
+  "createPassword": "Create Password",
+  "@createPassword": {
+    "description": "Create password screen title and button label"
+  },
+  "createPasswordDescription": "Create a new password for your account",
+  "@createPasswordDescription": {
+    "description": "Create password screen description"
+  },
+  "newPassword": "New Password",
+  "@newPassword": {
+    "description": "New password field label"
+  },
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  "passwordResetSuccessfully": "Password reset successfully",
+  "@passwordResetSuccessfully": {
+    "description": "Message shown when password is reset successfully"
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Validation message when passwords do not match"
+  },
+  "termsPlatformCompliance": "All users must comply with the platform's rules and regulations at all times.",
+  "@termsPlatformCompliance": {
+    "description": "Terms: platform compliance paragraph"
+  },
+  "termsAccurateInfo": "Users are required to provide accurate and truthful information when using the platform.",
+  "@termsAccurateInfo": {
+    "description": "Terms: accurate info paragraph"
+  },
+  "termsSuspendAccounts": "Safqa reserves the right to suspend or terminate accounts that violate these terms.",
+  "@termsSuspendAccounts": {
+    "description": "Terms: suspend accounts paragraph"
+  },
+  "termsMonitored": "All activities on the platform are monitored to ensure compliance and security.",
+  "@termsMonitored": {
+    "description": "Terms: monitored paragraph"
+  },
+  "termsBuyerAppTitle": "Buyer Application",
+  "@termsBuyerAppTitle": {
+    "description": "Terms: buyer app section title"
+  },
+  "termsAccountUsageTitle": "Account Usage",
+  "@termsAccountUsageTitle": {
+    "description": "Terms: account usage section title"
+  },
+  "termsBuyerAge": "Buyers must be at least 18 years of age to create an account and participate in auctions.",
+  "@termsBuyerAge": {
+    "description": "Terms: buyer age paragraph"
+  },
+  "termsBuyerCredentials": "Buyers are responsible for maintaining the confidentiality of their account credentials.",
+  "@termsBuyerCredentials": {
+    "description": "Terms: buyer credentials paragraph"
+  },
+  "termsBuyerMultipleAccounts": "Creating multiple accounts for the same individual is strictly prohibited.",
+  "@termsBuyerMultipleAccounts": {
+    "description": "Terms: buyer multiple accounts paragraph"
+  },
+  "termsBiddingRulesTitle": "Bidding Rules",
+  "@termsBiddingRulesTitle": {
+    "description": "Terms: bidding rules section title"
+  },
+  "termsBindingBids": "All bids placed on the platform are legally binding and cannot be retracted.",
+  "@termsBindingBids": {
+    "description": "Terms: binding bids paragraph"
+  },
+  "termsHighestBidWins": "The highest bid at the close of the auction wins the item.",
+  "@termsHighestBidWins": {
+    "description": "Terms: highest bid wins paragraph"
+  },
+  "termsProxyBiddingRules": "Proxy bidding allows the system to automatically bid on your behalf up to your maximum limit.",
+  "@termsProxyBiddingRules": {
+    "description": "Terms: proxy bidding rules paragraph"
+  },
+  "termsManipulateBids": "Any attempt to manipulate bids or collude with other bidders is strictly prohibited.",
+  "@termsManipulateBids": {
+    "description": "Terms: manipulate bids paragraph"
+  },
+  "termsPaymentsTitle": "Payments",
+  "@termsPaymentsTitle": {
+    "description": "Terms: payments section title"
+  },
+  "termsWalletBalance": "Buyers must maintain sufficient wallet balance to cover their bids and purchases.",
+  "@termsWalletBalance": {
+    "description": "Terms: wallet balance paragraph"
+  },
+  "termsSecurityDeposits": "Security deposits may be required for certain high-value auctions.",
+  "@termsSecurityDeposits": {
+    "description": "Terms: security deposits paragraph"
+  },
+  "termsRefundsPolicy": "Refunds are processed within 7 business days after a valid dispute is resolved in the buyer's favor.",
+  "@termsRefundsPolicy": {
+    "description": "Terms: refunds policy paragraph"
+  },
+  "termsDisputesTitle": "Disputes",
+  "@termsDisputesTitle": {
+    "description": "Terms: disputes section title"
+  },
+  "termsRaiseDisputes": "Buyers may raise a dispute within 48 hours of receiving an item that does not match the description.",
+  "@termsRaiseDisputes": {
+    "description": "Terms: raise disputes paragraph"
+  },
+  "termsDisputeDecisions": "Safqa's dispute resolution team will review all submitted evidence and make a final decision.",
+  "@termsDisputeDecisions": {
+    "description": "Terms: dispute decisions paragraph"
+  },
+  "termsSellerAppTitle": "Seller Application",
+  "@termsSellerAppTitle": {
+    "description": "Terms: seller app section title"
+  },
+  "termsSellerRegTitle": "Seller Registration",
+  "@termsSellerRegTitle": {
+    "description": "Terms: seller registration section title"
+  },
+  "termsSellerVerification": "All sellers must complete identity verification before listing items for auction.",
+  "@termsSellerVerification": {
+    "description": "Terms: seller verification paragraph"
+  },
+  "termsSellerApproval": "Seller accounts are subject to approval by the Safqa team before becoming active.",
+  "@termsSellerApproval": {
+    "description": "Terms: seller approval paragraph"
+  },
+  "termsSellerAccuracy": "Sellers are responsible for the accuracy and completeness of their product listings.",
+  "@termsSellerAccuracy": {
+    "description": "Terms: seller accuracy paragraph"
+  },
+  "termsAuctionMgmtTitle": "Auction Management",
+  "@termsAuctionMgmtTitle": {
+    "description": "Terms: auction management section title"
+  },
+  "termsHonestDescriptions": "Sellers must provide honest and accurate descriptions of all items listed for auction.",
+  "@termsHonestDescriptions": {
+    "description": "Terms: honest descriptions paragraph"
+  },
+  "termsAuctionRules": "Sellers must adhere to all platform auction rules, including minimum pricing guidelines.",
+  "@termsAuctionRules": {
+    "description": "Terms: auction rules paragraph"
+  },
+  "termsNoModifyActive": "Active auction listings cannot be modified once bidding has commenced.",
+  "@termsNoModifyActive": {
+    "description": "Terms: no modify active paragraph"
+  },
+  "termsDeliveryTitle": "Delivery",
+  "@termsDeliveryTitle": {
+    "description": "Terms: delivery section title"
+  },
+  "termsTimelyDelivery": "Sellers are obligated to deliver items to winning buyers within the agreed timeframe.",
+  "@termsTimelyDelivery": {
+    "description": "Terms: timely delivery paragraph"
+  },
+  "termsDeliveryInfo": "Accurate delivery information must be provided to ensure smooth and timely shipments.",
+  "@termsDeliveryInfo": {
+    "description": "Terms: delivery info paragraph"
+  },
+  "termsFailureToDeliver": "Failure to deliver items may result in account suspension and financial penalties.",
+  "@termsFailureToDeliver": {
+    "description": "Terms: failure to deliver paragraph"
+  },
+  "termsFeesTitle": "Fees",
+  "@termsFeesTitle": {
+    "description": "Terms: fees section title"
+  },
+  "termsPlatformFees": "Safqa charges a platform fee on all successfully completed auction transactions.",
+  "@termsPlatformFees": {
+    "description": "Terms: platform fees paragraph"
+  },
+  "termsTrackEarnings": "Sellers can track their earnings and fee deductions in real time through the seller dashboard.",
+  "@termsTrackEarnings": {
+    "description": "Terms: track earnings paragraph"
+  },
+  "termsNotifPolicyTitle": "Notification Policy",
+  "@termsNotifPolicyTitle": {
+    "description": "Terms: notification policy section title"
+  },
+  "termsNotifGenerated": "Notifications are automatically generated for key events such as new bids, auction endings, and payments.",
+  "@termsNotifGenerated": {
+    "description": "Terms: notifications generated paragraph"
+  },
+  "termsNotifInformational": "Notifications are for informational purposes only and do not constitute legal or financial advice.",
+  "@termsNotifInformational": {
+    "description": "Terms: notifications informational paragraph"
+  },
+  "termsReviewNotif": "Users are responsible for reviewing all notifications and taking appropriate action in a timely manner.",
+  "@termsReviewNotif": {
+    "description": "Terms: review notifications paragraph"
+  },
+  "termsPrivacyDataTitle": "Privacy & Data",
+  "@termsPrivacyDataTitle": {
+    "description": "Terms: privacy and data section title"
+  },
+  "termsDataCollected": "Safqa collects personal data including name, email, phone number, and transaction history.",
+  "@termsDataCollected": {
+    "description": "Terms: data collected paragraph"
+  },
+  "termsDataProtected": "All collected data is stored securely and protected against unauthorized access.",
+  "@termsDataProtected": {
+    "description": "Terms: data protected paragraph"
+  },
+  "termsNoShareData": "Safqa does not share personal user data with third parties without explicit user consent.",
+  "@termsNoShareData": {
+    "description": "Terms: no share data paragraph"
+  },
+  "termsLiabilityTitle": "Liability",
+  "@termsLiabilityTitle": {
+    "description": "Terms: liability section title"
+  },
+  "termsNotResponsible": "Safqa is not responsible for losses arising from user errors or third-party service failures.",
+  "@termsNotResponsible": {
+    "description": "Terms: not responsible paragraph"
+  },
+  "termsDowntime": "The platform may experience scheduled or unscheduled downtime for maintenance purposes.",
+  "@termsDowntime": {
+    "description": "Terms: downtime paragraph"
+  },
+  "termsIntermediary": "Safqa acts solely as an intermediary between buyers and sellers and does not guarantee transaction outcomes.",
+  "@termsIntermediary": {
+    "description": "Terms: intermediary paragraph"
+  },
+  "termsChangesTitle": "Changes to Terms",
+  "@termsChangesTitle": {
+    "description": "Terms: changes to terms section title"
+  },
+  "termsUpdatedAnytime": "Safqa reserves the right to update these terms and conditions at any time without prior notice.",
+  "@termsUpdatedAnytime": {
+    "description": "Terms: updated anytime paragraph"
+  },
+  "termsContinuedUse": "Continued use of the platform after any changes constitutes acceptance of the updated terms.",
+  "@termsContinuedUse": {
+    "description": "Terms: continued use paragraph"
   }
 }

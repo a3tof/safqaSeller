@@ -34,5 +34,365 @@
   "onBoardingSubtitle3": "تصميم عصري ثنائي اللغة (عربي/إنجليزي) يتيح لك التنقل والمزايدة بسلاسة من أي جهاز.",
   "@onBoardingSubtitle3": {
     "description": "Onboarding page 3 subtitle"
+  },
+  "signIn": "تسجيل الدخول",
+  "@signIn": {
+    "description": "Sign in button label"
+  },
+  "email": "البريد الإلكتروني",
+  "@email": {
+    "description": "Email field label"
+  },
+  "password": "كلمة المرور",
+  "@password": {
+    "description": "Password field label"
+  },
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "@forgotPassword": {
+    "description": "Forgot password link label"
+  },
+  "signInWithGoogle": "تسجيل الدخول بـ Google",
+  "@signInWithGoogle": {
+    "description": "Sign in with Google button label"
+  },
+  "signInWithApple": "تسجيل الدخول بـ Apple",
+  "@signInWithApple": {
+    "description": "Sign in with Apple button label"
+  },
+  "signInWithFacebook": "تسجيل الدخول بـ Facebook",
+  "@signInWithFacebook": {
+    "description": "Sign in with Facebook button label"
+  },
+  "fullName": "الاسم الكامل",
+  "@fullName": {
+    "description": "Full name field label"
+  },
+  "phoneNumber": "رقم الهاتف",
+  "@phoneNumber": {
+    "description": "Phone number field label"
+  },
+  "birthdate": "تاريخ الميلاد",
+  "@birthdate": {
+    "description": "Birthdate field label"
+  },
+  "gender": "الجنس",
+  "@gender": {
+    "description": "Gender field label"
+  },
+  "male": "ذكر",
+  "@male": {
+    "description": "Male gender option"
+  },
+  "female": "أنثى",
+  "@female": {
+    "description": "Female gender option"
+  },
+  "otpSentToEmail": "تم إرسال رمز التحقق إلى بريدك الإلكتروني",
+  "@otpSentToEmail": {
+    "description": "Message shown when OTP is sent to email"
+  },
+  "termsAndConditionsPrefix": "بالتسجيل، أنت توافق على",
+  "@termsAndConditionsPrefix": {
+    "description": "Prefix text before terms and conditions link"
+  },
+  "termsAndConditions": "الشروط والأحكام",
+  "@termsAndConditions": {
+    "description": "Terms and conditions link label"
+  },
+  "or": "أو",
+  "@or": {
+    "description": "Divider text between sign in options"
+  },
+  "haveAccount": "هل لديك حساب بالفعل؟",
+  "@haveAccount": {
+    "description": "Text shown when user already has an account"
+  },
+  "dontHaveAccount": "ليس لديك حساب؟",
+  "@dontHaveAccount": {
+    "description": "Text shown when user does not have an account"
+  },
+  "createAccount": "إنشاء حساب",
+  "@createAccount": {
+    "description": "Create account button label"
+  },
+  "verificationCode": "رمز التحقق",
+  "@verificationCode": {
+    "description": "Verification code screen title"
+  },
+  "verificationCodeDescription": "أدخل رمز التحقق المرسل إلى بريدك الإلكتروني",
+  "@verificationCodeDescription": {
+    "description": "Verification code screen description"
+  },
+  "emailConfirmedSuccessfully": "تم تأكيد البريد الإلكتروني بنجاح",
+  "@emailConfirmedSuccessfully": {
+    "description": "Message shown when email is confirmed successfully"
+  },
+  "otpResentSuccessfully": "تم إعادة إرسال رمز التحقق بنجاح",
+  "@otpResentSuccessfully": {
+    "description": "Message shown when OTP is resent successfully"
+  },
+  "otpExpired": "انتهت صلاحية رمز التحقق",
+  "@otpExpired": {
+    "description": "Message shown when OTP has expired"
+  },
+  "invalidOtp": "رمز التحقق غير صالح",
+  "@invalidOtp": {
+    "description": "Message shown when OTP is invalid"
+  },
+  "verify": "تحقق",
+  "@verify": {
+    "description": "Verify button label"
+  },
+  "dontReceiveCode": "لم تستلم الرمز؟",
+  "@dontReceiveCode": {
+    "description": "Text shown when user did not receive verification code"
+  },
+  "resend": "إعادة الإرسال",
+  "@resend": {
+    "description": "Resend button label"
+  },
+  "forgetPasswordTitle": "نسيت كلمة المرور",
+  "@forgetPasswordTitle": {
+    "description": "Forgot password screen title"
+  },
+  "forgetPasswordDescription": "أدخل عنوان بريدك الإلكتروني وسنرسل لك رمزاً لإعادة تعيين كلمة المرور",
+  "@forgetPasswordDescription": {
+    "description": "Forgot password screen description"
+  },
+  "sendCode": "إرسال الرمز",
+  "@sendCode": {
+    "description": "Send code button label"
+  },
+  "createPassword": "إنشاء كلمة المرور",
+  "@createPassword": {
+    "description": "Create password screen title and button label"
+  },
+  "createPasswordDescription": "أنشئ كلمة مرور جديدة لحسابك",
+  "@createPasswordDescription": {
+    "description": "Create password screen description"
+  },
+  "newPassword": "كلمة المرور الجديدة",
+  "@newPassword": {
+    "description": "New password field label"
+  },
+  "confirmPassword": "تأكيد كلمة المرور",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  "passwordResetSuccessfully": "تم إعادة تعيين كلمة المرور بنجاح",
+  "@passwordResetSuccessfully": {
+    "description": "Message shown when password is reset successfully"
+  },
+  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
+  "@passwordsDoNotMatch": {
+    "description": "Validation message when passwords do not match"
+  },
+  "termsPlatformCompliance": "يجب على جميع المستخدمين الالتزام بقواعد وأنظمة المنصة في جميع الأوقات.",
+  "@termsPlatformCompliance": {
+    "description": "Terms: platform compliance paragraph"
+  },
+  "termsAccurateInfo": "يُلزَم المستخدمون بتقديم معلومات دقيقة وصادقة عند استخدام المنصة.",
+  "@termsAccurateInfo": {
+    "description": "Terms: accurate info paragraph"
+  },
+  "termsSuspendAccounts": "تحتفظ صفقة بالحق في تعليق أو إنهاء الحسابات التي تنتهك هذه الشروط.",
+  "@termsSuspendAccounts": {
+    "description": "Terms: suspend accounts paragraph"
+  },
+  "termsMonitored": "تتم مراقبة جميع الأنشطة على المنصة لضمان الامتثال والأمان.",
+  "@termsMonitored": {
+    "description": "Terms: monitored paragraph"
+  },
+  "termsBuyerAppTitle": "تطبيق المشتري",
+  "@termsBuyerAppTitle": {
+    "description": "Terms: buyer app section title"
+  },
+  "termsAccountUsageTitle": "استخدام الحساب",
+  "@termsAccountUsageTitle": {
+    "description": "Terms: account usage section title"
+  },
+  "termsBuyerAge": "يجب أن يكون عمر المشتري 18 عامًا على الأقل لإنشاء حساب والمشاركة في المزادات.",
+  "@termsBuyerAge": {
+    "description": "Terms: buyer age paragraph"
+  },
+  "termsBuyerCredentials": "يتحمل المشترون مسؤولية الحفاظ على سرية بيانات اعتماد حساباتهم.",
+  "@termsBuyerCredentials": {
+    "description": "Terms: buyer credentials paragraph"
+  },
+  "termsBuyerMultipleAccounts": "يُحظر تمامًا إنشاء حسابات متعددة لنفس الشخص.",
+  "@termsBuyerMultipleAccounts": {
+    "description": "Terms: buyer multiple accounts paragraph"
+  },
+  "termsBiddingRulesTitle": "قواعد المزايدة",
+  "@termsBiddingRulesTitle": {
+    "description": "Terms: bidding rules section title"
+  },
+  "termsBindingBids": "جميع العروض المقدمة على المنصة ملزمة قانونيًا ولا يمكن سحبها.",
+  "@termsBindingBids": {
+    "description": "Terms: binding bids paragraph"
+  },
+  "termsHighestBidWins": "يفوز بالعنصر أعلى عرض سعر عند إغلاق المزاد.",
+  "@termsHighestBidWins": {
+    "description": "Terms: highest bid wins paragraph"
+  },
+  "termsProxyBiddingRules": "تتيح المزايدة التلقائية للنظام تقديم العروض نيابةً عنك حتى حدك الأقصى.",
+  "@termsProxyBiddingRules": {
+    "description": "Terms: proxy bidding rules paragraph"
+  },
+  "termsManipulateBids": "يُحظر تمامًا أي محاولة للتلاعب في العروض أو التواطؤ مع مزايدين آخرين.",
+  "@termsManipulateBids": {
+    "description": "Terms: manipulate bids paragraph"
+  },
+  "termsPaymentsTitle": "المدفوعات",
+  "@termsPaymentsTitle": {
+    "description": "Terms: payments section title"
+  },
+  "termsWalletBalance": "يجب على المشترين الحفاظ على رصيد محفظة كافٍ لتغطية عروضهم ومشترياتهم.",
+  "@termsWalletBalance": {
+    "description": "Terms: wallet balance paragraph"
+  },
+  "termsSecurityDeposits": "قد يُطلب تأمين مالي لبعض المزادات عالية القيمة.",
+  "@termsSecurityDeposits": {
+    "description": "Terms: security deposits paragraph"
+  },
+  "termsRefundsPolicy": "تتم معالجة المبالغ المستردة في غضون 7 أيام عمل بعد حل نزاع صالح لصالح المشتري.",
+  "@termsRefundsPolicy": {
+    "description": "Terms: refunds policy paragraph"
+  },
+  "termsDisputesTitle": "النزاعات",
+  "@termsDisputesTitle": {
+    "description": "Terms: disputes section title"
+  },
+  "termsRaiseDisputes": "يمكن للمشترين رفع نزاع خلال 48 ساعة من استلام منتج لا يطابق الوصف.",
+  "@termsRaiseDisputes": {
+    "description": "Terms: raise disputes paragraph"
+  },
+  "termsDisputeDecisions": "سيراجع فريق تسوية النزاعات في صفقة جميع الأدلة المقدمة ويتخذ القرار النهائي.",
+  "@termsDisputeDecisions": {
+    "description": "Terms: dispute decisions paragraph"
+  },
+  "termsSellerAppTitle": "تطبيق البائع",
+  "@termsSellerAppTitle": {
+    "description": "Terms: seller app section title"
+  },
+  "termsSellerRegTitle": "تسجيل البائع",
+  "@termsSellerRegTitle": {
+    "description": "Terms: seller registration section title"
+  },
+  "termsSellerVerification": "يجب على جميع البائعين إكمال التحقق من الهوية قبل إدراج المنتجات للمزاد.",
+  "@termsSellerVerification": {
+    "description": "Terms: seller verification paragraph"
+  },
+  "termsSellerApproval": "تخضع حسابات البائعين لموافقة فريق صفقة قبل تفعيلها.",
+  "@termsSellerApproval": {
+    "description": "Terms: seller approval paragraph"
+  },
+  "termsSellerAccuracy": "يتحمل البائعون مسؤولية دقة واكتمال قوائم منتجاتهم.",
+  "@termsSellerAccuracy": {
+    "description": "Terms: seller accuracy paragraph"
+  },
+  "termsAuctionMgmtTitle": "إدارة المزادات",
+  "@termsAuctionMgmtTitle": {
+    "description": "Terms: auction management section title"
+  },
+  "termsHonestDescriptions": "يجب على البائعين تقديم أوصاف صادقة ودقيقة لجميع العناصر المدرجة للمزاد.",
+  "@termsHonestDescriptions": {
+    "description": "Terms: honest descriptions paragraph"
+  },
+  "termsAuctionRules": "يجب على البائعين الالتزام بجميع قواعد مزادات المنصة، بما في ذلك إرشادات الحد الأدنى للأسعار.",
+  "@termsAuctionRules": {
+    "description": "Terms: auction rules paragraph"
+  },
+  "termsNoModifyActive": "لا يمكن تعديل قوائم المزادات النشطة بعد بدء عملية المزايدة.",
+  "@termsNoModifyActive": {
+    "description": "Terms: no modify active paragraph"
+  },
+  "termsDeliveryTitle": "التسليم",
+  "@termsDeliveryTitle": {
+    "description": "Terms: delivery section title"
+  },
+  "termsTimelyDelivery": "يلتزم البائعون بتسليم العناصر للمشترين الفائزين في الإطار الزمني المتفق عليه.",
+  "@termsTimelyDelivery": {
+    "description": "Terms: timely delivery paragraph"
+  },
+  "termsDeliveryInfo": "يجب توفير معلومات توصيل دقيقة لضمان سلامة الشحنات وتوصيلها في الوقت المناسب.",
+  "@termsDeliveryInfo": {
+    "description": "Terms: delivery info paragraph"
+  },
+  "termsFailureToDeliver": "قد يؤدي الإخفاق في تسليم المنتجات إلى تعليق الحساب وفرض غرامات مالية.",
+  "@termsFailureToDeliver": {
+    "description": "Terms: failure to deliver paragraph"
+  },
+  "termsFeesTitle": "الرسوم",
+  "@termsFeesTitle": {
+    "description": "Terms: fees section title"
+  },
+  "termsPlatformFees": "تفرض صفقة رسومًا على المنصة على جميع معاملات المزاد المكتملة بنجاح.",
+  "@termsPlatformFees": {
+    "description": "Terms: platform fees paragraph"
+  },
+  "termsTrackEarnings": "يمكن للبائعين تتبع أرباحهم وخصومات الرسوم في الوقت الفعلي من خلال لوحة تحكم البائع.",
+  "@termsTrackEarnings": {
+    "description": "Terms: track earnings paragraph"
+  },
+  "termsNotifPolicyTitle": "سياسة الإشعارات",
+  "@termsNotifPolicyTitle": {
+    "description": "Terms: notification policy section title"
+  },
+  "termsNotifGenerated": "تُنشأ الإشعارات تلقائيًا للأحداث الرئيسية كالعروض الجديدة ونهايات المزادات والمدفوعات.",
+  "@termsNotifGenerated": {
+    "description": "Terms: notifications generated paragraph"
+  },
+  "termsNotifInformational": "الإشعارات لأغراض إعلامية فقط ولا تشكل نصيحة قانونية أو مالية.",
+  "@termsNotifInformational": {
+    "description": "Terms: notifications informational paragraph"
+  },
+  "termsReviewNotif": "يتحمل المستخدمون مسؤولية مراجعة جميع الإشعارات واتخاذ الإجراء المناسب في الوقت المناسب.",
+  "@termsReviewNotif": {
+    "description": "Terms: review notifications paragraph"
+  },
+  "termsPrivacyDataTitle": "الخصوصية والبيانات",
+  "@termsPrivacyDataTitle": {
+    "description": "Terms: privacy and data section title"
+  },
+  "termsDataCollected": "تجمع صفقة البيانات الشخصية بما في ذلك الاسم والبريد الإلكتروني ورقم الهاتف وسجل المعاملات.",
+  "@termsDataCollected": {
+    "description": "Terms: data collected paragraph"
+  },
+  "termsDataProtected": "يتم تخزين جميع البيانات المجمعة بأمان وحمايتها من الوصول غير المصرح به.",
+  "@termsDataProtected": {
+    "description": "Terms: data protected paragraph"
+  },
+  "termsNoShareData": "لا تشارك صفقة البيانات الشخصية للمستخدمين مع أطراف ثالثة دون موافصة صريحة من المستخدم.",
+  "@termsNoShareData": {
+    "description": "Terms: no share data paragraph"
+  },
+  "termsLiabilityTitle": "المسؤولية",
+  "@termsLiabilityTitle": {
+    "description": "Terms: liability section title"
+  },
+  "termsNotResponsible": "لا تتحمل صفقة المسؤولية عن الخسائر الناجمة عن أخطاء المستخدمين أو إخفاقات الخدمات الخارجية.",
+  "@termsNotResponsible": {
+    "description": "Terms: not responsible paragraph"
+  },
+  "termsDowntime": "قد تعاني المنصة من توقف مجدول أو غير مجدول لأغراض الصيانة.",
+  "@termsDowntime": {
+    "description": "Terms: downtime paragraph"
+  },
+  "termsIntermediary": "تعمل صفقة كوسيط فقط بين المشترين والبائعين ولا تضمن نتائج المعاملات.",
+  "@termsIntermediary": {
+    "description": "Terms: intermediary paragraph"
+  },
+  "termsChangesTitle": "التغييرات على الشروط",
+  "@termsChangesTitle": {
+    "description": "Terms: changes to terms section title"
+  },
+  "termsUpdatedAnytime": "تحتفظ صفقة بالحق في تحديث هذه الشروط والأحكام في أي وقت دون إشعار مسبق.",
+  "@termsUpdatedAnytime": {
+    "description": "Terms: updated anytime paragraph"
+  },
+  "termsContinuedUse": "يُعد الاستمرار في استخدام المنصة بعد أي تغييرات قبولًا للشروط المحدثة.",
+  "@termsContinuedUse": {
+    "description": "Terms: continued use paragraph"
   }
 }

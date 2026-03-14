@@ -60,9 +60,10 @@ class _SplashScreenBodyState extends State<SplashScreenBody>
     _hammerJumpAnim =
         TweenSequence<double>([
           TweenSequenceItem(
-            tween:
-                Tween<double>(begin: 0.0, end: -120.0)
-                    .chain(CurveTween(curve: Curves.easeOut)),
+            tween: Tween<double>(
+              begin: 0.0,
+              end: -120.0,
+            ).chain(CurveTween(curve: Curves.easeOut)),
             weight: 40,
           ),
           TweenSequenceItem(
@@ -87,10 +88,7 @@ class _SplashScreenBodyState extends State<SplashScreenBody>
         );
 
     _hammerSlideAnim =
-        Tween<Offset>(
-          begin: Offset.zero,
-          end: const Offset(-1.2, 0.0),
-        ).animate(
+        Tween<Offset>(begin: Offset.zero, end: const Offset(-1.2, 0.0)).animate(
           CurvedAnimation(
             parent: _controller,
             curve: const Interval(0.65, 0.85, curve: Curves.easeInOutCubic),
@@ -98,10 +96,7 @@ class _SplashScreenBodyState extends State<SplashScreenBody>
         );
 
     _textSlideAnim =
-        Tween<Offset>(
-          begin: const Offset(0.5, 0.0),
-          end: Offset.zero,
-        ).animate(
+        Tween<Offset>(begin: const Offset(0.5, 0.0), end: Offset.zero).animate(
           CurvedAnimation(
             parent: _controller,
             curve: const Interval(0.65, 0.85, curve: Curves.easeInOutCubic),
@@ -183,10 +178,7 @@ class _SplashScreenBodyState extends State<SplashScreenBody>
                     position: _textSlideAnim,
                     child: FadeTransition(
                       opacity: _textOpacityAnim,
-                      child: Image.asset(
-                        Assets.imagesSAFQA,
-                        width: 180.w,
-                      ),
+                      child: Image.asset(Assets.imagesSAFQA, width: 180.w),
                     ),
                   ),
                 ),

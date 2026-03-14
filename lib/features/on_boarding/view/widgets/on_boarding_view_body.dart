@@ -35,10 +35,7 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
   }
 
   void _markSeen() {
-    getIt<CacheHelper>().saveData(
-      key: CacheKeys.onboardingSeen,
-      value: true,
-    );
+    getIt<CacheHelper>().saveData(key: CacheKeys.onboardingSeen, value: true);
   }
 
   @override
@@ -52,9 +49,7 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
     return SafeArea(
       child: Column(
         children: [
-          Expanded(
-            child: OnBoardingPageView(pageController: pageController),
-          ),
+          Expanded(child: OnBoardingPageView(pageController: pageController)),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: kHorizontalPadding.w),
             child: Column(

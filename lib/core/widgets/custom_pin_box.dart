@@ -3,6 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
 
+/// A custom PIN input box widget for verification codes
+///
+/// Features:
+/// - Single digit numeric input
+/// - Visual error indication (red border)
+/// - Auto-clearing error state on input
 class CustomPinBox extends StatefulWidget {
   const CustomPinBox({
     super.key,
@@ -10,6 +16,9 @@ class CustomPinBox extends StatefulWidget {
     required this.focusNode,
     required this.onChanged,
     this.validator,
+
+    /// When null the box sizes itself using the default 60 dp (scaled).
+    /// When a value is provided it is used as-is (already in logical pixels).
     this.size,
   });
 
@@ -24,12 +33,14 @@ class CustomPinBox extends StatefulWidget {
 }
 
 class _CustomPinBoxState extends State<CustomPinBox> {
+  // Constants
   static const double _defaultBoxSize = 60.0;
   static const double _borderWidth = 1.5;
   static const double _borderRadius = 12.0;
   static const Color _normalBorderColor = Color(0xFFE0E0E0);
   static const Color _errorBorderColor = Colors.red;
 
+  // State
   bool _hasError = false;
 
   @override
@@ -44,6 +55,7 @@ class _CustomPinBoxState extends State<CustomPinBox> {
     super.dispose();
   }
 
+  /// Clears error state when user starts typing
   void _onTextChanged() {
     if (_hasError && widget.controller.text.isNotEmpty) {
       setState(() {
@@ -52,6 +64,7 @@ class _CustomPinBoxState extends State<CustomPinBox> {
     }
   }
 
+  /// Updates error state based on validation result
   void _updateErrorState(bool hasError) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -75,7 +88,8 @@ class _CustomPinBoxState extends State<CustomPinBox> {
 
   @override
   Widget build(BuildContext context) {
-    final double resolvedSize = widget.size ?? _defaultBoxSize.r;
+    // When size is explicit (from LayoutBuilder) use it as-is; otherwise scale the default.
+    final double resolvedSize = widget.size ?? _defaultBoxSize.sp;
 
     return Container(
       width: resolvedSize,
@@ -94,9 +108,7 @@ class _CustomPinBoxState extends State<CustomPinBox> {
         keyboardType: TextInputType.number,
         maxLength: 1,
         style: TextStyles.semiBold24(context),
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-        ],
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: const InputDecoration(
           counterText: '',
           border: InputBorder.none,

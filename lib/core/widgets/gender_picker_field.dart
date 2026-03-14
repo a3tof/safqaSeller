@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
-import 'package:safqaseller/generated/l10n.dart';
 
 class GenderPickerField extends StatefulWidget {
   const GenderPickerField({
@@ -37,19 +36,19 @@ class _GenderPickerFieldState extends State<GenderPickerField> {
       ),
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.all(20.w),
+          padding: EdgeInsets.all(20.sp),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 40.w,
-                height: 4.h,
+                width: 40.sp,
+                height: 4.sp,
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 20.sp),
               ListTile(
                 leading: Icon(
                   Icons.male,
@@ -78,7 +77,7 @@ class _GenderPickerFieldState extends State<GenderPickerField> {
                   Navigator.pop(context);
                 },
               ),
-              Divider(height: 1.h),
+              Divider(height: 1.sp),
               ListTile(
                 leading: Icon(
                   Icons.female,
@@ -107,7 +106,7 @@ class _GenderPickerFieldState extends State<GenderPickerField> {
                   Navigator.pop(context);
                 },
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 20.sp),
             ],
           ),
         );
@@ -131,7 +130,7 @@ class _GenderPickerFieldState extends State<GenderPickerField> {
       onSaved: widget.onSaved,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return S.of(context).fieldRequired;
+          return 'هذا الحقل مطلوب';
         }
         return null;
       },
