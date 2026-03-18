@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Facebook SDK credentials.
+  These values are referenced from AndroidManifest.xml via @string/...
+  The Dart-side copy of these values lives in lib/core/config/app_config.dart.
+  Keep both files in sync whenever you rotate or change credentials.
+-->
+<resources>
+    <string name="facebook_app_id">1646710110114006</string>
+    <string name="fb_login_protocol_scheme">fb1646710110114006</string>
+    <string name="facebook_client_token">d8c31e8242b7a71e889c0c1eba1c39b6</string>
+</resources>

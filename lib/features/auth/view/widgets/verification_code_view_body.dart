@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/constants.dart';
-import 'package:safqaseller/core/service_locator.dart';
-import 'package:safqaseller/core/storage/cache_helper.dart';
-import 'package:safqaseller/core/storage/cache_keys.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
 import 'package:safqaseller/core/widgets/custom_button.dart';
@@ -12,11 +10,16 @@ import 'package:safqaseller/core/widgets/custom_loading_button.dart';
 import 'package:safqaseller/core/widgets/custom_pin_box.dart';
 import 'package:safqaseller/features/auth/view/auth_route_args.dart';
 import 'package:safqaseller/features/auth/view/create_password_view.dart';
+import 'package:safqaseller/features/auth/view_model/confirm_email/confirm_email_view_model.dart';
+import 'package:safqaseller/features/auth/view_model/confirm_email/confirm_email_view_model_state.dart';
+import 'package:safqaseller/features/forgot_password/view_model/forgot_password_view_model.dart';
+import 'package:safqaseller/features/forgot_password/view_model/forgot_password_view_model_state.dart';
 import 'package:safqaseller/features/home/view/home_screen_view.dart';
 import 'package:safqaseller/generated/l10n.dart';
 
 class VerificationCodeViewBody extends StatefulWidget {
   const VerificationCodeViewBody({super.key, required this.args});
+
   final VerificationCodeArgs args;
 
   @override
@@ -27,7 +30,6 @@ class VerificationCodeViewBody extends StatefulWidget {
 class _VerificationCodeViewBodyState extends State<VerificationCodeViewBody> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
-  bool _isLoading = false;
 
   static const int _digitCount = 6;
   static const double _boxSpacing = 8.0;
@@ -36,6 +38,8 @@ class _VerificationCodeViewBodyState extends State<VerificationCodeViewBody> {
       List.generate(_digitCount, (_) => TextEditingController());
   final List<FocusNode> _focusNodes =
       List.generate(_digitCount, (_) => FocusNode());
+
+  String get _otp => _controllers.map((c) => c.text).join();
 
   @override
   void initState() {
@@ -57,61 +61,152 @@ class _VerificationCodeViewBodyState extends State<VerificationCodeViewBody> {
 
   @override
   void dispose() {
-    for (final c in _controllers) c.dispose();
-    for (final f in _focusNodes) f.dispose();
+    for (final c in _controllers) {
+      c.dispose();
+    }
+    for (final f in _focusNodes) {
+      f.dispose();
+    }
     super.dispose();
   }
 
-  Future<void> _submit() async {
+  void _submit() {
     if (!_formKey.currentState!.validate()) {
       setState(() => _autoValidateMode = AutovalidateMode.always);
       return;
     }
 
-    setState(() => _isLoading = true);
-    await Future.delayed(const Duration(milliseconds: 1200));
-    if (!mounted) return;
-    setState(() => _isLoading = false);
-
     if (widget.args.flow == VerificationFlow.registration) {
-      await getIt<CacheHelper>().saveData(
-        key: CacheKeys.isLoggedIn,
-        value: true,
+      context.read<ConfirmEmailViewModel>().confirmEmail(
+            email: widget.args.email,
+            otp: _otp,
+            password: widget.args.password,
+          );
+    } else {
+      context.read<ForgotPasswordViewModel>().verifyOtp(
+            email: widget.args.email,
+            code: _otp,
+          );
+    }
+  }
+
+  void _resend() {
+    if (widget.args.flow == VerificationFlow.registration) {
+      context.read<ConfirmEmailViewModel>().resendOtp(widget.args.email);
+    } else {
+      context.read<ForgotPasswordViewModel>().resendOtp(widget.args.email);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.args.flow == VerificationFlow.registration) {
+      return BlocConsumer<ConfirmEmailViewModel, ConfirmEmailState>(
+        listener: _confirmEmailListener,
+        builder: (context, state) =>
+            _buildBody(isLoading: state is ConfirmEmailLoading),
       );
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(S.of(context).emailConfirmedSuccessfully),
-        backgroundColor: Colors.green,
-      ));
+    } else {
+      return BlocConsumer<ForgotPasswordViewModel, ForgotPasswordState>(
+        listener: _forgotPasswordListener,
+        builder: (context, state) =>
+            _buildBody(isLoading: state is ForgotPasswordLoading),
+      );
+    }
+  }
+
+  void _confirmEmailListener(BuildContext context, ConfirmEmailState state) {
+    if (state is ConfirmEmailAutoLoginSuccess) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context).emailConfirmedSuccessfully),
+          backgroundColor: Colors.green,
+        ),
+      );
       Navigator.pushNamedAndRemoveUntil(
         context,
         HomeScreenView.routeName,
         (route) => false,
       );
-    } else {
-      Navigator.pushNamed(
+    } else if (state is ConfirmEmailSuccess) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context).emailConfirmedSuccessfully),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pushNamedAndRemoveUntil(
         context,
-        CreatePasswordView.routeName,
-        arguments: CreatePasswordArgs(
-          email: widget.args.email,
-          token: 'mock-token',
+        HomeScreenView.routeName,
+        (route) => false,
+      );
+    } else if (state is ConfirmEmailOtpResent) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context).otpResentSuccessfully),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else if (state is ConfirmEmailError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_friendlyOtpError(context, state.message)),
+          backgroundColor: Colors.red,
         ),
       );
     }
   }
 
-  Future<void> _resend() async {
-    setState(() => _isLoading = true);
-    await Future.delayed(const Duration(milliseconds: 1000));
-    if (!mounted) return;
-    setState(() => _isLoading = false);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(S.of(context).otpResentSuccessfully),
-      backgroundColor: Colors.green,
-    ));
+  void _forgotPasswordListener(
+    BuildContext context,
+    ForgotPasswordState state,
+  ) {
+    if (state is ForgotPasswordOtpVerified) {
+      Navigator.pushNamed(
+        context,
+        CreatePasswordView.routeName,
+        arguments: CreatePasswordArgs(
+          email: state.email,
+          token: state.token,
+          forgotPasswordViewModel:
+              widget.args.forgotPasswordViewModel ??
+              context.read<ForgotPasswordViewModel>(),
+        ),
+      );
+    } else if (state is ForgotPasswordOtpResent) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context).otpResentSuccessfully),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else if (state is ForgotPasswordError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_friendlyOtpError(context, state.message)),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  /// Maps raw server OTP error messages to localized user-friendly strings.
+  String _friendlyOtpError(BuildContext context, String raw) {
+    final lower = raw.toLowerCase();
+    if (lower.contains('expired') || lower.contains('exp')) {
+      return S.of(context).otpExpired;
+    }
+    if (lower.contains('invalid') ||
+        lower.contains('incorrect') ||
+        lower.contains('wrong') ||
+        lower.contains('not valid') ||
+        lower.contains('otp')) {
+      return S.of(context).invalidOtp;
+    }
+    return raw;
+  }
+
+  Widget _buildBody({required bool isLoading}) {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: kHorizontalPadding.sp),
@@ -149,7 +244,8 @@ class _VerificationCodeViewBodyState extends State<VerificationCodeViewBody> {
                           _digitCount,
                           (index) => Padding(
                             padding: EdgeInsets.only(
-                              right: index < _digitCount - 1 ? _boxSpacing : 0,
+                              right:
+                                  index < _digitCount - 1 ? _boxSpacing : 0,
                             ),
                             child: CustomPinBox(
                               size: boxSize,
@@ -175,7 +271,7 @@ class _VerificationCodeViewBodyState extends State<VerificationCodeViewBody> {
                   ),
                 ),
                 SizedBox(height: 32.sp),
-                _isLoading
+                isLoading
                     ? const CustomLoadingButton()
                     : CustomButton(
                         backgroundColor: AppColors.lightPrimaryColor,
@@ -194,7 +290,7 @@ class _VerificationCodeViewBodyState extends State<VerificationCodeViewBody> {
                     ),
                     SizedBox(width: 4.sp),
                     GestureDetector(
-                      onTap: _isLoading ? null : _resend,
+                      onTap: _resend,
                       child: Text(
                         S.of(context).resend,
                         style: TextStyles.semiBold14(context)

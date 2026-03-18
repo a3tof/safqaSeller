@@ -1,0 +1,242 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:safqaseller/core/config/app_config.dart';
+import 'package:safqaseller/core/storage/cache_helper.dart';
+import 'package:safqaseller/core/storage/cache_keys.dart';
+
+class DioHelper {
+  final Dio dio;
+
+  DioHelper({required CacheHelper cacheHelper})
+      : dio = Dio(
+          BaseOptions(
+            baseUrl: AppConfig.baseUrl,
+            receiveDataWhenStatusError: true,
+            // Accept every status code — repositories decide what is success/failure.
+            validateStatus: (_) => true,
+            headers: {
+              'x-api-key': AppConfig.apiKey,
+              'Content-Type': 'application/json',
+            },
+          ),
+        ) {
+    // ── Header injection ────────────────────────────────────────────────────
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          final deviceId = cacheHelper.getData(key: CacheKeys.deviceId);
+          if (deviceId != null) {
+            options.headers['DeviceId'] = deviceId;
+          }
+          if (options.extra['requiresAuth'] == true) {
+            final token = cacheHelper.getData(key: CacheKeys.token);
+            if (token != null) {
+              options.headers['Authorization'] = 'Bearer $token';
+            }
+          }
+          handler.next(options);
+        },
+      ),
+    );
+
+    // ── Request / response logger (debug builds only) ───────────────────────
+    if (kDebugMode) {
+      dio.interceptors.add(_ApiLogger());
+    }
+  }
+
+  Future<Response<dynamic>> postData({
+    required String endPoint,
+    required Map<String, dynamic> data,
+    bool requiresAuth = false,
+  }) async {
+    return dio.post<dynamic>(
+      endPoint,
+      data: data,
+      options: Options(extra: {'requiresAuth': requiresAuth}),
+    );
+  }
+
+  Future<Response<dynamic>> postNoBody({
+    required String endPoint,
+    bool requiresAuth = false,
+  }) async {
+    return dio.post<dynamic>(
+      endPoint,
+      options: Options(extra: {'requiresAuth': requiresAuth}),
+    );
+  }
+
+  Future<Response<dynamic>> getData({
+    required String endPoint,
+    Map<String, dynamic>? queryParams,
+    bool requiresAuth = false,
+  }) async {
+    return dio.get<dynamic>(
+      endPoint,
+      queryParameters: queryParams,
+      options: Options(extra: {'requiresAuth': requiresAuth}),
+    );
+  }
+
+  Future<Response<dynamic>> putData({
+    required String endPoint,
+    required Map<String, dynamic> data,
+    bool requiresAuth = false,
+  }) async {
+    return dio.put<dynamic>(
+      endPoint,
+      data: data,
+      options: Options(extra: {'requiresAuth': requiresAuth}),
+    );
+  }
+
+  Future<Response<dynamic>> deleteData({
+    required String endPoint,
+    bool requiresAuth = false,
+  }) async {
+    return dio.delete<dynamic>(
+      endPoint,
+      options: Options(extra: {'requiresAuth': requiresAuth}),
+    );
+  }
+}
+
+// ── Logger interceptor ────────────────────────────────────────────────────────
+
+class _ApiLogger extends Interceptor {
+  static final _sep = '─' * 60;
+  static const _indent = '  ';
+
+  // Sensitive header keys whose values are masked in logs.
+  static const _maskedHeaders = {'authorization', 'x-api-key'};
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    final buf = StringBuffer();
+    buf.writeln(_sep);
+    buf.writeln('➤ REQUEST');
+    buf.writeln('$_indent${options.method}  ${options.uri}');
+    buf.writeln('$_indent headers:');
+    options.headers.forEach((k, v) {
+      final display = _maskedHeaders.contains(k.toLowerCase())
+          ? _mask(v.toString())
+          : v;
+      buf.writeln('$_indent$_indent$k: $display');
+    });
+    if (options.data != null) {
+      buf.writeln('$_indent body:');
+      buf.writeln('$_indent$_indent${_prettyJson(options.data)}');
+    }
+    buf.write(_sep);
+    debugPrint(buf.toString());
+    handler.next(options);
+  }
+
+  @override
+  void onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
+    final buf = StringBuffer();
+    final ok = _isSuccess(response.statusCode);
+    buf.writeln(_sep);
+    buf.writeln('${ok ? '✔' : '✘'} RESPONSE  [${response.statusCode}]');
+    buf.writeln(
+      '$_indent${response.requestOptions.method}  ${response.requestOptions.uri}',
+    );
+    buf.writeln('$_indent body:');
+    buf.writeln('$_indent$_indent${_prettyJson(response.data)}');
+    buf.write(_sep);
+    debugPrint(buf.toString());
+    handler.next(response);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    final buf = StringBuffer();
+    buf.writeln(_sep);
+    buf.writeln('✘ ERROR  [${err.response?.statusCode ?? err.type.name}]');
+    buf.writeln(
+      '$_indent${err.requestOptions.method}  ${err.requestOptions.uri}',
+    );
+    buf.writeln('$_indent message: ${err.message}');
+    if (err.response?.data != null) {
+      buf.writeln('$_indent body:');
+      buf.writeln('$_indent$_indent${_prettyJson(err.response?.data)}');
+    }
+    buf.write(_sep);
+    debugPrint(buf.toString());
+    handler.next(err);
+  }
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+
+  bool _isSuccess(int? code) => code != null && code >= 200 && code < 300;
+
+  /// Shows first 6 chars + asterisks so the key is identifiable but not leaked.
+  String _mask(String value) {
+    if (value.length <= 6) return '***';
+    return '${value.substring(0, 6)}${'*' * (value.length - 6)}';
+  }
+
+  String _prettyJson(dynamic data) {
+    if (data == null) return 'null';
+    try {
+      final encoder = const JsonEncoder.withIndent('    ');
+      if (data is String) {
+        final decoded = jsonDecode(data);
+        return encoder.convert(decoded);
+      }
+      return encoder.convert(data);
+    } catch (_) {
+      return data.toString();
+    }
+  }
+}
+
+// ── Response helper used by all repositories ─────────────────────────────────
+
+/// Extracts a human-readable error message from any response body.
+/// Never throws.
+String extractResponseError(dynamic data, int? statusCode) {
+  final body = _decodeIfString(data);
+
+  if (body is Map) {
+    final msg = _str(body['message']) ??
+        _str(body['Message']) ??
+        _str(body['title']) ??
+        _str(body['Title']);
+    if (msg != null && msg.isNotEmpty) return msg;
+
+    final errors = body['Errors'] ?? body['errors'];
+    if (errors is List && errors.isNotEmpty) {
+      return errors.first?.toString() ?? 'Unknown error';
+    }
+    if (errors is String && errors.isNotEmpty) return errors;
+  }
+
+  // Server returned a plain JSON array like ["Invalid OTP"] — take the first item.
+  if (body is List && body.isNotEmpty) {
+    final first = body.first;
+    if (first is String && first.isNotEmpty) return first;
+  }
+
+  if (body is String && body.isNotEmpty) return body;
+
+  return 'Server error (${statusCode ?? '?'})';
+}
+
+dynamic _decodeIfString(dynamic data) {
+  if (data is String) {
+    try {
+      return jsonDecode(data);
+    } catch (_) {
+      return data;
+    }
+  }
+  return data;
+}
+
+String? _str(dynamic v) => v is String ? v : null;

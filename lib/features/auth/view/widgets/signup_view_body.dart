@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/constants.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
@@ -12,6 +13,8 @@ import 'package:safqaseller/features/auth/view/auth_route_args.dart';
 import 'package:safqaseller/features/auth/view/verification_code_view.dart';
 import 'package:safqaseller/features/auth/view/widgets/have_an_account_widget.dart';
 import 'package:safqaseller/features/auth/view/widgets/terms_and_conditions.dart';
+import 'package:safqaseller/features/auth/view_model/register/register_view_model.dart';
+import 'package:safqaseller/features/auth/view_model/register/register_view_model_state.dart';
 import 'package:safqaseller/generated/l10n.dart';
 
 class SignupViewBody extends StatefulWidget {
@@ -22,14 +25,13 @@ class SignupViewBody extends StatefulWidget {
 }
 
 class _SignupViewBodyState extends State<SignupViewBody> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
-  AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
-  bool _isLoading = false;
-  late String _email, _password;
-  String? _birthdate;
-  String? _gender;
-  bool _isTermsAccepted = false;
+  AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
+  late String email, userName, password, phoneNumber;
+  String? birthdate;
+  String? gender;
+  bool isTermsAccepted = false;
 
   @override
   void dispose() {
@@ -37,139 +39,169 @@ class _SignupViewBodyState extends State<SignupViewBody> {
     super.dispose();
   }
 
-  Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) {
-      setState(() => _autoValidateMode = AutovalidateMode.always);
-      return;
-    }
-    _formKey.currentState!.save();
-
-    if (!_isTermsAccepted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context).termsAndConditions),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-    if (_birthdate == null || _gender == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill all fields'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    setState(() => _isLoading = true);
-    await Future.delayed(const Duration(milliseconds: 1200));
-    if (!mounted) return;
-    setState(() => _isLoading = false);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(S.of(context).otpSentToEmail),
-        backgroundColor: const Color(0xFF1A3A6B),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-    Navigator.pushNamed(
-      context,
-      VerificationCodeView.routeName,
-      arguments: VerificationCodeArgs(
-        email: _email,
-        password: _password,
-        flow: VerificationFlow.registration,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: kHorizontalPadding.sp),
-        child: Form(
-          key: _formKey,
-          autovalidateMode: _autoValidateMode,
-          child: Column(
-            children: [
-              SizedBox(height: 24.sp),
-              CustomTextFormField(
-                enabled: !_isLoading,
-                hintText: S.of(context).fullName,
-                textInputType: TextInputType.name,
+    return BlocConsumer<RegisterViewModel, RegisterState>(
+      listener: (context, state) {
+        if (state is RegisterSuccessEmailSent) {
+          final msg = state.message.isNotEmpty
+              ? state.message
+              : S.of(context).otpSentToEmail;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(msg),
+              backgroundColor: const Color(0xFF1A3A6B),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+          Navigator.pushNamed(
+            context,
+            VerificationCodeView.routeName,
+            arguments: VerificationCodeArgs(
+              email: state.email,
+              password: state.password,
+              flow: VerificationFlow.registration,
+            ),
+          );
+        } else if (state is RegisterError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        final isLoading = state is RegisterLoading;
+        return SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: kHorizontalPadding.sp),
+            child: Form(
+              key: formKey,
+              autovalidateMode: autoValidateMode,
+              child: Column(
+                children: [
+                  SizedBox(height: 24.sp),
+                  CustomTextFormField(
+                    enabled: !isLoading,
+                    onSaved: (value) => userName = value!,
+                    hintText: S.of(context).fullName,
+                    textInputType: TextInputType.name,
+                  ),
+                  SizedBox(height: 16.sp),
+                  CustomTextFormField(
+                    enabled: !isLoading,
+                    onSaved: (value) => email = value!,
+                    hintText: S.of(context).email,
+                    textInputType: TextInputType.emailAddress,
+                  ),
+                  SizedBox(height: 16.sp),
+                  CustomTextFormField(
+                    enabled: !isLoading,
+                    onSaved: (value) => phoneNumber = value!,
+                    hintText: S.of(context).phoneNumber,
+                    textInputType: TextInputType.phone,
+                  ),
+                  SizedBox(height: 16.sp),
+                  DatePickerField(
+                    enabled: !isLoading,
+                    hintText: S.of(context).birthdate,
+                    onSaved: (value) => birthdate = value,
+                  ),
+                  SizedBox(height: 16.sp),
+                  GenderPickerField(
+                    enabled: !isLoading,
+                    hintText: S.of(context).gender,
+                    maleText: S.of(context).male,
+                    femaleText: S.of(context).female,
+                    onSaved: (value) => gender = value,
+                  ),
+                  SizedBox(height: 16.sp),
+                  PasswordField(
+                    enabled: !isLoading,
+                    controller: _passwordController,
+                    hintText: S.of(context).password,
+                    onSaved: (value) => password = value!,
+                  ),
+                  SizedBox(height: 16.sp),
+                  PasswordField(
+                    enabled: !isLoading,
+                    hintText: S.of(context).confirmPassword,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return S.of(context).fieldRequired;
+                      }
+                      if (value != _passwordController.text) {
+                        return S.of(context).passwordsDoNotMatch;
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 16.sp),
+                  TermsAndConditions(
+                    onChanged: (value) => isTermsAccepted = value,
+                  ),
+                  SizedBox(height: 30.sp),
+                  isLoading
+                      ? const CustomLoadingButton()
+                      : CustomButton(
+                          backgroundColor: AppColors.lightPrimaryColor,
+                          textColor: AppColors.secondaryColor,
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              formKey.currentState!.save();
+
+                              if (!isTermsAccepted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Please accept terms and conditions',
+                                    ),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (birthdate == null || gender == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Please fill all fields'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+
+                              // Convert gender string to int (0 = male, 1 = female)
+                              final genderInt = gender == 'male' ? 0 : 1;
+
+                              context.read<RegisterViewModel>().userRegister(
+                                    fullName: userName,
+                                    email: email,
+                                    password: password,
+                                    birthDate: birthdate!,
+                                    gender: genderInt,
+                                    cityId: 1,
+                                    phoneNumber: phoneNumber,
+                                  );
+                            } else {
+                              setState(() => autoValidateMode =
+                                  AutovalidateMode.always);
+                            }
+                          },
+                          text: S.of(context).signUp,
+                        ),
+                  SizedBox(height: 26.sp),
+                  HaveAnAccountWidget(),
+                ],
               ),
-              SizedBox(height: 16.sp),
-              CustomTextFormField(
-                enabled: !_isLoading,
-                onSaved: (value) => _email = value!,
-                hintText: S.of(context).email,
-                textInputType: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 16.sp),
-              CustomTextFormField(
-                enabled: !_isLoading,
-                hintText: S.of(context).phoneNumber,
-                textInputType: TextInputType.phone,
-              ),
-              SizedBox(height: 16.sp),
-              DatePickerField(
-                enabled: !_isLoading,
-                hintText: S.of(context).birthdate,
-                onSaved: (value) => _birthdate = value,
-              ),
-              SizedBox(height: 16.sp),
-              GenderPickerField(
-                enabled: !_isLoading,
-                hintText: S.of(context).gender,
-                maleText: S.of(context).male,
-                femaleText: S.of(context).female,
-                onSaved: (value) => _gender = value,
-              ),
-              SizedBox(height: 16.sp),
-              PasswordField(
-                enabled: !_isLoading,
-                controller: _passwordController,
-                hintText: S.of(context).password,
-                onSaved: (value) => _password = value!,
-              ),
-              SizedBox(height: 16.sp),
-              PasswordField(
-                enabled: !_isLoading,
-                hintText: S.of(context).confirmPassword,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return S.of(context).fieldRequired;
-                  }
-                  if (value != _passwordController.text) {
-                    return S.of(context).passwordsDoNotMatch;
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.sp),
-              TermsAndConditions(
-                onChanged: (value) => _isTermsAccepted = value,
-              ),
-              SizedBox(height: 30.sp),
-              _isLoading
-                  ? const CustomLoadingButton()
-                  : CustomButton(
-                      backgroundColor: AppColors.lightPrimaryColor,
-                      textColor: AppColors.secondaryColor,
-                      onPressed: _submit,
-                      text: S.of(context).signUp,
-                    ),
-              SizedBox(height: 26.sp),
-              HaveAnAccountWidget(),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
