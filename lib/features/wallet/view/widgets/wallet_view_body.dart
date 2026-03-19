@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
@@ -13,48 +12,47 @@ import 'package:safqaseller/features/wallet/view/transaction_history_view.dart';
 import 'package:safqaseller/features/wallet/view/widgets/transaction_item.dart';
 import 'package:safqaseller/features/wallet/view/widgets/wallet_action_button.dart';
 import 'package:safqaseller/features/wallet/view/withdrawal_view.dart';
-import 'package:safqaseller/features/wallet/view_model/wallet/wallet_view_model.dart';
-import 'package:safqaseller/features/wallet/view_model/wallet/wallet_view_model_state.dart';
 
+/// UI-only wallet screen with mock data. No BLoC/state management.
 class WalletViewBody extends StatelessWidget {
   const WalletViewBody({super.key});
+
+  static final _mockBalance = const WalletBalance(balance: 1250.50);
+  static final _mockCards = [
+    CardModel(
+      id: 1,
+      cardholderName: 'John Doe',
+      last4: '4242',
+      expiryDate: '12/28',
+      label: 'Primary',
+    ),
+  ];
+  static final _mockTransactions = [
+    TransactionModel(
+      id: 1,
+      title: 'Deposit',
+      amount: 500,
+      date: DateTime.now(),
+      type: TransactionType.deposit,
+    ),
+    TransactionModel(
+      id: 2,
+      title: 'Withdrawal',
+      amount: 120,
+      date: DateTime.now().subtract(const Duration(days: 1)),
+      type: TransactionType.withdrawal,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: buildAppBar(context: context, title: 'Wallet'),
-      body: BlocBuilder<WalletViewModel, WalletState>(
-        builder: (context, state) {
-          if (state is WalletLoading || state is WalletInitial) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is WalletError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(state.message,
-                      style: TextStyles.regular16(context),
-                      textAlign: TextAlign.center),
-                  SizedBox(height: 16.h),
-                  ElevatedButton(
-                    onPressed: () =>
-                        context.read<WalletViewModel>().loadWallet(),
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final s = state as WalletSuccess;
-          return RefreshIndicator(
-            onRefresh: () => context.read<WalletViewModel>().loadWallet(),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Column(
+      body: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 20.h),
@@ -68,7 +66,7 @@ class WalletViewBody extends StatelessWidget {
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _BalanceSection(balance: s.balance),
+                                _BalanceSection(balance: _mockBalance),
                                 SizedBox(height: 16.h),
                                 Row(
                                   mainAxisAlignment:
@@ -99,7 +97,7 @@ class WalletViewBody extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Flexible(
-                                  child: _BalanceSection(balance: s.balance),
+                                  child: _BalanceSection(balance: _mockBalance),
                                 ),
                                 Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -149,7 +147,7 @@ class WalletViewBody extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 8.h),
-                  if (s.cards.isEmpty)
+                  if (_mockCards.isEmpty)
                     Center(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 24.h),
@@ -169,8 +167,8 @@ class WalletViewBody extends StatelessWidget {
                     SizedBox(
                       height: 215.h,
                       child: PageView.builder(
-                        itemCount: s.cards.length,
-                        itemBuilder: (_, i) => _CreditCardWidget(card: s.cards[i]),
+                        itemCount: _mockCards.length,
+                        itemBuilder: (_, i) => _CreditCardWidget(card: _mockCards[i]),
                       ),
                     ),
 
@@ -208,7 +206,7 @@ class WalletViewBody extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (s.transactions.isEmpty)
+                  if (_mockTransactions.isEmpty)
                     Center(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 24.h),
@@ -221,12 +219,12 @@ class WalletViewBody extends StatelessWidget {
                     // Date header for the first group
                     Text(
                       DateFormat('d MMMM yyyy')
-                          .format(s.transactions.first.date),
+                          .format(_mockTransactions.first.date),
                       style: TextStyles.medium14(context)
                           .copyWith(color: const Color(0xFFAAAAAA)),
                     ),
                     SizedBox(height: 12.h),
-                    ...s.transactions
+                    ..._mockTransactions
                         .take(3)
                         .map((t) => Padding(
                               padding: EdgeInsets.only(bottom: 12.h),
@@ -235,10 +233,7 @@ class WalletViewBody extends StatelessWidget {
                   ],
                   SizedBox(height: 24.h),
                 ],
-              ),
-            ),
-          );
-        },
+        ),
       ),
     );
   }
