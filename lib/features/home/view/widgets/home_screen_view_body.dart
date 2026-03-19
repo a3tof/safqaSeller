@@ -26,11 +26,7 @@ class _HomeScreenViewBodyState extends State<HomeScreenViewBody> {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (_) => CompleteProfileDialog(
-        onComplete: () {
-          // TODO: navigate to profile-completion screen
-        },
-      ),
+      builder: (_) => CompleteProfileDialog(onComplete: () {}),
     );
   }
 
@@ -42,18 +38,13 @@ class _HomeScreenViewBodyState extends State<HomeScreenViewBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ── Logo  (design: 4 px below 44 px status bar) ─────────────────
             SizedBox(height: 4.h),
             const Center(child: _SafqaBusinessLogo()),
-
-            // ── Greeting  (design: 24 px below logo) ─────────────────────────
             SizedBox(height: 24.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: const _GreetingRow(),
             ),
-
-            // ── Scrollable cards  (design: 32 px below greeting) ─────────────
             SizedBox(height: 32.h),
             Expanded(
               child: SingleChildScrollView(
@@ -106,11 +97,6 @@ class _HomeScreenViewBodyState extends State<HomeScreenViewBody> {
   }
 }
 
-// ── Private widgets ────────────────────────────────────────────────────────────
-
-/// "safqa.Business" wordmark.
-/// Font: AlegreyaSC (pubspec family name — no space).
-/// Sizes: 40 sp for "safqa" / "." and 24 sp for "Business", per Figma.
 class _SafqaBusinessLogo extends StatelessWidget {
   const _SafqaBusinessLogo();
 
@@ -153,9 +139,6 @@ class _SafqaBusinessLogo extends StatelessWidget {
   }
 }
 
-/// Greeting row: avatar + two-line text + action icons.
-/// Design: left side 70×70 circle photo + "Welcome!" (grey 18 sp) /
-/// "Hello, Seller!" (primary 18 sp medium), constrained to 103 px wide.
 class _GreetingRow extends StatelessWidget {
   const _GreetingRow();
 
@@ -164,7 +147,6 @@ class _GreetingRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // Avatar + text
         Flexible(
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -187,7 +169,6 @@ class _GreetingRow extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8.w),
-              // Constrained to 103 px as in the Figma spec
               Flexible(
                 child: SizedBox(
                   width: 103.w,
@@ -217,14 +198,14 @@ class _GreetingRow extends StatelessWidget {
             ],
           ),
         ),
-
-        // Notification + profile icons (28 sp, primary colour)
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             _HeaderIcon(icon: Icons.notifications_outlined, onTap: () {}),
             SizedBox(width: 8.w),
-            _HeaderIcon(icon: Icons.person_outline_rounded, onTap: () {}),
+            _HeaderIcon(icon: Icons.wallet_outlined, onTap: () {
+              Navigator.pushNamed(context, WalletView.routeName);
+            }),
           ],
         ),
       ],
@@ -232,7 +213,6 @@ class _GreetingRow extends StatelessWidget {
   }
 }
 
-/// Small tappable icon button used in the header.
 class _HeaderIcon extends StatelessWidget {
   const _HeaderIcon({required this.icon, required this.onTap});
 
