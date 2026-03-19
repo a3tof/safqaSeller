@@ -28,14 +28,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
         "createPassword":
             MessageLookupByLibrary.simpleMessage("إنشاء كلمة المرور"),
-        "createPasswordDescription": MessageLookupByLibrary.simpleMessage(
-            "أنشئ كلمة مرور جديدة لحسابك"),
+        "createPasswordDescription":
+            MessageLookupByLibrary.simpleMessage("أنشئ كلمة مرور جديدة لحسابك"),
         "dontHaveAccount":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟"),
         "dontReceiveCode":
             MessageLookupByLibrary.simpleMessage("لم تستلم الرمز؟"),
-        "email":
-            MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
+        "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
         "emailConfirmedSuccessfully": MessageLookupByLibrary.simpleMessage(
             "تم تأكيد البريد الإلكتروني بنجاح"),
         "female": MessageLookupByLibrary.simpleMessage("أنثى"),
@@ -65,13 +64,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "تصميم عصري ثنائي اللغة (عربي/إنجليزي) يتيح لك التنقل والمزايدة بسلاسة من أي جهاز."),
         "onBoardingTitle1":
             MessageLookupByLibrary.simpleMessage("توقف عن إضاعة الوقت!"),
-        "onBoardingTitle2":
-            MessageLookupByLibrary.simpleMessage("مزايدة ذكية"),
+        "onBoardingTitle2": MessageLookupByLibrary.simpleMessage("مزايدة ذكية"),
         "onBoardingTitle3":
             MessageLookupByLibrary.simpleMessage("تجربة مصمّمة لك"),
         "or": MessageLookupByLibrary.simpleMessage("أو"),
-        "otpExpired": MessageLookupByLibrary.simpleMessage(
-            "انتهت صلاحية رمز التحقق"),
+        "otpExpired":
+            MessageLookupByLibrary.simpleMessage("انتهت صلاحية رمز التحقق"),
         "otpResentSuccessfully": MessageLookupByLibrary.simpleMessage(
             "تم إعادة إرسال رمز التحقق بنجاح"),
         "otpSentToEmail": MessageLookupByLibrary.simpleMessage(
@@ -79,32 +77,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
         "passwordResetSuccessfully": MessageLookupByLibrary.simpleMessage(
             "تم إعادة تعيين كلمة المرور بنجاح"),
-        "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
-            "كلمتا المرور غير متطابقتين"),
+        "passwordsDoNotMatch":
+            MessageLookupByLibrary.simpleMessage("كلمتا المرور غير متطابقتين"),
         "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
         "resend": MessageLookupByLibrary.simpleMessage("إعادة الإرسال"),
         "sendCode": MessageLookupByLibrary.simpleMessage("إرسال الرمز"),
         "signIn": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
-        "signInWithApple": MessageLookupByLibrary.simpleMessage(
-            "تسجيل الدخول بـ Apple"),
-        "signInWithFacebook": MessageLookupByLibrary.simpleMessage(
-            "تسجيل الدخول بـ Facebook"),
-        "signInWithGoogle": MessageLookupByLibrary.simpleMessage(
-            "تسجيل الدخول بـ Google"),
+        "signInWithApple":
+            MessageLookupByLibrary.simpleMessage("تسجيل الدخول بـ Apple"),
+        "signInWithFacebook":
+            MessageLookupByLibrary.simpleMessage("تسجيل الدخول بـ Facebook"),
+        "signInWithGoogle":
+            MessageLookupByLibrary.simpleMessage("تسجيل الدخول بـ Google"),
         "signUp": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
-        "termsAndConditions":
-            MessageLookupByLibrary.simpleMessage("الشروط والأحكام"),
-        "termsAndConditionsPrefix":
-            MessageLookupByLibrary.simpleMessage("بالتسجيل، أنت توافق على"),
-        "verificationCode":
-            MessageLookupByLibrary.simpleMessage("رمز التحقق"),
-        "verificationCodeDescription": MessageLookupByLibrary.simpleMessage(
-            "أدخل رمز التحقق المرسل إلى بريدك الإلكتروني"),
-        "verify": MessageLookupByLibrary.simpleMessage("تحقق"),
         "termsAccountUsageTitle":
             MessageLookupByLibrary.simpleMessage("استخدام الحساب"),
         "termsAccurateInfo": MessageLookupByLibrary.simpleMessage(
             "يُلزَم المستخدمون بتقديم معلومات دقيقة وصادقة عند استخدام المنصة."),
+        "termsAndConditions":
+            MessageLookupByLibrary.simpleMessage("الشروط والأحكام"),
+        "termsAndConditionsPrefix":
+            MessageLookupByLibrary.simpleMessage("بالتسجيل، أنت توافق على"),
         "termsAuctionMgmtTitle":
             MessageLookupByLibrary.simpleMessage("إدارة المزادات"),
         "termsAuctionRules": MessageLookupByLibrary.simpleMessage(
@@ -131,12 +124,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "يتم تخزين جميع البيانات المجمعة بأمان وحمايتها من الوصول غير المصرح به."),
         "termsDeliveryInfo": MessageLookupByLibrary.simpleMessage(
             "يجب توفير معلومات توصيل دقيقة لضمان سلامة الشحنات وتوصيلها في الوقت المناسب."),
-        "termsDeliveryTitle":
-            MessageLookupByLibrary.simpleMessage("التسليم"),
+        "termsDeliveryTitle": MessageLookupByLibrary.simpleMessage("التسليم"),
         "termsDisputeDecisions": MessageLookupByLibrary.simpleMessage(
             "سيراجع فريق تسوية النزاعات في صفقة جميع الأدلة المقدمة ويتخذ القرار النهائي."),
-        "termsDisputesTitle":
-            MessageLookupByLibrary.simpleMessage("النزاعات"),
+        "termsDisputesTitle": MessageLookupByLibrary.simpleMessage("النزاعات"),
         "termsDowntime": MessageLookupByLibrary.simpleMessage(
             "قد تعاني المنصة من توقف مجدول أو غير مجدول لأغراض الصيانة."),
         "termsFailureToDeliver": MessageLookupByLibrary.simpleMessage(
@@ -158,16 +149,15 @@ class MessageLookup extends MessageLookupByLibrary {
             "لا يمكن تعديل قوائم المزادات النشطة بعد بدء عملية المزايدة."),
         "termsNoShareData": MessageLookupByLibrary.simpleMessage(
             "لا تشارك صفقة البيانات الشخصية للمستخدمين مع أطراف ثالثة دون موافصة صريحة من المستخدم."),
+        "termsNotResponsible": MessageLookupByLibrary.simpleMessage(
+            "لا تتحمل صفقة المسؤولية عن الخسائر الناجمة عن أخطاء المستخدمين أو إخفاقات الخدمات الخارجية."),
         "termsNotifGenerated": MessageLookupByLibrary.simpleMessage(
             "تُنشأ الإشعارات تلقائيًا للأحداث الرئيسية كالعروض الجديدة ونهايات المزادات والمدفوعات."),
         "termsNotifInformational": MessageLookupByLibrary.simpleMessage(
             "الإشعارات لأغراض إعلامية فقط ولا تشكل نصيحة قانونية أو مالية."),
         "termsNotifPolicyTitle":
             MessageLookupByLibrary.simpleMessage("سياسة الإشعارات"),
-        "termsNotResponsible": MessageLookupByLibrary.simpleMessage(
-            "لا تتحمل صفقة المسؤولية عن الخسائر الناجمة عن أخطاء المستخدمين أو إخفاقات الخدمات الخارجية."),
-        "termsPaymentsTitle":
-            MessageLookupByLibrary.simpleMessage("المدفوعات"),
+        "termsPaymentsTitle": MessageLookupByLibrary.simpleMessage("المدفوعات"),
         "termsPlatformCompliance": MessageLookupByLibrary.simpleMessage(
             "يجب على جميع المستخدمين الالتزام بقواعد وأنظمة المنصة في جميع الأوقات."),
         "termsPlatformFees": MessageLookupByLibrary.simpleMessage(
@@ -186,10 +176,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "قد يُطلب تأمين مالي لبعض المزادات عالية القيمة."),
         "termsSellerAccuracy": MessageLookupByLibrary.simpleMessage(
             "يتحمل البائعون مسؤولية دقة واكتمال قوائم منتجاتهم."),
-        "termsSellerApproval": MessageLookupByLibrary.simpleMessage(
-            "تخضع حسابات البائعين لموافقة فريق صفقة قبل تفعيلها."),
         "termsSellerAppTitle":
             MessageLookupByLibrary.simpleMessage("تطبيق البائع"),
+        "termsSellerApproval": MessageLookupByLibrary.simpleMessage(
+            "تخضع حسابات البائعين لموافقة فريق صفقة قبل تفعيلها."),
         "termsSellerRegTitle":
             MessageLookupByLibrary.simpleMessage("تسجيل البائع"),
         "termsSellerVerification": MessageLookupByLibrary.simpleMessage(
@@ -203,6 +193,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "termsUpdatedAnytime": MessageLookupByLibrary.simpleMessage(
             "تحتفظ صفقة بالحق في تحديث هذه الشروط والأحكام في أي وقت دون إشعار مسبق."),
         "termsWalletBalance": MessageLookupByLibrary.simpleMessage(
-            "يجب على المشترين الحفاظ على رصيد محفظة كافٍ لتغطية عروضهم ومشترياتهم.")
+            "يجب على المشترين الحفاظ على رصيد محفظة كافٍ لتغطية عروضهم ومشترياتهم."),
+        "verificationCode": MessageLookupByLibrary.simpleMessage("رمز التحقق"),
+        "verificationCodeDescription": MessageLookupByLibrary.simpleMessage(
+            "أدخل رمز التحقق المرسل إلى بريدك الإلكتروني"),
+        "verify": MessageLookupByLibrary.simpleMessage("تحقق")
       };
 }

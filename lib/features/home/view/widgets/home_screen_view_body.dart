@@ -5,6 +5,7 @@ import 'package:safqaseller/core/utils/app_images.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
 import 'package:safqaseller/features/home/view/widgets/complete_profile_dialog.dart';
 import 'package:safqaseller/features/home/view/widgets/home_action_card.dart';
+import 'package:safqaseller/features/wallet/view/wallet_view.dart';
 
 class HomeScreenViewBody extends StatefulWidget {
   const HomeScreenViewBody({super.key});
@@ -56,15 +57,16 @@ class _HomeScreenViewBodyState extends State<HomeScreenViewBody> {
             SizedBox(height: 32.h),
             Expanded(
               child: SingleChildScrollView(
-                padding:
-                    EdgeInsets.only(left: 16.w, right: 16.w, bottom: 24.h),
+                padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 24.h),
                 child: Column(
                   children: [
                     HomeActionCard(
                       label: 'New Lot Auction',
                       showAddIcon: true,
                       backgroundImage: Assets.imagesHammer,
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, WalletView.routeName);
+                      },
                     ),
                     SizedBox(height: 16.h),
                     HomeActionCard(
@@ -168,52 +170,52 @@ class _GreetingRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-              width: 70.w,
-              height: 70.w,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.secondaryColor,
-                border: Border.all(
-                  color: const Color(0xFFCCDDEE),
-                  width: 1.5,
+                width: 70.w,
+                height: 70.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.secondaryColor,
+                  border: Border.all(
+                    color: const Color(0xFFCCDDEE),
+                    width: 1.5,
+                  ),
+                ),
+                child: Icon(
+                  Icons.person_rounded,
+                  color: AppColors.primaryColor,
+                  size: 38.sp,
                 ),
               ),
-              child: Icon(
-                Icons.person_rounded,
-                color: AppColors.primaryColor,
-                size: 38.sp,
-              ),
-            ),
-            SizedBox(width: 8.w),
-            // Constrained to 103 px as in the Figma spec
-            Flexible(
-              child: SizedBox(
-                width: 103.w,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Welcome!',
-                      style: TextStyles.regular18(context).copyWith(
-                        color: const Color(0xFF808080),
+              SizedBox(width: 8.w),
+              // Constrained to 103 px as in the Figma spec
+              Flexible(
+                child: SizedBox(
+                  width: 103.w,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Welcome!',
+                        style: TextStyles.regular18(
+                          context,
+                        ).copyWith(color: const Color(0xFF808080)),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      'Hello, Seller!',
-                      style: TextStyles.medium18(context).copyWith(
-                        color: AppColors.primaryColor,
+                      SizedBox(height: 2.h),
+                      Text(
+                        'Hello, Seller!',
+                        style: TextStyles.medium18(
+                          context,
+                        ).copyWith(color: AppColors.primaryColor),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         ),
 
         // Notification + profile icons (28 sp, primary colour)

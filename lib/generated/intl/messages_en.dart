@@ -25,8 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "birthdate": MessageLookupByLibrary.simpleMessage("Birthdate"),
         "confirmPassword":
             MessageLookupByLibrary.simpleMessage("Confirm Password"),
-        "createAccount":
-            MessageLookupByLibrary.simpleMessage("Create Account"),
+        "createAccount": MessageLookupByLibrary.simpleMessage("Create Account"),
         "createPassword":
             MessageLookupByLibrary.simpleMessage("Create Password"),
         "createPasswordDescription": MessageLookupByLibrary.simpleMessage(
@@ -65,8 +64,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Stop wasting time!"),
         "onBoardingTitle2":
             MessageLookupByLibrary.simpleMessage("Smart Bidding"),
-        "onBoardingTitle3": MessageLookupByLibrary.simpleMessage(
-            "Experience Designed For You"),
+        "onBoardingTitle3":
+            MessageLookupByLibrary.simpleMessage("Experience Designed For You"),
         "or": MessageLookupByLibrary.simpleMessage("Or"),
         "otpExpired": MessageLookupByLibrary.simpleMessage("OTP has expired"),
         "otpResentSuccessfully":
@@ -89,19 +88,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "signInWithGoogle":
             MessageLookupByLibrary.simpleMessage("Sign in with Google"),
         "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
-        "termsAndConditions":
-            MessageLookupByLibrary.simpleMessage("Terms and Conditions"),
-        "termsAndConditionsPrefix": MessageLookupByLibrary.simpleMessage(
-            "By signing up, you agree to our"),
-        "verificationCode":
-            MessageLookupByLibrary.simpleMessage("Verification Code"),
-        "verificationCodeDescription": MessageLookupByLibrary.simpleMessage(
-            "Enter the verification code sent to your email"),
-        "verify": MessageLookupByLibrary.simpleMessage("Verify"),
         "termsAccountUsageTitle":
             MessageLookupByLibrary.simpleMessage("Account Usage"),
         "termsAccurateInfo": MessageLookupByLibrary.simpleMessage(
             "Users are required to provide accurate and truthful information when using the platform."),
+        "termsAndConditions":
+            MessageLookupByLibrary.simpleMessage("Terms and Conditions"),
+        "termsAndConditionsPrefix": MessageLookupByLibrary.simpleMessage(
+            "By signing up, you agree to our"),
         "termsAuctionMgmtTitle":
             MessageLookupByLibrary.simpleMessage("Auction Management"),
         "termsAuctionRules": MessageLookupByLibrary.simpleMessage(
@@ -131,8 +125,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "termsDeliveryTitle": MessageLookupByLibrary.simpleMessage("Delivery"),
         "termsDisputeDecisions": MessageLookupByLibrary.simpleMessage(
             "Safqa\'s dispute resolution team will review all submitted evidence and make a final decision."),
-        "termsDisputesTitle":
-            MessageLookupByLibrary.simpleMessage("Disputes"),
+        "termsDisputesTitle": MessageLookupByLibrary.simpleMessage("Disputes"),
         "termsDowntime": MessageLookupByLibrary.simpleMessage(
             "The platform may experience scheduled or unscheduled downtime for maintenance purposes."),
         "termsFailureToDeliver": MessageLookupByLibrary.simpleMessage(
@@ -154,16 +147,15 @@ class MessageLookup extends MessageLookupByLibrary {
             "Active auction listings cannot be modified once bidding has commenced."),
         "termsNoShareData": MessageLookupByLibrary.simpleMessage(
             "Safqa does not share personal user data with third parties without explicit user consent."),
+        "termsNotResponsible": MessageLookupByLibrary.simpleMessage(
+            "Safqa is not responsible for losses arising from user errors or third-party service failures."),
         "termsNotifGenerated": MessageLookupByLibrary.simpleMessage(
             "Notifications are automatically generated for key events such as new bids, auction endings, and payments."),
         "termsNotifInformational": MessageLookupByLibrary.simpleMessage(
             "Notifications are for informational purposes only and do not constitute legal or financial advice."),
         "termsNotifPolicyTitle":
             MessageLookupByLibrary.simpleMessage("Notification Policy"),
-        "termsNotResponsible": MessageLookupByLibrary.simpleMessage(
-            "Safqa is not responsible for losses arising from user errors or third-party service failures."),
-        "termsPaymentsTitle":
-            MessageLookupByLibrary.simpleMessage("Payments"),
+        "termsPaymentsTitle": MessageLookupByLibrary.simpleMessage("Payments"),
         "termsPlatformCompliance": MessageLookupByLibrary.simpleMessage(
             "All users must comply with the platform\'s rules and regulations at all times."),
         "termsPlatformFees": MessageLookupByLibrary.simpleMessage(
@@ -182,10 +174,10 @@ class MessageLookup extends MessageLookupByLibrary {
             "Security deposits may be required for certain high-value auctions."),
         "termsSellerAccuracy": MessageLookupByLibrary.simpleMessage(
             "Sellers are responsible for the accuracy and completeness of their product listings."),
-        "termsSellerApproval": MessageLookupByLibrary.simpleMessage(
-            "Seller accounts are subject to approval by the Safqa team before becoming active."),
         "termsSellerAppTitle":
             MessageLookupByLibrary.simpleMessage("Seller Application"),
+        "termsSellerApproval": MessageLookupByLibrary.simpleMessage(
+            "Seller accounts are subject to approval by the Safqa team before becoming active."),
         "termsSellerRegTitle":
             MessageLookupByLibrary.simpleMessage("Seller Registration"),
         "termsSellerVerification": MessageLookupByLibrary.simpleMessage(
@@ -199,6 +191,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "termsUpdatedAnytime": MessageLookupByLibrary.simpleMessage(
             "Safqa reserves the right to update these terms and conditions at any time without prior notice."),
         "termsWalletBalance": MessageLookupByLibrary.simpleMessage(
-            "Buyers must maintain sufficient wallet balance to cover their bids and purchases.")
+            "Buyers must maintain sufficient wallet balance to cover their bids and purchases."),
+        "verificationCode":
+            MessageLookupByLibrary.simpleMessage("Verification Code"),
+        "verificationCodeDescription": MessageLookupByLibrary.simpleMessage(
+            "Enter the verification code sent to your email"),
+        "verify": MessageLookupByLibrary.simpleMessage("Verify")
       };
 }
