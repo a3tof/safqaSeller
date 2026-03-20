@@ -5,6 +5,7 @@ import 'package:safqaseller/core/utils/app_images.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
 import 'package:safqaseller/features/home/view/widgets/complete_profile_dialog.dart';
 import 'package:safqaseller/features/home/view/widgets/home_action_card.dart';
+import 'package:safqaseller/features/profile/view/profile_view.dart';
 import 'package:safqaseller/features/wallet/view/wallet_view.dart';
 
 class HomeScreenViewBody extends StatefulWidget {
@@ -162,10 +163,15 @@ class _GreetingRow extends StatelessWidget {
                     width: 1.5,
                   ),
                 ),
-                child: Icon(
-                  Icons.person_rounded,
-                  color: AppColors.primaryColor,
-                  size: 38.sp,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, ProfileView.routeName);
+                  },
+                  icon: Icon(
+                    Icons.person_rounded,
+                    color: AppColors.primaryColor,
+                    size: 38.sp,
+                  ),
                 ),
               ),
               SizedBox(width: 8.w),
@@ -203,9 +209,12 @@ class _GreetingRow extends StatelessWidget {
           children: [
             _HeaderIcon(icon: Icons.notifications_outlined, onTap: () {}),
             SizedBox(width: 8.w),
-            _HeaderIcon(icon: Icons.wallet_outlined, onTap: () {
-              Navigator.pushNamed(context, WalletView.routeName);
-            }),
+            _HeaderIcon(
+              icon: Icons.wallet_rounded,
+              onTap: () {
+                Navigator.pushNamed(context, WalletView.routeName);
+              },
+            ),
           ],
         ),
       ],

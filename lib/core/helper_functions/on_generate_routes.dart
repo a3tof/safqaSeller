@@ -11,6 +11,7 @@ import 'package:safqaseller/features/auth/view/signup_view.dart';
 import 'package:safqaseller/features/auth/view/verification_code_view.dart';
 import 'package:safqaseller/features/home/view/home_screen_view.dart';
 import 'package:safqaseller/features/on_boarding/view/on_boarding_view.dart';
+import 'package:safqaseller/features/profile/view/profile_view.dart';
 import 'package:safqaseller/features/splash/view/splash_screen_view.dart';
 import 'package:safqaseller/features/terms_and_conditions/view/terms_and_conditions_view.dart';
 import 'package:safqaseller/features/wallet/view/add_card_view.dart';
@@ -58,6 +59,10 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
     case TermsAndConditionsView.routeName:
       return MaterialPageRoute(
           builder: (_) => const TermsAndConditionsView());
+
+    // ── Profile ────────────────────────────────────────────────────────────
+    case ProfileView.routeName:
+      return MaterialPageRoute(builder: (_) => const ProfileView());
 
     // ── Wallet ─────────────────────────────────────────────────────────────
     case WalletView.routeName:
