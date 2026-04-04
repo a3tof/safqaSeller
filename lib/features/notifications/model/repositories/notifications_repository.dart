@@ -15,7 +15,7 @@ class NotificationsRepository {
 
   Future<List<NotificationModel>> getNotifications() async {
     final cache = getIt<CacheHelper>();
-    final savedTime = cache.getData(key: 'token_time');
+    final savedTime = cache.getData(key: CacheKeys.tokenTime);
     bool needsRefresh = false;
     if (savedTime is String) {
       final dt = DateTime.tryParse(savedTime);
@@ -54,26 +54,28 @@ class NotificationsRepository {
     final token = cache.getData(key: CacheKeys.token);
     if (token != null) {
       // Use a new Dio instance to avoid interceptor loops
-      final dio = Dio(BaseOptions(
-        baseUrl: AppConfig.baseUrl,
-        validateStatus: (_) => true,
-        headers: {
-          'x-api-key': AppConfig.apiKey,
-          'Content-Type': 'application/json',
-        },
-      ));
-      
+      final dio = Dio(
+        BaseOptions(
+          baseUrl: AppConfig.baseUrl,
+          validateStatus: (_) => true,
+          headers: {
+            'x-api-key': AppConfig.apiKey,
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
       final response = await dio.post(
         'Auth/refresh-token',
         data: '"$token"', // Passing expired token as a simple JSON string
       );
-      
+
       if (response.statusCode == 200) {
         final newToken = response.data['token'] ?? response.data['Token'];
         if (newToken != null) {
           await cache.saveData(key: CacheKeys.token, value: newToken);
           await cache.saveData(
-            key: 'token_time',
+            key: CacheKeys.tokenTime,
             value: DateTime.now().toIso8601String(),
           );
         }

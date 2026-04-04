@@ -2,6 +2,7 @@ abstract class CacheKeys {
   static const String themeMode = 'themeMode';
   static const String language = 'language';
   static const String token = 'token';
+  static const String tokenTime = 'token_time';
   static const String refreshToken = 'refreshToken';
   static const String userId = 'uId';
   static const String deviceId = 'deviceId';

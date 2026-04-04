@@ -42,8 +42,7 @@ class AuthRepository {
     final auth = _parse(r.data);
     if (auth.isSuccess == true) {
       // Derive role from API message and persist to cache
-      final isSeller =
-          (auth.message ?? '').toLowerCase().contains('as seller');
+      final isSeller = (auth.message ?? '').toLowerCase().contains('as seller');
       final role = isSeller ? 'Seller' : 'User';
       await cacheHelper.saveData(key: CacheKeys.role, value: role);
       if (auth.token != null && auth.token!.isNotEmpty) {
@@ -69,6 +68,7 @@ class AuthRepository {
       if (kDebugMode) debugPrint('Logout API failed: $e');
     }
     await cacheHelper.removeData(key: CacheKeys.token);
+    await cacheHelper.removeData(key: CacheKeys.tokenTime);
     await cacheHelper.removeData(key: CacheKeys.refreshToken);
     await cacheHelper.removeData(key: CacheKeys.userId);
     await cacheHelper.saveData(key: CacheKeys.isLoggedIn, value: false);
@@ -158,6 +158,10 @@ class AuthRepository {
 
   Future<void> _saveSession(AuthResponseModel r) async {
     await cacheHelper.saveData(key: CacheKeys.token, value: r.token);
+    await cacheHelper.saveData(
+      key: CacheKeys.tokenTime,
+      value: DateTime.now().toIso8601String(),
+    );
     if (r.refreshToken != null) {
       await cacheHelper.saveData(
         key: CacheKeys.refreshToken,
