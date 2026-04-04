@@ -54,6 +54,10 @@ abstract class TextStyles {
     return TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold);
   }
 
+  static TextStyle medium16(BuildContext context) {
+    return TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500);
+  }
+
   static TextStyle semiBold16(BuildContext context) {
     return TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600);
   }

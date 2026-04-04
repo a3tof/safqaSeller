@@ -22,6 +22,7 @@ import 'package:safqaseller/features/seller/view/seller_home_view.dart';
 import 'package:safqaseller/features/splash/view/splash_screen_view.dart';
 import 'package:safqaseller/features/subscription/view/subscription_view.dart';
 import 'package:safqaseller/features/terms_and_conditions/view/terms_and_conditions_view.dart';
+import 'package:safqaseller/features/notifications/view/notifications_view.dart';
 import 'package:safqaseller/features/wallet/view/add_card_view.dart';
 import 'package:safqaseller/features/wallet/view/deposit_view.dart';
 import 'package:safqaseller/features/wallet/view/saved_cards_view.dart';
@@ -114,6 +115,10 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const WithdrawalView());
     case TransactionHistoryView.routeName:
       return MaterialPageRoute(builder: (_) => const TransactionHistoryView());
+
+    // ── Notifications ──────────────────────────────────────────────────────
+    case NotificationsView.routeName:
+      return MaterialPageRoute(builder: (_) => const NotificationsView());
 
     default:
       return MaterialPageRoute(builder: (_) => const SplashView());

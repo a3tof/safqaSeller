@@ -11,6 +11,7 @@ import 'package:safqaseller/features/home/view/widgets/home_action_card.dart';
 import 'package:safqaseller/features/profile/view/profile_view.dart';
 import 'package:safqaseller/features/profile/view_model/profile_view_model.dart';
 import 'package:safqaseller/features/profile/view_model/profile_view_model_state.dart';
+import 'package:safqaseller/features/notifications/view/notifications_view.dart';
 import 'package:safqaseller/features/wallet/view/wallet_view.dart';
 
 class HomeScreenViewBody extends StatefulWidget {
@@ -228,7 +229,12 @@ class _GreetingRow extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _HeaderIcon(icon: Icons.notifications_outlined, onTap: () {}),
+            _HeaderIcon(
+              icon: Icons.notifications_outlined,
+              onTap: () {
+                Navigator.pushNamed(context, NotificationsView.routeName);
+              },
+            ),
             SizedBox(width: 8.w),
             _HeaderIcon(
               icon: Icons.wallet_rounded,
