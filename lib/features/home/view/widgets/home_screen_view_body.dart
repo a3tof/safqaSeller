@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
 import 'package:safqaseller/core/utils/app_images.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
+import 'package:safqaseller/features/auth/view_model/auth/auth_view_model.dart';
+import 'package:safqaseller/features/auth/view_model/auth/auth_view_model_state.dart';
 import 'package:safqaseller/features/home/view/widgets/complete_profile_dialog.dart';
 import 'package:safqaseller/features/home/view/widgets/home_action_card.dart';
 import 'package:safqaseller/features/profile/view/profile_view.dart';
+import 'package:safqaseller/features/profile/view_model/profile_view_model.dart';
+import 'package:safqaseller/features/profile/view_model/profile_view_model_state.dart';
 import 'package:safqaseller/features/wallet/view/wallet_view.dart';
 
 class HomeScreenViewBody extends StatefulWidget {
@@ -24,11 +29,20 @@ class _HomeScreenViewBodyState extends State<HomeScreenViewBody> {
 
   void _maybeShowDialog() {
     if (!mounted) return;
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => CompleteProfileDialog(onComplete: () {}),
-    );
+
+    // Only show dialog if role == "User" AND profile is NOT completed
+    final authState = context.read<AuthViewModel>().state;
+    final profileVM = context.read<ProfileViewModel>();
+
+    if (authState is AuthAuthenticated && authState.role == 'User') {
+      if (!profileVM.isProfileCompleted) {
+        showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => CompleteProfileDialog(onComplete: () {}),
+        );
+      }
+    }
   }
 
   @override
@@ -36,62 +50,69 @@ class _HomeScreenViewBodyState extends State<HomeScreenViewBody> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: 4.h),
-            const Center(child: _SafqaBusinessLogo()),
-            SizedBox(height: 24.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: const _GreetingRow(),
-            ),
-            SizedBox(height: 32.h),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 24.h),
-                child: Column(
-                  children: [
-                    HomeActionCard(
-                      label: 'New Lot Auction',
-                      showAddIcon: true,
-                      backgroundImage: Assets.imagesHammer,
-                      onTap: () {
-                        Navigator.pushNamed(context, WalletView.routeName);
-                      },
-                    ),
-                    SizedBox(height: 16.h),
-                    HomeActionCard(
-                      label: 'New Single Auction',
-                      showAddIcon: true,
-                      backgroundImage: Assets.imagesHammer,
-                      onTap: () {},
-                    ),
-                    SizedBox(height: 16.h),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: HomeActionCard(
-                            label: 'History',
-                            backgroundImage: Assets.imagesFrame1,
-                            onTap: () {},
+        child: BlocListener<ProfileViewModel, ProfileViewModelState>(
+          listener: (context, state) {
+            // If profile just became completed, no further action needed
+            // The dialog will not show again since isProfileCompleted is true
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: 4.h),
+              const Center(child: _SafqaBusinessLogo()),
+              SizedBox(height: 24.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: const _GreetingRow(),
+              ),
+              SizedBox(height: 32.h),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding:
+                      EdgeInsets.only(left: 16.w, right: 16.w, bottom: 24.h),
+                  child: Column(
+                    children: [
+                      HomeActionCard(
+                        label: 'New Lot Auction',
+                        showAddIcon: true,
+                        backgroundImage: Assets.imagesHammer,
+                        onTap: () {
+                          Navigator.pushNamed(context, WalletView.routeName);
+                        },
+                      ),
+                      SizedBox(height: 16.h),
+                      HomeActionCard(
+                        label: 'New Single Auction',
+                        showAddIcon: true,
+                        backgroundImage: Assets.imagesHammer,
+                        onTap: () {},
+                      ),
+                      SizedBox(height: 16.h),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: HomeActionCard(
+                              label: 'History',
+                              backgroundImage: Assets.imagesFrame1,
+                              onTap: () {},
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Expanded(
-                          child: HomeActionCard(
-                            label: 'Statistics',
-                            backgroundImage: Assets.imagesFrame2,
-                            onTap: () {},
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: HomeActionCard(
+                              label: 'Statistics',
+                              backgroundImage: Assets.imagesFrame2,
+                              onTap: () {},
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

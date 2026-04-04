@@ -1,10 +1,18 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:safqaseller/core/service_locator.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
 import 'package:safqaseller/core/widgets/custom_app_bar.dart';
 import 'package:safqaseller/core/widgets/custom_button.dart';
 import 'package:safqaseller/features/complete_profile/view/identity_verification_view.dart';
+import 'package:safqaseller/features/seller/view_model/seller_view_model.dart';
+import 'package:safqaseller/features/seller/view_model/seller_view_model_state.dart';
 
 class SellerInformationView extends StatefulWidget {
   const SellerInformationView({super.key, this.accountType});
@@ -22,9 +30,12 @@ class _SellerInformationViewState extends State<SellerInformationView> {
   final _phoneController = TextEditingController();
   final _descController = TextEditingController();
 
-  String _selectedCountry = 'Egypt';
   String _selectedCity = 'Cairo';
   String _selectedPhoneCode = '+20';
+  int _selectedCityId = 1;
+  int _selectedBusinessType = 0; // 0 = Personal, 1 = Business
+
+  File? _logoFile;
 
   static const List<Map<String, String>> _countries = [
     {'name': 'Egypt', 'code': '+20', 'flag': '🇪🇬'},
@@ -34,14 +45,24 @@ class _SellerInformationViewState extends State<SellerInformationView> {
     {'name': 'Kuwait', 'code': '+965', 'flag': '🇰🇼'},
   ];
 
-  static const List<String> _cities = [
-    'Cairo',
-    'Alexandria',
-    'Giza',
-    'Luxor',
-    'Aswan',
-    'Sharm El Sheikh',
+  static const List<Map<String, dynamic>> _cities = [
+    {'name': 'Cairo', 'id': 1},
+    {'name': 'Alexandria', 'id': 2},
+    {'name': 'Giza', 'id': 3},
+    {'name': 'Luxor', 'id': 4},
+    {'name': 'Aswan', 'id': 5},
+    {'name': 'Sharm El Sheikh', 'id': 6},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Determine business type from account type argument
+    // Personal = 0, Business = 1
+    if (widget.accountType.toString().toLowerCase().contains('business')) {
+      _selectedBusinessType = 1;
+    }
+  }
 
   @override
   void dispose() {
@@ -51,98 +72,164 @@ class _SellerInformationViewState extends State<SellerInformationView> {
     super.dispose();
   }
 
+  Future<void> _pickLogo() async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+    if (image != null) {
+      setState(() => _logoFile = File(image.path));
+    }
+  }
+
+  Future<void> _submit(SellerViewModel viewModel) async {
+    if (!_formKey.currentState!.validate()) return;
+
+    MultipartFile? logo;
+    if (_logoFile != null) {
+      logo = await MultipartFile.fromFile(
+        _logoFile!.path,
+        filename: _logoFile!.path.split(Platform.pathSeparator).last,
+      );
+    }
+
+    final phoneNumber = '$_selectedPhoneCode${_phoneController.text.trim()}';
+
+    await viewModel.createSeller(
+      storeName: _nameController.text.trim(),
+      phoneNumber: phoneNumber,
+      cityId: _selectedCityId,
+      businessType: _selectedBusinessType,
+      description: _descController.text.trim(),
+      logo: logo,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: buildAppBar(context: context, title: 'Seller Information'),
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 8.h),
-                // Name field
-                _FieldLabel(label: 'Name'),
-                SizedBox(height: 6.h),
-                _InputField(
-                  controller: _nameController,
-                  hint: 'Store Name',
-                  keyboardType: TextInputType.name,
-                ),
-                SizedBox(height: 16.h),
+    return BlocProvider(
+      create: (_) => getIt<SellerViewModel>(),
+      child: BlocConsumer<SellerViewModel, SellerViewModelState>(
+        listener: (context, state) {
+          if (state is SellerCreated) {
+            // Navigate to Identity Verification with sellerId
+            Navigator.pushNamed(
+              context,
+              IdentityVerificationView.routeName,
+              arguments: _selectedBusinessType == 1, // isBusinessFlow
+            );
+          } else if (state is SellerError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red.shade600,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is SellerLoading;
 
-                // Phone number field
-                _FieldLabel(label: 'Number'),
-                SizedBox(height: 6.h),
-                _PhoneField(
-                  phoneController: _phoneController,
-                  countries: _countries,
-                  selectedCode: _selectedPhoneCode,
-                  onCodeChanged: (code) =>
-                      setState(() => _selectedPhoneCode = code),
-                ),
-                SizedBox(height: 16.h),
-
-                // Address
-                _FieldLabel(label: 'Address'),
-                SizedBox(height: 6.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _DropdownField(
-                        value: _selectedCountry,
-                        items: _countries.map((c) => c['name']!).toList(),
-                        hint: 'Country',
-                        onChanged: (v) =>
-                            setState(() => _selectedCountry = v ?? _selectedCountry),
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar:
+                buildAppBar(context: context, title: 'Seller Information'),
+            body: SafeArea(
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 8.h),
+                      // Name field
+                      _FieldLabel(label: 'Store Name'),
+                      SizedBox(height: 6.h),
+                      _InputField(
+                        controller: _nameController,
+                        hint: 'Store Name',
+                        keyboardType: TextInputType.name,
+                        validator: (v) =>
+                            v == null || v.trim().isEmpty
+                                ? 'Store name is required'
+                                : null,
                       ),
-                    ),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: _DropdownField(
+                      SizedBox(height: 16.h),
+
+                      // Phone number field
+                      _FieldLabel(label: 'Phone Number'),
+                      SizedBox(height: 6.h),
+                      _PhoneField(
+                        phoneController: _phoneController,
+                        countries: _countries,
+                        selectedCode: _selectedPhoneCode,
+                        onCodeChanged: (code) =>
+                            setState(() => _selectedPhoneCode = code),
+                      ),
+                      SizedBox(height: 16.h),
+
+                      // City
+                      _FieldLabel(label: 'City'),
+                      SizedBox(height: 6.h),
+                      _CityDropdown(
                         value: _selectedCity,
-                        items: _cities,
-                        hint: 'City',
-                        onChanged: (v) =>
-                            setState(() => _selectedCity = v ?? _selectedCity),
+                        cities: _cities,
+                        onChanged: (name, id) {
+                          setState(() {
+                            _selectedCity = name;
+                            _selectedCityId = id;
+                          });
+                        },
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 16.h),
+
+                      // Logo
+                      _FieldLabel(label: 'Logo (Optional)'),
+                      SizedBox(height: 6.h),
+                      _ImagePickerBox(
+                        file: _logoFile,
+                        onTap: _pickLogo,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      // Description
+                      _FieldLabel(label: 'Description'),
+                      SizedBox(height: 6.h),
+                      _DescriptionField(
+                        controller: _descController,
+                        validator: (v) =>
+                            v == null || v.trim().isEmpty
+                                ? 'Description is required'
+                                : null,
+                      ),
+                      SizedBox(height: 32.h),
+
+                      isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.primaryColor,
+                              ),
+                            )
+                          : CustomButton(
+                              onPressed: () {
+                                _submit(
+                                    context.read<SellerViewModel>());
+                              },
+                              text: 'Save & Continue',
+                              textColor: Colors.white,
+                              backgroundColor: AppColors.primaryColor,
+                            ),
+                      SizedBox(height: 16.h),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 16.h),
-
-                // Logo
-                _FieldLabel(label: 'Logo (Optional)'),
-                SizedBox(height: 6.h),
-                _ImagePickerBox(),
-                SizedBox(height: 16.h),
-
-                // Description
-                _FieldLabel(label: 'Description'),
-                SizedBox(height: 6.h),
-                _DescriptionField(controller: _descController),
-                SizedBox(height: 32.h),
-
-                CustomButton(
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      IdentityVerificationView.routeName,
-                    );
-                  },
-                  text: 'Save & Continue',
-                  textColor: Colors.white,
-                  backgroundColor: AppColors.primaryColor,
-                ),
-                SizedBox(height: 16.h),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -170,17 +257,20 @@ class _InputField extends StatelessWidget {
     required this.controller,
     required this.hint,
     this.keyboardType = TextInputType.text,
+    this.validator,
   });
 
   final TextEditingController controller;
   final String hint;
   final TextInputType keyboardType;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
+      validator: validator,
       style: TextStyles.regular14(context).copyWith(color: Colors.black87),
       decoration: _inputDecoration(hint),
     );
@@ -215,7 +305,8 @@ class _PhoneField extends StatelessWidget {
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: selectedCode,
-              icon: Icon(Icons.arrow_drop_down, size: 18.sp, color: Colors.grey),
+              icon:
+                  Icon(Icons.arrow_drop_down, size: 18.sp, color: Colors.grey),
               items: countries.map((c) {
                 return DropdownMenuItem<String>(
                   value: c['code'],
@@ -244,7 +335,10 @@ class _PhoneField extends StatelessWidget {
           child: TextFormField(
             controller: phoneController,
             keyboardType: TextInputType.phone,
-            style: TextStyles.regular14(context).copyWith(color: Colors.black87),
+            validator: (v) =>
+                v == null || v.trim().isEmpty ? 'Phone number is required' : null,
+            style:
+                TextStyles.regular14(context).copyWith(color: Colors.black87),
             decoration: _inputDecoration('Phone Number'),
           ),
         ),
@@ -253,18 +347,16 @@ class _PhoneField extends StatelessWidget {
   }
 }
 
-class _DropdownField extends StatelessWidget {
-  const _DropdownField({
+class _CityDropdown extends StatelessWidget {
+  const _CityDropdown({
     required this.value,
-    required this.items,
-    required this.hint,
+    required this.cities,
     required this.onChanged,
   });
 
   final String value;
-  final List<String> items;
-  final String hint;
-  final ValueChanged<String?> onChanged;
+  final List<Map<String, dynamic>> cities;
+  final void Function(String name, int id) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -280,12 +372,23 @@ class _DropdownField extends StatelessWidget {
         child: DropdownButton<String>(
           value: value,
           isExpanded: true,
-          icon: Icon(Icons.arrow_drop_down, size: 20.sp, color: Colors.grey),
-          style: TextStyles.regular14(context).copyWith(color: Colors.black87),
-          items: items
-              .map((item) => DropdownMenuItem(value: item, child: Text(item)))
+          icon:
+              Icon(Icons.arrow_drop_down, size: 20.sp, color: Colors.grey),
+          style:
+              TextStyles.regular14(context).copyWith(color: Colors.black87),
+          items: cities
+              .map((c) => DropdownMenuItem(
+                    value: c['name'] as String,
+                    child: Text(c['name'] as String),
+                  ))
               .toList(),
-          onChanged: onChanged,
+          onChanged: (v) {
+            if (v != null) {
+              final city =
+                  cities.firstWhere((c) => c['name'] == v);
+              onChanged(v, city['id'] as int);
+            }
+          },
         ),
       ),
     );
@@ -293,31 +396,47 @@ class _DropdownField extends StatelessWidget {
 }
 
 class _ImagePickerBox extends StatelessWidget {
-  const _ImagePickerBox();
+  const _ImagePickerBox({this.file, required this.onTap});
+
+  final File? file;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // TODO: implement image picker
-      },
+      onTap: onTap,
       child: Container(
         width: double.infinity,
         height: 52.h,
         decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFFDDE3EE)),
+          border: Border.all(
+            color: file != null
+                ? AppColors.primaryColor
+                : const Color(0xFFDDE3EE),
+          ),
           borderRadius: BorderRadius.circular(8.r),
-          color: Colors.white,
+          color: file != null ? AppColors.secondaryColor : Colors.white,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Add Image ',
-              style: TextStyles.regular14(context)
-                  .copyWith(color: const Color(0xFF999999)),
-            ),
-            Icon(Icons.add, size: 18.sp, color: const Color(0xFF999999)),
+            if (file != null) ...[
+              Icon(Icons.check_circle_rounded,
+                  size: 18.sp, color: Colors.green),
+              SizedBox(width: 6.w),
+              Text(
+                'Image selected',
+                style: TextStyles.regular14(context)
+                    .copyWith(color: AppColors.primaryColor),
+              ),
+            ] else ...[
+              Text(
+                'Add Image ',
+                style: TextStyles.regular14(context)
+                    .copyWith(color: const Color(0xFF999999)),
+              ),
+              Icon(Icons.add, size: 18.sp, color: const Color(0xFF999999)),
+            ],
           ],
         ),
       ),
@@ -326,8 +445,9 @@ class _ImagePickerBox extends StatelessWidget {
 }
 
 class _DescriptionField extends StatefulWidget {
-  const _DescriptionField({required this.controller});
+  const _DescriptionField({required this.controller, this.validator});
   final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   @override
   State<_DescriptionField> createState() => _DescriptionFieldState();
@@ -354,12 +474,13 @@ class _DescriptionFieldState extends State<_DescriptionField> {
           maxLength: _maxChars,
           maxLines: 4,
           minLines: 4,
-          buildCounter: (_, {required currentLength, required isFocused, maxLength}) =>
-              const SizedBox.shrink(),
+          validator: widget.validator,
+          buildCounter:
+              (_, {required currentLength, required isFocused, maxLength}) =>
+                  const SizedBox.shrink(),
           style: TextStyles.regular14(context).copyWith(color: Colors.black87),
           decoration: _inputDecoration('').copyWith(
-            contentPadding:
-                EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 28.h),
+            contentPadding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 28.h),
           ),
         ),
         Positioned(
@@ -379,14 +500,14 @@ class _DescriptionFieldState extends State<_DescriptionField> {
 InputDecoration _inputDecoration(String hint) {
   return InputDecoration(
     hintText: hint,
-    hintStyle: TextStyle(
+    hintStyle: const TextStyle(
       fontSize: 14,
-      color: const Color(0xFF999999),
+      color: Color(0xFF999999),
       fontWeight: FontWeight.w400,
     ),
     filled: true,
     fillColor: Colors.white,
-    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
       borderSide: const BorderSide(color: Color(0xFFDDE3EE)),

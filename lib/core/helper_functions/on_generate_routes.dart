@@ -18,6 +18,7 @@ import 'package:safqaseller/features/complete_profile/view/legal_documents_view.
 import 'package:safqaseller/features/complete_profile/view/seller_information_view.dart';
 import 'package:safqaseller/features/complete_profile/view/store_information_view.dart';
 import 'package:safqaseller/features/profile/view/profile_view.dart';
+import 'package:safqaseller/features/seller/view/seller_home_view.dart';
 import 'package:safqaseller/features/splash/view/splash_screen_view.dart';
 import 'package:safqaseller/features/subscription/view/subscription_view.dart';
 import 'package:safqaseller/features/terms_and_conditions/view/terms_and_conditions_view.dart';
@@ -89,7 +90,14 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
     case LegalDocumentsView.routeName:
       return MaterialPageRoute(builder: (_) => const LegalDocumentsView());
     case FinancialDetailsView.routeName:
-      return MaterialPageRoute(builder: (_) => const FinancialDetailsView());
+      final args = settings.arguments as LegalDocumentsArgs?;
+      return MaterialPageRoute(
+        builder: (_) => FinancialDetailsView(legalDocs: args),
+      );
+
+    // ── Seller Home ────────────────────────────────────────────────────────
+    case SellerHomeView.routeName:
+      return MaterialPageRoute(builder: (_) => const SellerHomeView());
 
     // ── Wallet ─────────────────────────────────────────────────────────────
     case WalletView.routeName:

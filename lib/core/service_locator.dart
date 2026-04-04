@@ -4,12 +4,16 @@ import 'package:safqaseller/core/network/dio_client.dart';
 import 'package:safqaseller/core/storage/cache_helper.dart';
 import 'package:safqaseller/core/storage/cache_keys.dart';
 import 'package:safqaseller/features/auth/model/repositories/auth_repository.dart';
+import 'package:safqaseller/features/auth/view_model/auth/auth_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/confirm_email/confirm_email_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/login/login_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/logout/logout_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/register/register_view_model.dart';
 import 'package:safqaseller/features/forgot_password/model/repositories/forgot_password_repository.dart';
 import 'package:safqaseller/features/forgot_password/view_model/forgot_password_view_model.dart';
+import 'package:safqaseller/features/profile/view_model/profile_view_model.dart';
+import 'package:safqaseller/features/seller/model/repositories/seller_repository.dart';
+import 'package:safqaseller/features/seller/view_model/seller_view_model.dart';
 import 'package:safqaseller/features/wallet/model/repositories/wallet_repository.dart';
 import 'package:safqaseller/features/wallet/view_model/add_card/add_card_view_model.dart';
 import 'package:safqaseller/features/wallet/view_model/deposit/deposit_view_model.dart';
@@ -45,17 +49,27 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton(
     () => WalletRepository(dioHelper: getIt()),
   );
+  getIt.registerLazySingleton(
+    () => SellerRepository(dioHelper: getIt()),
+  );
 
-  // 4. ViewModels (factory = new instance per call)
+  // 4. Global ViewModels (singletons — live for the app lifetime)
+  getIt.registerLazySingleton(() => AuthViewModel(getIt()));
+  getIt.registerLazySingleton(() => ProfileViewModel(getIt()));
+
+  // 5. ViewModels (factory = new instance per call)
   getIt.registerFactory(() => RegisterViewModel(getIt()));
   getIt.registerFactory(() => LoginViewModel(getIt()));
   getIt.registerFactory(() => ConfirmEmailViewModel(getIt()));
   getIt.registerFactory(() => ForgotPasswordViewModel(getIt()));
-  getIt.registerFactory(() => LogoutViewModel(getIt()));
+  getIt.registerFactory(() => LogoutViewModel(getIt<AuthViewModel>()));
   getIt.registerFactory(() => WalletViewModel(getIt()));
   getIt.registerFactory(() => AddCardViewModel(getIt()));
   getIt.registerFactory(() => DepositViewModel(getIt()));
   getIt.registerFactory(() => WithdrawalViewModel(getIt()));
+  getIt.registerFactory(
+    () => SellerViewModel(sellerRepository: getIt(), cacheHelper: getIt()),
+  );
 }
 
 String _generateDeviceId() {

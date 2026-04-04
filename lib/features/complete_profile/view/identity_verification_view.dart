@@ -1,10 +1,21 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:safqaseller/core/service_locator.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
 import 'package:safqaseller/core/widgets/custom_app_bar.dart';
 import 'package:safqaseller/core/widgets/custom_button.dart';
+import 'package:safqaseller/features/auth/view_model/auth/auth_view_model.dart';
 import 'package:safqaseller/features/complete_profile/view/store_information_view.dart';
+import 'package:safqaseller/features/home/view/home_screen_view.dart';
+import 'package:safqaseller/features/profile/view_model/profile_view_model.dart';
+import 'package:safqaseller/features/seller/view_model/seller_view_model.dart';
+import 'package:safqaseller/features/seller/view_model/seller_view_model_state.dart';
 
 class IdentityVerificationView extends StatefulWidget {
   const IdentityVerificationView({super.key, this.isBusinessFlow = false});
@@ -18,82 +29,162 @@ class IdentityVerificationView extends StatefulWidget {
 }
 
 class _IdentityVerificationViewState extends State<IdentityVerificationView> {
-  bool _idFrontUploaded = false;
-  bool _idBackUploaded = false;
-  bool _selfieUploaded = false;
+  File? _idFrontFile;
+  File? _idBackFile;
+  File? _selfieFile;
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage(void Function(File) onPicked,
+      {ImageSource source = ImageSource.gallery}) async {
+    final image = await _picker.pickImage(source: source, imageQuality: 80);
+    if (image != null) {
+      setState(() => onPicked(File(image.path)));
+    }
+  }
+
+  Future<void> _submit(SellerViewModel viewModel) async {
+    if (_idFrontFile == null || _idBackFile == null || _selfieFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Please upload all three documents'),
+          backgroundColor: Colors.red.shade600,
+        ),
+      );
+      return;
+    }
+
+    final nationalIdFront = await MultipartFile.fromFile(
+      _idFrontFile!.path,
+      filename: 'national_id_front.jpg',
+    );
+    final nationalIdBack = await MultipartFile.fromFile(
+      _idBackFile!.path,
+      filename: 'national_id_back.jpg',
+    );
+    final selfieWithId = await MultipartFile.fromFile(
+      _selfieFile!.path,
+      filename: 'selfie_with_id.jpg',
+    );
+
+    await viewModel.uploadPersonalVerification(
+      nationalIdFront: nationalIdFront,
+      nationalIdBack: nationalIdBack,
+      selfieWithId: selfieWithId,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: buildAppBar(context: context, title: 'Identity Verification'),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 24.h),
-              Text(
-                'To start selling, we need to confirm it\'s you',
-                style: TextStyles.regular16(context)
-                    .copyWith(color: const Color(0xFF444444), height: 1.5),
+    return BlocProvider(
+      create: (_) => getIt<SellerViewModel>(),
+      child: BlocConsumer<SellerViewModel, SellerViewModelState>(
+        listener: (context, state) {
+          if (state is PersonalVerificationSuccess) {
+            if (widget.isBusinessFlow) {
+              // Business flow: continue to Store Information
+              Navigator.pushNamed(
+                context,
+                StoreInformationView.routeName,
+              );
+            } else {
+              // Personal flow: mark profile complete and go home
+              getIt<ProfileViewModel>().completeProfile();
+              getIt<AuthViewModel>().setRole('Seller');
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Your profile has been submitted for review!',
+                  ),
+                  backgroundColor: Color(0xFF023E8A),
+                ),
+              );
+
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                HomeScreenView.routeName,
+                (route) => false,
+              );
+            }
+          } else if (state is SellerError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red.shade600,
               ),
-              SizedBox(height: 24.h),
-              _UploadTile(
-                icon: Icons.camera_alt_outlined,
-                label: 'Upload National ID (Front)',
-                uploaded: _idFrontUploaded,
-                onTap: () {
-                  // TODO: implement image picker
-                  setState(() => _idFrontUploaded = !_idFrontUploaded);
-                },
-              ),
-              SizedBox(height: 12.h),
-              _UploadTile(
-                icon: Icons.camera_alt_outlined,
-                label: 'Upload National ID (Back)',
-                uploaded: _idBackUploaded,
-                onTap: () {
-                  setState(() => _idBackUploaded = !_idBackUploaded);
-                },
-              ),
-              SizedBox(height: 12.h),
-              _UploadTile(
-                icon: Icons.sentiment_satisfied_alt_outlined,
-                label: 'Take a Selfie with ID',
-                uploaded: _selfieUploaded,
-                onTap: () {
-                  setState(() => _selfieUploaded = !_selfieUploaded);
-                },
-              ),
-              const Spacer(),
-              CustomButton(
-                onPressed: () {
-                  if (widget.isBusinessFlow) {
-                    Navigator.pushNamed(
-                      context,
-                      StoreInformationView.routeName,
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Your profile has been submitted for review!',
-                        ),
-                        backgroundColor: Color(0xFF023E8A),
+            );
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is SellerLoading;
+
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: buildAppBar(
+                context: context, title: 'Identity Verification'),
+            body: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 24.h),
+                    Text(
+                      'To start selling, we need to confirm it\'s you',
+                      style: TextStyles.regular16(context).copyWith(
+                          color: const Color(0xFF444444), height: 1.5),
+                    ),
+                    SizedBox(height: 24.h),
+                    _UploadTile(
+                      icon: Icons.camera_alt_outlined,
+                      label: 'Upload National ID (Front)',
+                      uploaded: _idFrontFile != null,
+                      onTap: () =>
+                          _pickImage((f) => _idFrontFile = f),
+                    ),
+                    SizedBox(height: 12.h),
+                    _UploadTile(
+                      icon: Icons.camera_alt_outlined,
+                      label: 'Upload National ID (Back)',
+                      uploaded: _idBackFile != null,
+                      onTap: () =>
+                          _pickImage((f) => _idBackFile = f),
+                    ),
+                    SizedBox(height: 12.h),
+                    _UploadTile(
+                      icon: Icons.sentiment_satisfied_alt_outlined,
+                      label: 'Take a Selfie with ID',
+                      uploaded: _selfieFile != null,
+                      onTap: () => _pickImage(
+                        (f) => _selfieFile = f,
+                        source: ImageSource.camera,
                       ),
-                    );
-                  }
-                },
-                text: widget.isBusinessFlow ? 'Continue' : 'Submit for Review',
-                textColor: Colors.white,
-                backgroundColor: AppColors.primaryColor,
+                    ),
+                    const Spacer(),
+                    isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primaryColor,
+                            ),
+                          )
+                        : CustomButton(
+                            onPressed: () {
+                              _submit(context.read<SellerViewModel>());
+                            },
+                            text: widget.isBusinessFlow
+                                ? 'Continue'
+                                : 'Submit for Review',
+                            textColor: Colors.white,
+                            backgroundColor: AppColors.primaryColor,
+                          ),
+                    SizedBox(height: 24.h),
+                  ],
+                ),
               ),
-              SizedBox(height: 24.h),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

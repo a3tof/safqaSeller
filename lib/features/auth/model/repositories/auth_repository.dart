@@ -32,14 +32,20 @@ class AuthRepository {
   // ── Login ─────────────────────────────────────────────────────────────────
 
   Future<AuthResponseModel> loginUser(LoginRequestModel model) async {
-    if (kDebugMode) debugPrint('AuthRepository: POST Auth/login');
+    if (kDebugMode) debugPrint('AuthRepository: POST Auth/login?role=seller');
     final r = await dioHelper.postData(
       endPoint: 'Auth/login',
       data: model.toJson(),
+      queryParams: {'role': 'seller'},
     );
     _requireSuccess(r);
     final auth = _parse(r.data);
     if (auth.isSuccess == true && auth.token != null) {
+      // Derive role from API message and persist to cache
+      final isSeller =
+          (auth.message ?? '').toLowerCase().contains('as seller');
+      final role = isSeller ? 'Seller' : 'User';
+      await cacheHelper.saveData(key: CacheKeys.role, value: role);
       await _saveSession(auth);
       return auth;
     }

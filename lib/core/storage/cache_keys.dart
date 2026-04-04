@@ -8,4 +8,7 @@ abstract class CacheKeys {
   static const String isLoggedIn = 'isLoggedIn';
   static const String onboardingSeen = 'onboardingSeen';
   static const String notificationsEnabled = 'notificationsEnabled';
+  static const String role = 'role';
+  static const String isProfileCompleted = 'isProfileCompleted';
+  static const String sellerId = 'sellerId';
 }

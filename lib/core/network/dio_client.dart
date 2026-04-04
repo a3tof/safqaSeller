@@ -49,11 +49,13 @@ class DioHelper {
   Future<Response<dynamic>> postData({
     required String endPoint,
     required Map<String, dynamic> data,
+    Map<String, dynamic>? queryParams,
     bool requiresAuth = false,
   }) async {
     return dio.post<dynamic>(
       endPoint,
       data: data,
+      queryParameters: queryParams,
       options: Options(extra: {'requiresAuth': requiresAuth}),
     );
   }
@@ -77,6 +79,20 @@ class DioHelper {
       endPoint,
       queryParameters: queryParams,
       options: Options(extra: {'requiresAuth': requiresAuth}),
+    );
+  }
+
+  Future<Response<dynamic>> postFormData({
+    required String endPoint,
+    required FormData data,
+    bool requiresAuth = false,
+  }) async {
+    return dio.post<dynamic>(
+      endPoint,
+      data: data,
+      options: Options(
+        extra: {'requiresAuth': requiresAuth},
+      ),
     );
   }
 

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
 import 'package:safqaseller/core/widgets/custom_app_bar.dart';
@@ -7,6 +10,7 @@ import 'package:safqaseller/core/widgets/custom_button.dart';
 import 'package:safqaseller/features/complete_profile/view/financial_details_view.dart';
 
 /// Legal Documents screen – shown for Business Account after Store Information.
+/// Collects document files and passes them to the FinancialDetailsView.
 class LegalDocumentsView extends StatefulWidget {
   const LegalDocumentsView({super.key});
   static const String routeName = 'legalDocumentsView';
@@ -16,10 +20,22 @@ class LegalDocumentsView extends StatefulWidget {
 }
 
 class _LegalDocumentsViewState extends State<LegalDocumentsView> {
-  bool _crUploaded = false;
-  bool _taxIdUploaded = false;
-  bool _nationalIdFrontUploaded = false;
-  bool _nationalIdBackUploaded = false;
+  File? _crFile;
+  File? _taxIdFile;
+  File? _nationalIdFrontFile;
+  File? _nationalIdBackFile;
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickFile(void Function(File) onPicked) async {
+    final image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+    if (image != null) {
+      setState(() => onPicked(File(image.path)));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,37 +60,59 @@ class _LegalDocumentsViewState extends State<LegalDocumentsView> {
               _DocumentTile(
                 icon: Icons.description_outlined,
                 label: 'Upload Commercial Registration (CR)',
-                uploaded: _crUploaded,
-                onTap: () => setState(() => _crUploaded = !_crUploaded),
+                uploaded: _crFile != null,
+                onTap: () => _pickFile((f) => _crFile = f),
               ),
               SizedBox(height: 12.h),
               _DocumentTile(
                 icon: Icons.description_outlined,
                 label: 'Upload Tax ID',
-                uploaded: _taxIdUploaded,
-                onTap: () =>
-                    setState(() => _taxIdUploaded = !_taxIdUploaded),
+                uploaded: _taxIdFile != null,
+                onTap: () => _pickFile((f) => _taxIdFile = f),
               ),
               SizedBox(height: 12.h),
               _DocumentTile(
                 icon: Icons.camera_alt_outlined,
                 label: 'Upload Owner\'s National ID (Front)',
-                uploaded: _nationalIdFrontUploaded,
-                onTap: () => setState(
-                    () => _nationalIdFrontUploaded = !_nationalIdFrontUploaded),
+                uploaded: _nationalIdFrontFile != null,
+                onTap: () =>
+                    _pickFile((f) => _nationalIdFrontFile = f),
               ),
               SizedBox(height: 12.h),
               _DocumentTile(
                 icon: Icons.camera_alt_outlined,
                 label: 'Upload Owner\'s National ID (Back)',
-                uploaded: _nationalIdBackUploaded,
-                onTap: () => setState(
-                    () => _nationalIdBackUploaded = !_nationalIdBackUploaded),
+                uploaded: _nationalIdBackFile != null,
+                onTap: () =>
+                    _pickFile((f) => _nationalIdBackFile = f),
               ),
               const Spacer(),
               CustomButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, FinancialDetailsView.routeName);
+                  if (_crFile == null ||
+                      _taxIdFile == null ||
+                      _nationalIdFrontFile == null ||
+                      _nationalIdBackFile == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:
+                            const Text('Please upload all four documents'),
+                        backgroundColor: Colors.red.shade600,
+                      ),
+                    );
+                    return;
+                  }
+                  // Pass document files to FinancialDetailsView
+                  Navigator.pushNamed(
+                    context,
+                    FinancialDetailsView.routeName,
+                    arguments: LegalDocumentsArgs(
+                      commercialRegister: _crFile!,
+                      taxId: _taxIdFile!,
+                      ownerNationalIdFront: _nationalIdFrontFile!,
+                      ownerNationalIdBack: _nationalIdBackFile!,
+                    ),
+                  );
                 },
                 text: 'Save & Continue',
                 textColor: Colors.white,
@@ -87,6 +125,21 @@ class _LegalDocumentsViewState extends State<LegalDocumentsView> {
       ),
     );
   }
+}
+
+/// Arguments passed from LegalDocumentsView to FinancialDetailsView.
+class LegalDocumentsArgs {
+  final File commercialRegister;
+  final File taxId;
+  final File ownerNationalIdFront;
+  final File ownerNationalIdBack;
+
+  LegalDocumentsArgs({
+    required this.commercialRegister,
+    required this.taxId,
+    required this.ownerNationalIdFront,
+    required this.ownerNationalIdBack,
+  });
 }
 
 class _DocumentTile extends StatelessWidget {
@@ -139,8 +192,9 @@ class _DocumentTile extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: TextStyles.medium15(context)
-                    .copyWith(color: AppColors.primaryColor),
+                style: TextStyles.medium15(context).copyWith(
+                  color: AppColors.primaryColor,
+                ),
               ),
             ),
             if (uploaded)

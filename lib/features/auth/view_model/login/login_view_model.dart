@@ -32,11 +32,15 @@ class LoginViewModel extends Cubit<LoginState> {
     emit(LoginLoading());
 
     try {
-      await authRepository.loginUser(
+      final result = await authRepository.loginUser(
         LoginRequestModel(email: email, password: password),
       );
-      if (kDebugMode) print('LoginViewModel: login successful');
-      emit(LoginSuccess());
+      final isSeller =
+          (result.message ?? '').toLowerCase().contains('as seller');
+      if (kDebugMode) {
+        print('LoginViewModel: login successful — isSeller: $isSeller');
+      }
+      emit(LoginSuccess(isSeller: isSeller));
     } catch (e) {
       final message = _clean(e);
       if (kDebugMode) print('LoginViewModel: login failed — $message');
@@ -71,12 +75,16 @@ class LoginViewModel extends Cubit<LoginState> {
         return;
       }
 
-      await authRepository.loginWithGoogle(
+      final result = await authRepository.loginWithGoogle(
         GoogleAuthRequestModel(idToken: idToken),
       );
 
-      if (kDebugMode) print('LoginViewModel: Google login successful');
-      emit(LoginSuccess());
+      final isSeller =
+          (result.message ?? '').toLowerCase().contains('as seller');
+      if (kDebugMode) {
+        print('LoginViewModel: Google login successful — isSeller: $isSeller');
+      }
+      emit(LoginSuccess(isSeller: isSeller));
     } on GoogleSignInException catch (e) {
       if (kDebugMode) {
         print('Google sign-in exception: ${e.code.name} — ${e.description}');
@@ -130,12 +138,18 @@ class LoginViewModel extends Cubit<LoginState> {
           print('Access Token: $accessToken');
         }
 
-        await authRepository.loginWithFacebook(
+        final authResult = await authRepository.loginWithFacebook(
           FacebookAuthRequestModel(accessToken: accessToken),
         );
 
-        if (kDebugMode) print('LoginViewModel: Facebook login successful');
-        emit(LoginSuccess());
+        final isSeller =
+            (authResult.message ?? '').toLowerCase().contains('as seller');
+        if (kDebugMode) {
+          print(
+            'LoginViewModel: Facebook login successful — isSeller: $isSeller',
+          );
+        }
+        emit(LoginSuccess(isSeller: isSeller));
       } else if (result.status == LoginStatus.cancelled) {
         if (kDebugMode) print('Facebook login cancelled by user');
         emit(LoginInitial());
