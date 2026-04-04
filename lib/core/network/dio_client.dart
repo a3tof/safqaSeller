@@ -227,6 +227,13 @@ String extractResponseError(dynamic data, int? statusCode) {
     if (msg != null && msg.isNotEmpty) return msg;
 
     final errors = body['Errors'] ?? body['errors'];
+    if (errors is Map && errors.isNotEmpty) {
+      final firstErrorValue = errors.values.first;
+      if (firstErrorValue is List && firstErrorValue.isNotEmpty) {
+        return firstErrorValue.first?.toString() ?? 'Validation error';
+      }
+      return firstErrorValue.toString();
+    }
     if (errors is List && errors.isNotEmpty) {
       return errors.first?.toString() ?? 'Unknown error';
     }

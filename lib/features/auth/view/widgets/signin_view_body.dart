@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/constants.dart';
 import 'package:safqaseller/core/service_locator.dart';
-import 'package:safqaseller/core/storage/cache_helper.dart';
-import 'package:safqaseller/core/storage/cache_keys.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
 import 'package:safqaseller/core/utils/app_images.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
@@ -21,7 +19,6 @@ import 'package:safqaseller/features/auth/view_model/auth/auth_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/login/login_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/login/login_view_model_state.dart';
 import 'package:safqaseller/features/home/view/home_screen_view.dart';
-import 'package:safqaseller/features/home/view/widgets/complete_profile_dialog.dart';
 import 'package:safqaseller/generated/l10n.dart';
 
 class SigninViewBody extends StatefulWidget {
@@ -71,21 +68,6 @@ class _SigninViewBodyState extends State<SigninViewBody> {
               HomeScreenView.routeName,
               (route) => false,
             );
-
-            final isProfileCompleted =
-                getIt<CacheHelper>().getData(key: CacheKeys.isProfileCompleted)
-                    as bool? ??
-                false;
-
-            if (!isProfileCompleted && context.mounted) {
-              showDialog<void>(
-                context: context,
-                barrierDismissible: false,
-                builder: (_) => CompleteProfileDialog(
-                  onComplete: () {},
-                ),
-              );
-            }
           }
         } else if (state is LoginError) {
           if (kDebugMode) print('UI: Login failed — ${state.message}');

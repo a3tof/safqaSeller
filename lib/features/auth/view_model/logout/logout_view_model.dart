@@ -3,6 +3,7 @@ import 'package:safqaseller/core/service_locator.dart';
 import 'package:safqaseller/features/auth/view_model/auth/auth_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/logout/logout_view_model_state.dart';
 import 'package:safqaseller/features/profile/view_model/profile_view_model.dart';
+import 'package:safqaseller/features/auth/model/repositories/auth_repository.dart';
 
 class LogoutViewModel extends Cubit<LogoutState> {
   final AuthViewModel _authViewModel;
@@ -12,6 +13,9 @@ class LogoutViewModel extends Cubit<LogoutState> {
   Future<void> logout() async {
     emit(LogoutLoading());
     try {
+      // Call repository to hit the signout API endpoint
+      await getIt<AuthRepository>().logout();
+
       // AuthViewModel.logout() clears all cached data:
       // token, refreshToken, userId, role, isProfileCompleted, sellerId, isLoggedIn
       await _authViewModel.logout();

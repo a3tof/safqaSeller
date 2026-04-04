@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:safqaseller/features/auth/view_model/logout/logout_view_model.dart';
 import 'package:safqaseller/features/profile/view/widgets/profile_header_section.dart';
 import 'package:safqaseller/features/profile/view/widgets/profile_info_field.dart';
 import 'package:safqaseller/features/profile/view/widgets/profile_menu_item.dart';
@@ -73,6 +75,16 @@ class ProfileViewBody extends StatelessWidget {
               icon: Icons.star_outline,
               label: 'Reviews & Ratings',
               onTap: () {},
+            ),
+            SizedBox(height: 12.h),
+            ProfileMenuItem(
+              icon: Icons.logout_rounded,
+              label: 'Logout',
+              iconColor: Colors.red,
+              textColor: Colors.red,
+              onTap: () {
+                context.read<LogoutViewModel>().logout();
+              },
             ),
             SizedBox(height: 24.h),
           ],

@@ -4,5 +4,5 @@ class ConfirmEmailRequestModel {
 
   const ConfirmEmailRequestModel({required this.email, required this.otp});
 
-  Map<String, dynamic> toJson() => {'Email': email, 'Otp': otp};
+  Map<String, dynamic> toJson() => {'email': email, 'otp': otp};
 }

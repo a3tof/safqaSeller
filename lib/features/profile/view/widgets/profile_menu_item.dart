@@ -9,12 +9,16 @@ class ProfileMenuItem extends StatelessWidget {
     required this.icon,
     required this.label,
     this.trailingIcon = Icons.chevron_right,
+    this.iconColor,
+    this.textColor,
     this.onTap,
   });
 
   final IconData icon;
   final String label;
   final IconData trailingIcon;
+  final Color? iconColor;
+  final Color? textColor;
   final VoidCallback? onTap;
 
   @override
@@ -31,17 +35,25 @@ class ProfileMenuItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.primaryColor, size: 22.sp),
+            Icon(
+              icon,
+              color: iconColor ?? AppColors.primaryColor,
+              size: 22.sp,
+            ),
             SizedBox(width: 12.w),
             Expanded(
               child: Text(
                 label,
                 style: TextStyles.regular14(context).copyWith(
-                  color: AppColors.primaryColor,
+                  color: textColor ?? AppColors.primaryColor,
                 ),
               ),
             ),
-            Icon(trailingIcon, color: AppColors.primaryColor, size: 22.sp),
+            Icon(
+              trailingIcon,
+              color: iconColor ?? AppColors.primaryColor,
+              size: 22.sp,
+            ),
           ],
         ),
       ),

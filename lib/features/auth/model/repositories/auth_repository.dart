@@ -40,13 +40,18 @@ class AuthRepository {
     );
     _requireSuccess(r);
     final auth = _parse(r.data);
-    if (auth.isSuccess == true && auth.token != null) {
+    if (auth.isSuccess == true) {
       // Derive role from API message and persist to cache
       final isSeller =
           (auth.message ?? '').toLowerCase().contains('as seller');
       final role = isSeller ? 'Seller' : 'User';
       await cacheHelper.saveData(key: CacheKeys.role, value: role);
-      await _saveSession(auth);
+      if (auth.token != null && auth.token!.isNotEmpty) {
+        await _saveSession(auth);
+      } else {
+        // If the token is missing but it's a success, we still mark as logged in.
+        await cacheHelper.saveData(key: CacheKeys.isLoggedIn, value: true);
+      }
       return auth;
     }
     throw Exception(auth.message ?? 'Login failed');
@@ -55,6 +60,14 @@ class AuthRepository {
   // ── Logout ────────────────────────────────────────────────────────────────
 
   Future<void> logout() async {
+    try {
+      await dioHelper.postNoBody(
+        endPoint: 'Auth/signout-all',
+        requiresAuth: true,
+      );
+    } catch (e) {
+      if (kDebugMode) debugPrint('Logout API failed: $e');
+    }
     await cacheHelper.removeData(key: CacheKeys.token);
     await cacheHelper.removeData(key: CacheKeys.refreshToken);
     await cacheHelper.removeData(key: CacheKeys.userId);
@@ -65,8 +78,8 @@ class AuthRepository {
 
   Future<void> resendConfirmationOtp(String email) async {
     final r = await dioHelper.postData(
-      endPoint: '/Auth/resend',
-      data: {'Email': email},
+      endPoint: 'Auth/resend',
+      data: {'email': email},
     );
     _requireSuccess(r);
   }
