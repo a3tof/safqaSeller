@@ -31,74 +31,99 @@ class NotificationItem extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          // ── Icon bubble ──────────────────────────────────────────────
-          _NotificationIcon(type: notification.type),
-          SizedBox(width: 16.w),
-          // ── Content ──────────────────────────────────────────────────
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Title row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ── Icon bubble ──────────────────────────────────────────────
+              _NotificationIcon(type: notification.type),
+              SizedBox(width: 16.w),
+              // ── Content ──────────────────────────────────────────────────
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        notification.title,
-                        style: TextStyles.medium16(context)
-                            .copyWith(color: Colors.black),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    SizedBox(width: 8.w),
-                    Text(
-                      notification.timeAgo,
-                      style: TextStyles.semiBold14(context)
-                          .copyWith(color: const Color(0xFF666666)),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8.h),
-                // Message
-                Text(
-                  notification.message,
-                  style: TextStyles.regular14(context)
-                      .copyWith(color: const Color(0xFF999999)),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                // Optional action button (e.g. "Open Chat" for Report type)
-                if (notification.hasAction && notification.actionLabel != null)
-                  Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 8.h),
-                      child: GestureDetector(
-                        onTap: onActionTap,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 14.w, vertical: 8.h),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
+                    // Title row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
                           child: Text(
-                            notification.actionLabel!,
-                            style: TextStyles.medium16(context)
-                                .copyWith(color: Colors.white),
+                            notification.title,
+                            style: TextStyles.medium16(
+                              context,
+                            ).copyWith(color: Colors.black),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          notification.timeAgo,
+                          style: TextStyles.semiBold14(
+                            context,
+                          ).copyWith(color: const Color(0xFF666666)),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
+                    // Message
+                    Text(
+                      notification.message,
+                      style: TextStyles.regular14(
+                        context,
+                      ).copyWith(color: const Color(0xFF999999)),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    // Optional action button (e.g. "Open Chat" for Report type)
+                    if (notification.hasAction &&
+                        notification.actionLabel != null)
+                      Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: GestureDetector(
+                            onTap: onActionTap,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 14.w,
+                                vertical: 8.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryColor,
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              child: Text(
+                                notification.actionLabel!,
+                                style: TextStyles.medium16(
+                                  context,
+                                ).copyWith(color: Colors.white),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-              ],
-            ),
+                  ],
+                ),
+              ),
+            ],
           ),
+          if (!notification.isRead)
+            PositionedDirectional(
+              top: -2.h,
+              start: -2.w, // Appears 'above'/corner of the notification
+              child: Container(
+                width: 10.r,
+                height: 10.r,
+                decoration: const BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -121,11 +146,7 @@ class _NotificationIcon extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       child: Center(
-        child: Icon(
-          _iconData,
-          color: AppColors.primaryColor,
-          size: 24.sp,
-        ),
+        child: Icon(_iconData, color: AppColors.primaryColor, size: 24.sp),
       ),
     );
   }
