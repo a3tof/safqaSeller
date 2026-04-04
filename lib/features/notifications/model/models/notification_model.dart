@@ -21,6 +21,35 @@ class NotificationModel {
     this.actionLabel,
   });
 
+  factory NotificationModel.fromJson(Map<String, dynamic> json) {
+    final rawType =
+        ((json['type'] ?? json['Type'] ?? '') as String).toLowerCase();
+
+    NotificationType type;
+    if (rawType.contains('auction')) {
+      type = NotificationType.newAuction;
+    } else if (rawType.contains('report') || rawType.contains('dispute')) {
+      type = NotificationType.report;
+    } else if (rawType.contains('order') || rawType.contains('delivery')) {
+      type = NotificationType.orderOnTheWay;
+    } else {
+      type = NotificationType.auctionReminder;
+    }
+
+    final rawCreatedAt =
+        json['createdAt'] ?? json['CreatedAt'] ?? json['created_at'];
+    final timeAgo = _formatTimeAgo(rawCreatedAt as String?);
+
+    return NotificationModel(
+      id: (json['id'] ?? json['Id'] ?? 0) as int,
+      title: (json['title'] ?? json['Title'] ?? '') as String,
+      message: (json['message'] ?? json['Message'] ?? '') as String,
+      timeAgo: timeAgo,
+      type: type,
+      isRead: (json['isRead'] ?? json['IsRead'] ?? false) as bool,
+    );
+  }
+
   NotificationModel copyWith({bool? isRead}) {
     return NotificationModel(
       id: id,
@@ -32,5 +61,21 @@ class NotificationModel {
       hasAction: hasAction,
       actionLabel: actionLabel,
     );
+  }
+
+  // ── Helpers ─────────────────────────────────────────────────────────────────
+
+  static String _formatTimeAgo(String? rawDate) {
+    if (rawDate == null || rawDate.isEmpty) return '';
+    try {
+      final dt = DateTime.parse(rawDate);
+      final diff = DateTime.now().difference(dt);
+      if (diff.inSeconds < 60) return 'Just now';
+      if (diff.inMinutes < 60) return '${diff.inMinutes} min ago';
+      if (diff.inHours < 24) return '${diff.inHours} hr ago';
+      return '${diff.inDays} day${diff.inDays == 1 ? '' : 's'} ago';
+    } catch (_) {
+      return '';
+    }
   }
 }

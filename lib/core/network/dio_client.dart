@@ -117,6 +117,18 @@ class DioHelper {
       options: Options(extra: {'requiresAuth': requiresAuth}),
     );
   }
+
+  Future<Response<dynamic>> deleteWithBody({
+    required String endPoint,
+    required Map<String, dynamic> data,
+    bool requiresAuth = false,
+  }) async {
+    return dio.delete<dynamic>(
+      endPoint,
+      data: data,
+      options: Options(extra: {'requiresAuth': requiresAuth}),
+    );
+  }
 }
 
 // ── Logger interceptor ────────────────────────────────────────────────────────

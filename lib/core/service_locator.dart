@@ -55,7 +55,7 @@ Future<void> setupServiceLocator() async {
     () => SellerRepository(dioHelper: getIt()),
   );
   getIt.registerLazySingleton(
-    () => NotificationsRepository(),
+    () => NotificationsRepository(dioHelper: getIt()),
   );
 
   // 4. Global ViewModels (singletons — live for the app lifetime)

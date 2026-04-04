@@ -8,6 +8,8 @@ class NotificationsViewModel extends Cubit<NotificationsState> {
   NotificationsViewModel(this.notificationsRepository)
       : super(NotificationsInitial());
 
+  // ── Load ──────────────────────────────────────────────────────────────────
+
   Future<void> loadNotifications() async {
     emit(NotificationsLoading());
     try {
@@ -17,6 +19,28 @@ class NotificationsViewModel extends Cubit<NotificationsState> {
       emit(NotificationsError(_clean(e)));
     }
   }
+
+  // ── Delete selected (no re-fetch — remove from state immediately) ─────────
+
+  Future<void> deleteNotifications(List<int> ids) async {
+    final current = state;
+    if (current is! NotificationsSuccess) return;
+
+    // Optimistic removal
+    final remaining =
+        current.notifications.where((n) => !ids.contains(n.id)).toList();
+    emit(NotificationsSuccess(notifications: remaining));
+
+    try {
+      await notificationsRepository.deleteNotifications(ids);
+    } catch (e) {
+      // Rollback if the API call fails
+      emit(current);
+      emit(NotificationsError(_clean(e)));
+    }
+  }
+
+  // ── Mark read helpers (local state only) ──────────────────────────────────
 
   void markAsRead(int notificationId) {
     final current = state;

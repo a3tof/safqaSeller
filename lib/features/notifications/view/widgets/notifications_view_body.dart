@@ -139,7 +139,7 @@ class _NotificationsList extends StatelessWidget {
     return ListView.separated(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 16.h),
       itemCount: notifications.length,
-      separatorBuilder: (_, __) => SizedBox(height: 16.h),
+      separatorBuilder: (_, _) => SizedBox(height: 16.h),
       itemBuilder: (context, index) {
         final notification = notifications[index];
         return Stack(
