@@ -4,10 +4,41 @@ import 'package:safqaseller/features/auth/model/models/register_model.dart';
 import 'package:safqaseller/features/auth/model/repositories/auth_repository.dart';
 import 'package:safqaseller/features/auth/view_model/register/register_view_model_state.dart';
 
+import 'package:safqaseller/features/auth/model/models/location_model.dart';
+
 class RegisterViewModel extends Cubit<RegisterState> {
   final AuthRepository authRepository;
 
+  List<LocationModel> countries = [];
+  List<LocationModel> cities = [];
+  LocationModel? selectedCountry;
+  LocationModel? selectedCity;
+
   RegisterViewModel(this.authRepository) : super(RegisterInitial());
+
+  Future<void> loadCountries() async {
+    emit(RegisterLocationsLoading());
+    try {
+      countries = await authRepository.getCountries();
+      emit(RegisterLocationsLoaded());
+    } catch (e) {
+      if (kDebugMode) debugPrint('RegisterViewModel getCountries error: $e');
+      emit(RegisterLocationsError(_clean(e)));
+    }
+  }
+
+  Future<void> loadCities(int countryId) async {
+    selectedCity = null;
+    cities = [];
+    emit(RegisterLocationsLoading());
+    try {
+      cities = await authRepository.getCities(countryId);
+      emit(RegisterLocationsLoaded());
+    } catch (e) {
+      if (kDebugMode) debugPrint('RegisterViewModel getCities error: $e');
+      emit(RegisterLocationsError(_clean(e)));
+    }
+  }
 
   Future<void> userRegister({
     required String fullName,

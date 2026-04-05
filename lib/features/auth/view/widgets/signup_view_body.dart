@@ -16,6 +16,7 @@ import 'package:safqaseller/features/auth/view/widgets/terms_and_conditions.dart
 import 'package:safqaseller/features/auth/view_model/register/register_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/register/register_view_model_state.dart';
 import 'package:safqaseller/generated/l10n.dart';
+import 'package:safqaseller/core/widgets/location_picker_field.dart';
 
 class SignupViewBody extends StatefulWidget {
   const SignupViewBody({super.key});
@@ -32,6 +33,17 @@ class _SignupViewBodyState extends State<SignupViewBody> {
   String? birthdate;
   String? gender;
   bool isTermsAccepted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModel = context.read<RegisterViewModel>();
+      if (viewModel.countries.isEmpty) {
+        viewModel.loadCountries();
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -111,6 +123,27 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                     onSaved: (value) => birthdate = value,
                   ),
                   SizedBox(height: 16.sp),
+                  LocationPickerField(
+                    enabled: !isLoading && context.read<RegisterViewModel>().countries.isNotEmpty,
+                    hintText: 'Country',
+                    locations: context.read<RegisterViewModel>().countries,
+                    selectedLocation: context.read<RegisterViewModel>().selectedCountry,
+                    onChanged: (location) {
+                      context.read<RegisterViewModel>().selectedCountry = location;
+                      if (location != null) {
+                        context.read<RegisterViewModel>().loadCities(location.id);
+                      }
+                    },
+                  ),
+                  SizedBox(height: 16.sp),
+                  LocationPickerField(
+                    enabled: !isLoading && context.read<RegisterViewModel>().cities.isNotEmpty,
+                    hintText: 'City',
+                    locations: context.read<RegisterViewModel>().cities,
+                    selectedLocation: context.read<RegisterViewModel>().selectedCity,
+                    onChanged: (location) => context.read<RegisterViewModel>().selectedCity = location,
+                  ),
+                  SizedBox(height: 16.sp),
                   GenderPickerField(
                     enabled: !isLoading,
                     hintText: S.of(context).gender,
@@ -165,10 +198,10 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                                 return;
                               }
 
-                              if (birthdate == null || gender == null) {
+                              if (birthdate == null || gender == null || context.read<RegisterViewModel>().selectedCity == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text('Please fill all fields'),
+                                    content: Text('Please fill all fields including City'),
                                     backgroundColor: Colors.red,
                                   ),
                                 );
@@ -184,7 +217,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                                     password: password,
                                     birthDate: birthdate!,
                                     gender: genderInt,
-                                    cityId: 1,
+                                    cityId: context.read<RegisterViewModel>().selectedCity!.id,
                                     phoneNumber: phoneNumber,
                                   );
                             } else {

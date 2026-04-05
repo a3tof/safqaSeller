@@ -6,6 +6,7 @@ import 'package:safqaseller/features/auth/model/models/auth_response_model.dart'
 import 'package:safqaseller/features/auth/model/models/confirm_email_model.dart';
 import 'package:safqaseller/features/auth/model/models/login_model.dart';
 import 'package:safqaseller/features/auth/model/models/register_model.dart';
+import 'package:safqaseller/features/auth/model/models/location_model.dart';
 import 'package:safqaseller/features/auth/model/models/social_auth_models.dart';
 
 class AuthRepository {
@@ -13,6 +14,30 @@ class AuthRepository {
   final CacheHelper cacheHelper;
 
   AuthRepository({required this.dioHelper, required this.cacheHelper});
+
+  // ── Locations ─────────────────────────────────────────────────────────────
+
+  Future<List<LocationModel>> getCountries() async {
+    final r = await dioHelper.getData(endPoint: 'Auth/countries');
+    _requireSuccess(r);
+    final data = r.data;
+    if (data is List) {
+      return data.map((e) => LocationModel.fromJson(e as Map<String, dynamic>)).toList();
+    }
+    return [];
+  }
+
+  Future<List<LocationModel>> getCities(int countryId) async {
+    final r = await dioHelper.getData(
+      endPoint: 'Auth/cities/$countryId',
+    );
+    _requireSuccess(r);
+    final data = r.data;
+    if (data is List) {
+      return data.map((e) => LocationModel.fromJson(e as Map<String, dynamic>)).toList();
+    }
+    return [];
+  }
 
   // ── Register ──────────────────────────────────────────────────────────────
 

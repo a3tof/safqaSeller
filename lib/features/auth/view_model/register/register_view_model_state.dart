@@ -17,3 +17,12 @@ class RegisterError extends RegisterState {
   final String message;
   RegisterError(this.message);
 }
+
+class RegisterLocationsLoading extends RegisterState {}
+
+class RegisterLocationsLoaded extends RegisterState {}
+
+class RegisterLocationsError extends RegisterState {
+  final String message;
+  RegisterLocationsError(this.message);
+}
