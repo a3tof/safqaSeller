@@ -9,16 +9,20 @@ class NotificationItem extends StatelessWidget {
     super.key,
     required this.notification,
     this.onActionTap,
+    this.onLongPress,
   });
 
   final NotificationModel notification;
   final VoidCallback? onActionTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
+    return GestureDetector(
+      onLongPress: onLongPress,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.r),
@@ -111,22 +115,9 @@ class NotificationItem extends StatelessWidget {
               ),
             ],
           ),
-          if (!notification.isRead)
-            PositionedDirectional(
-              top: -2.h,
-              start: -2.w, // Appears 'above'/corner of the notification
-              child: Container(
-                width: 10.r,
-                height: 10.r,
-                decoration: const BoxDecoration(
-                  color: Colors.red,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
         ],
       ),
-    );
+    ));
   }
 }
 

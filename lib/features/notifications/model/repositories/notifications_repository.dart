@@ -87,7 +87,7 @@ class NotificationsRepository {
 
   Future<void> deleteNotifications(List<int> ids) async {
     final r = await dioHelper.deleteWithBody(
-      endPoint: 'Notifications/Delete-SelectedNotifications',
+      endPoint: 'Notifications/Delete-SelectedNotification',
       data: {'notificationIds': ids},
       requiresAuth: true,
     );

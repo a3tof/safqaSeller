@@ -134,6 +134,65 @@ class _NotificationsList extends StatelessWidget {
   const _NotificationsList({required this.notifications});
   final List<NotificationModel> notifications;
 
+  void _showDeleteMenu(BuildContext context, NotificationModel notification) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+      ),
+      builder: (bottomSheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40.w,
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2.r),
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                Text(
+                  'Notification Options',
+                  style: TextStyles.medium16(context).copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                ListTile(
+                  leading: const Icon(Icons.delete_outline, color: Colors.red),
+                  title: Text(
+                    'Delete',
+                    style: TextStyles.medium16(context).copyWith(color: Colors.red),
+                  ),
+                  onTap: () {
+                    Navigator.pop(bottomSheetContext);
+                    context
+                        .read<NotificationsViewModel>()
+                        .deleteNotifications([notification.id]);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.close),
+                  title: Text(
+                    'Cancel',
+                    style: TextStyles.medium16(context),
+                  ),
+                  onTap: () => Navigator.pop(bottomSheetContext),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
@@ -147,6 +206,7 @@ class _NotificationsList extends StatelessWidget {
           children: [
             NotificationItem(
               notification: notification,
+              onLongPress: () => _showDeleteMenu(context, notification),
               onActionTap: () {
                 // TODO: navigate to chat when backend is wired
                 ScaffoldMessenger.of(context).showSnackBar(
