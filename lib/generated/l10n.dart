@@ -1713,6 +1713,141 @@ class S {
       args: [],
     );
   }
+
+  /// `Basic`
+  String get kBasic {
+    return Intl.message('Basic', name: 'kBasic', desc: '', args: []);
+  }
+
+  /// `Premium`
+  String get kPremium {
+    return Intl.message('Premium', name: 'kPremium', desc: '', args: []);
+  }
+
+  /// `Elite`
+  String get kElite {
+    return Intl.message('Elite', name: 'kElite', desc: '', args: []);
+  }
+
+  /// `Boost Now`
+  String get kBoostNow {
+    return Intl.message('Boost Now', name: 'kBoostNow', desc: '', args: []);
+  }
+
+  /// `Upgrade to Premium`
+  String get kUpgradeToPremium {
+    return Intl.message(
+      'Upgrade to Premium',
+      name: 'kUpgradeToPremium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Go Elite`
+  String get kGoElite {
+    return Intl.message('Go Elite', name: 'kGoElite', desc: '', args: []);
+  }
+
+  /// `Appears at the top of search results for 24 hours`
+  String get kAppearsAtTheTop24 {
+    return Intl.message(
+      'Appears at the top of search results for 24 hours',
+      name: 'kAppearsAtTheTop24',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Featured badge on your auction`
+  String get kFeaturedBadge {
+    return Intl.message(
+      'Featured badge on your auction',
+      name: 'kFeaturedBadge',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Highlighted card color to attract buyers`
+  String get kHighlightedCard {
+    return Intl.message(
+      'Highlighted card color to attract buyers',
+      name: 'kHighlightedCard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appears at the top of search results for 3 days`
+  String get kAppearsAtTheTop3D {
+    return Intl.message(
+      'Appears at the top of search results for 3 days',
+      name: 'kAppearsAtTheTop3D',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Push notifications sent to interested buyers`
+  String get kPushNotifications {
+    return Intl.message(
+      'Push notifications sent to interested buyers',
+      name: 'kPushNotifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Featured badge & highlighted card`
+  String get kFeaturedBadgeHighl {
+    return Intl.message(
+      'Featured badge & highlighted card',
+      name: 'kFeaturedBadgeHighl',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Basic Analytics`
+  String get kBasicAnalytics {
+    return Intl.message(
+      'Basic Analytics',
+      name: 'kBasicAnalytics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pinned as a Top Banner on the homepage for 7 days`
+  String get kPinnedAsTopBanner {
+    return Intl.message(
+      'Pinned as a Top Banner on the homepage for 7 days',
+      name: 'kPinnedAsTopBanner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Instant push notifications to all interested buyers`
+  String get kInstantPushNotific {
+    return Intl.message(
+      'Instant push notifications to all interested buyers',
+      name: 'kInstantPushNotific',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Detailed Analytics`
+  String get kDetailedAnalytics {
+    return Intl.message(
+      'Detailed Analytics',
+      name: 'kDetailedAnalytics',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

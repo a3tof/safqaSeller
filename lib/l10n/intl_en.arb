@@ -659,5 +659,21 @@
   "@kEnterWithdrawalAmo": {
     "description": "Auto-generated"
   },
-  "kUploadOwners": "Upload Owner's National ID"
+  "kUploadOwners": "Upload Owner's National ID",
+  "kBasic": "Basic",
+  "kPremium": "Premium",
+  "kElite": "Elite",
+  "kBoostNow": "Boost Now",
+  "kUpgradeToPremium": "Upgrade to Premium",
+  "kGoElite": "Go Elite",
+  "kAppearsAtTheTop24": "Appears at the top of search results for 24 hours",
+  "kFeaturedBadge": "Featured badge on your auction",
+  "kHighlightedCard": "Highlighted card color to attract buyers",
+  "kAppearsAtTheTop3D": "Appears at the top of search results for 3 days",
+  "kPushNotifications": "Push notifications sent to interested buyers",
+  "kFeaturedBadgeHighl": "Featured badge & highlighted card",
+  "kBasicAnalytics": "Basic Analytics",
+  "kPinnedAsTopBanner": "Pinned as a Top Banner on the homepage for 7 days",
+  "kInstantPushNotific": "Instant push notifications to all interested buyers",
+  "kDetailedAnalytics": "Detailed Analytics"
 }

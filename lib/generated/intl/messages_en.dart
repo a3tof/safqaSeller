@@ -61,7 +61,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "kAccountType": MessageLookupByLibrary.simpleMessage("Account Type"),
     "kAddCard": MessageLookupByLibrary.simpleMessage("Add Card"),
+    "kAppearsAtTheTop24": MessageLookupByLibrary.simpleMessage(
+      "Appears at the top of search results for 24 hours",
+    ),
+    "kAppearsAtTheTop3D": MessageLookupByLibrary.simpleMessage(
+      "Appears at the top of search results for 3 days",
+    ),
     "kBankName": MessageLookupByLibrary.simpleMessage("Bank Name"),
+    "kBasic": MessageLookupByLibrary.simpleMessage("Basic"),
+    "kBasicAnalytics": MessageLookupByLibrary.simpleMessage("Basic Analytics"),
+    "kBoostNow": MessageLookupByLibrary.simpleMessage("Boost Now"),
     "kBusinessAccount": MessageLookupByLibrary.simpleMessage(
       "Business Account",
     ),
@@ -80,7 +89,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "Deposit successful!",
     ),
     "kDescription": MessageLookupByLibrary.simpleMessage("Description"),
+    "kDetailedAnalytics": MessageLookupByLibrary.simpleMessage(
+      "Detailed Analytics",
+    ),
     "kEdit": MessageLookupByLibrary.simpleMessage("Edit"),
+    "kElite": MessageLookupByLibrary.simpleMessage("Elite"),
     "kEnglish": MessageLookupByLibrary.simpleMessage("English"),
     "kEnterDepositAmount": MessageLookupByLibrary.simpleMessage(
       "Enter deposit amount",
@@ -89,8 +102,18 @@ class MessageLookup extends MessageLookupByLibrary {
       "Enter withdrawal amount",
     ),
     "kExpires": MessageLookupByLibrary.simpleMessage("EXPIRES"),
+    "kFeaturedBadge": MessageLookupByLibrary.simpleMessage(
+      "Featured badge on your auction",
+    ),
+    "kFeaturedBadgeHighl": MessageLookupByLibrary.simpleMessage(
+      "Featured badge & highlighted card",
+    ),
     "kFinancialDetails": MessageLookupByLibrary.simpleMessage(
       "Financial Details",
+    ),
+    "kGoElite": MessageLookupByLibrary.simpleMessage("Go Elite"),
+    "kHighlightedCard": MessageLookupByLibrary.simpleMessage(
+      "Highlighted card color to attract buyers",
     ),
     "kHistory": MessageLookupByLibrary.simpleMessage("History"),
     "kIdentityVerificatio": MessageLookupByLibrary.simpleMessage(
@@ -98,6 +121,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "kInstaPayNumberOp": MessageLookupByLibrary.simpleMessage(
       "Insta Pay Number (Optional)",
+    ),
+    "kInstantPushNotific": MessageLookupByLibrary.simpleMessage(
+      "Instant push notifications to all interested buyers",
     ),
     "kLegalBusinessName": MessageLookupByLibrary.simpleMessage(
       "Legal Business Name",
@@ -127,6 +153,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "kOpeningChat": MessageLookupByLibrary.simpleMessage("Opening chat..."),
     "kPhoneNumber": MessageLookupByLibrary.simpleMessage("Phone Number"),
+    "kPinnedAsTopBanner": MessageLookupByLibrary.simpleMessage(
+      "Pinned as a Top Banner on the homepage for 7 days",
+    ),
     "kPleaseFillAllFiel": MessageLookupByLibrary.simpleMessage(
       "Please fill all fields including City",
     ),
@@ -142,7 +171,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "kPleaseUploadAllTh": MessageLookupByLibrary.simpleMessage(
       "Please upload all three documents",
     ),
+    "kPremium": MessageLookupByLibrary.simpleMessage("Premium"),
     "kPrimary": MessageLookupByLibrary.simpleMessage("Primary"),
+    "kPushNotifications": MessageLookupByLibrary.simpleMessage(
+      "Push notifications sent to interested buyers",
+    ),
     "kReviewsRatings": MessageLookupByLibrary.simpleMessage(
       "Reviews & Ratings",
     ),
@@ -170,6 +203,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "kTransactions": MessageLookupByLibrary.simpleMessage("Transactions"),
     "kUpgrade": MessageLookupByLibrary.simpleMessage("Upgrade"),
+    "kUpgradeToPremium": MessageLookupByLibrary.simpleMessage(
+      "Upgrade to Premium",
+    ),
     "kUploadCommercialRe": MessageLookupByLibrary.simpleMessage(
       "Upload Commercial Registration (CR)",
     ),

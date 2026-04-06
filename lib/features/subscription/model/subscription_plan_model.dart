@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:safqaseller/generated/l10n.dart';
+
 class SubscriptionPlanModel {
   const SubscriptionPlanModel({
     required this.name,
@@ -11,38 +14,38 @@ class SubscriptionPlanModel {
   final List<String> features;
   final String ctaLabel;
 
-  static const List<SubscriptionPlanModel> plans = [
+  static List<SubscriptionPlanModel> plans(BuildContext context) => [
     SubscriptionPlanModel(
-      name: 'Basic',
+      name: S.of(context).kBasic,
       price: '99\$',
       features: [
-        'Appears at the top of search results for 24 hours',
-        '"Featured" badge on your auction',
-        'Highlighted card color to attract buyers',
+        S.of(context).kAppearsAtTheTop24,
+        S.of(context).kFeaturedBadge,
+        S.of(context).kHighlightedCard,
       ],
-      ctaLabel: 'Boost Now',
+      ctaLabel: S.of(context).kBoostNow,
     ),
     SubscriptionPlanModel(
-      name: 'Premium',
+      name: S.of(context).kPremium,
       price: '499\$',
       features: [
-        'Appears at the top of search results for 3 days',
-        'Push notifications sent to interested buyers',
-        '"Featured" badge & highlighted card',
-        'Basic Analytics (Track your daily views)',
+        S.of(context).kAppearsAtTheTop3D,
+        S.of(context).kPushNotifications,
+        S.of(context).kFeaturedBadgeHighl,
+        S.of(context).kBasicAnalytics,
       ],
-      ctaLabel: 'Upgrade to Premium',
+      ctaLabel: S.of(context).kUpgradeToPremium,
     ),
     SubscriptionPlanModel(
-      name: 'Elite',
+      name: S.of(context).kElite,
       price: '999\$',
       features: [
-        'Pinned as a Top Banner on the homepage for 7 days',
-        'Instant push notifications to all interested buyers',
-        '"Featured" badge on your auction',
-        'Detailed Analytics (Views, clicks, and active bidders)',
+        S.of(context).kPinnedAsTopBanner,
+        S.of(context).kInstantPushNotific,
+        S.of(context).kFeaturedBadge,
+        S.of(context).kDetailedAnalytics,
       ],
-      ctaLabel: 'Go Elite',
+      ctaLabel: S.of(context).kGoElite,
     ),
   ];
 }

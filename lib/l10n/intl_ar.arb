@@ -659,5 +659,21 @@
   "@kEnterWithdrawalAmo": {
     "description": "Auto-generated"
   },
-  "kUploadOwners": "رفع بطاقة الهوية للمالك"
+  "kUploadOwners": "رفع بطاقة الهوية للمالك",
+  "kBasic": "الأساسية",
+  "kPremium": "المميزة",
+  "kElite": "النخبة",
+  "kBoostNow": "ترويج الآن",
+  "kUpgradeToPremium": "الترقية للتميز",
+  "kGoElite": "اشترك في النخبة",
+  "kAppearsAtTheTop24": "يظهر في أعلى نتائج البحث لمدة 24 ساعة",
+  "kFeaturedBadge": "شارة مميز لمزادك",
+  "kHighlightedCard": "لون محدد للبطاقة لجذب المشترين",
+  "kAppearsAtTheTop3D": "يظهر في أعلى نتائج البحث لمدة 3 أيام",
+  "kPushNotifications": "إرسال إشعارات فورية للمشترين المهتمين",
+  "kFeaturedBadgeHighl": "شارة مميز وبطاقة ملونة",
+  "kBasicAnalytics": "تحليلات أساسية",
+  "kPinnedAsTopBanner": "تثبيت كإعلان في الصفحة الرئيسية لمدة 7 أيام",
+  "kInstantPushNotific": "إشعارات فورية لجميع المشترين المهتمين",
+  "kDetailedAnalytics": "تحليلات مفصلة"
 }

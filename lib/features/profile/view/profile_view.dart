@@ -6,7 +6,10 @@ import 'package:safqaseller/features/auth/view/signin_view.dart';
 import 'package:safqaseller/features/auth/view_model/logout/logout_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/logout/logout_view_model_state.dart';
 import 'package:safqaseller/features/profile/view/widgets/profile_view_body.dart';
+import 'package:safqaseller/features/profile/view_model/profile_view_model.dart';
+import 'package:safqaseller/features/profile/view_model/profile_view_model_state.dart';
 import 'package:safqaseller/generated/l10n.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -34,10 +37,19 @@ class ProfileView extends StatelessWidget {
             }
           },
           builder: (context, state) {
+            final Widget innerBody = BlocBuilder<ProfileViewModel, ProfileViewModelState>(
+              builder: (ctx, profileState) {
+                return Skeletonizer(
+                  enabled: profileState is ProfileInitial,
+                  child: const ProfileViewBody(),
+                );
+              },
+            );
+
             if (state is LogoutLoading) {
               return Stack(
                 children: [
-                  const ProfileViewBody(),
+                  innerBody,
                   Container(
                     color: Colors.black26,
                     child: const Center(
@@ -47,7 +59,7 @@ class ProfileView extends StatelessWidget {
                 ],
               );
             }
-            return const ProfileViewBody();
+            return innerBody;
           },
         ),
       ),

@@ -55,7 +55,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "kAccountType": MessageLookupByLibrary.simpleMessage("نوع الحساب"),
     "kAddCard": MessageLookupByLibrary.simpleMessage("إضافة بطاقة"),
+    "kAppearsAtTheTop24": MessageLookupByLibrary.simpleMessage(
+      "يظهر في أعلى نتائج البحث لمدة 24 ساعة",
+    ),
+    "kAppearsAtTheTop3D": MessageLookupByLibrary.simpleMessage(
+      "يظهر في أعلى نتائج البحث لمدة 3 أيام",
+    ),
     "kBankName": MessageLookupByLibrary.simpleMessage("اسم البنك"),
+    "kBasic": MessageLookupByLibrary.simpleMessage("الأساسية"),
+    "kBasicAnalytics": MessageLookupByLibrary.simpleMessage("تحليلات أساسية"),
+    "kBoostNow": MessageLookupByLibrary.simpleMessage("ترويج الآن"),
     "kBusinessAccount": MessageLookupByLibrary.simpleMessage("حساب أعمال"),
     "kBusinessAddress": MessageLookupByLibrary.simpleMessage("عنوان العمل"),
     "kBusinessNumber": MessageLookupByLibrary.simpleMessage("الرقم التجاري"),
@@ -70,7 +79,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "تم الإيداع بنجاح!",
     ),
     "kDescription": MessageLookupByLibrary.simpleMessage("الوصف"),
+    "kDetailedAnalytics": MessageLookupByLibrary.simpleMessage("تحليلات مفصلة"),
     "kEdit": MessageLookupByLibrary.simpleMessage("تعديل"),
+    "kElite": MessageLookupByLibrary.simpleMessage("النخبة"),
     "kEnglish": MessageLookupByLibrary.simpleMessage("English"),
     "kEnterDepositAmount": MessageLookupByLibrary.simpleMessage(
       "أدخل مبلغ الإيداع",
@@ -79,8 +90,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "أدخل مبلغ السحب",
     ),
     "kExpires": MessageLookupByLibrary.simpleMessage("صالح حتى"),
+    "kFeaturedBadge": MessageLookupByLibrary.simpleMessage("شارة مميز لمزادك"),
+    "kFeaturedBadgeHighl": MessageLookupByLibrary.simpleMessage(
+      "شارة مميز وبطاقة ملونة",
+    ),
     "kFinancialDetails": MessageLookupByLibrary.simpleMessage(
       "التفاصيل المالية",
+    ),
+    "kGoElite": MessageLookupByLibrary.simpleMessage("اشترك في النخبة"),
+    "kHighlightedCard": MessageLookupByLibrary.simpleMessage(
+      "لون محدد للبطاقة لجذب المشترين",
     ),
     "kHistory": MessageLookupByLibrary.simpleMessage("السجل"),
     "kIdentityVerificatio": MessageLookupByLibrary.simpleMessage(
@@ -88,6 +107,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "kInstaPayNumberOp": MessageLookupByLibrary.simpleMessage(
       "رقم إنستا باي (اختياري)",
+    ),
+    "kInstantPushNotific": MessageLookupByLibrary.simpleMessage(
+      "إشعارات فورية لجميع المشترين المهتمين",
     ),
     "kLegalBusinessName": MessageLookupByLibrary.simpleMessage(
       "الاسم التجاري القانوني",
@@ -123,6 +145,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "جاري فتح المحادثة...",
     ),
     "kPhoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
+    "kPinnedAsTopBanner": MessageLookupByLibrary.simpleMessage(
+      "تثبيت كإعلان في الصفحة الرئيسية لمدة 7 أيام",
+    ),
     "kPleaseFillAllFiel": MessageLookupByLibrary.simpleMessage(
       "يرجى ملء جميع الحقول بما في ذلك المدينة",
     ),
@@ -138,7 +163,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "kPleaseUploadAllTh": MessageLookupByLibrary.simpleMessage(
       "يرجى رفع جميع المستندات الثلاثة",
     ),
+    "kPremium": MessageLookupByLibrary.simpleMessage("المميزة"),
     "kPrimary": MessageLookupByLibrary.simpleMessage("الأساسية"),
+    "kPushNotifications": MessageLookupByLibrary.simpleMessage(
+      "إرسال إشعارات فورية للمشترين المهتمين",
+    ),
     "kReviewsRatings": MessageLookupByLibrary.simpleMessage(
       "التقييمات والمراجعات",
     ),
@@ -162,6 +191,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "kTransactions": MessageLookupByLibrary.simpleMessage("المعاملات"),
     "kUpgrade": MessageLookupByLibrary.simpleMessage("ترقية"),
+    "kUpgradeToPremium": MessageLookupByLibrary.simpleMessage("الترقية للتميز"),
     "kUploadCommercialRe": MessageLookupByLibrary.simpleMessage(
       "رفع السجل التجاري (CR)",
     ),

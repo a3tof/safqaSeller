@@ -4,6 +4,7 @@ import 'package:safqaseller/core/utils/app_color.dart';
 import 'package:safqaseller/features/subscription/model/subscription_plan_model.dart';
 import 'package:safqaseller/features/subscription/view/widgets/subscription_plan_card.dart';
 import 'package:safqaseller/features/subscription/view/widgets/subscription_tab_bar.dart';
+import 'package:safqaseller/generated/l10n.dart';
 
 class SubscriptionViewBody extends StatefulWidget {
   const SubscriptionViewBody({super.key});
@@ -48,7 +49,11 @@ class _SubscriptionViewBodyState extends State<SubscriptionViewBody>
             padding: EdgeInsets.symmetric(horizontal: 40.w),
             child: SubscriptionTabBar(
               tabController: _tabController,
-              labels: const ['Basic', 'Premium', 'Elite'],
+              labels: [
+                S.of(context).kBasic,
+                S.of(context).kPremium,
+                S.of(context).kElite,
+              ],
             ),
           ),
           SizedBox(height: 24.h),
@@ -57,7 +62,7 @@ class _SubscriptionViewBodyState extends State<SubscriptionViewBody>
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: SubscriptionPlanModel.plans
+              children: SubscriptionPlanModel.plans(context)
                   .map((plan) => SubscriptionPlanCard(plan: plan))
                   .toList(),
             ),
