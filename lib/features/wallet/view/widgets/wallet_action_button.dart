@@ -23,9 +23,12 @@ class WalletActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final displayLabel = label.replaceAll(r'\n', '\n');
+
     return GestureDetector(
       onTap: onTap,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 50.w,
@@ -43,11 +46,16 @@ class WalletActionButton extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8.h),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            style: TextStyles.medium14(context)
-                .copyWith(color: AppColors.primaryColor),
+          SizedBox(
+            width: 72.w,
+            child: Text(
+              displayLabel,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: TextStyles.medium14(context)
+                  .copyWith(color: AppColors.primaryColor, height: 1.15),
+            ),
           ),
         ],
       ),

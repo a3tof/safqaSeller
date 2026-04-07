@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/constants.dart';
+import 'package:safqaseller/core/service_locator.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
 import 'package:safqaseller/core/widgets/custom_button.dart';
@@ -10,6 +13,7 @@ import 'package:safqaseller/core/widgets/custom_loading_button.dart';
 import 'package:safqaseller/core/widgets/custom_pin_box.dart';
 import 'package:safqaseller/features/auth/view/auth_route_args.dart';
 import 'package:safqaseller/features/auth/view/create_password_view.dart';
+import 'package:safqaseller/features/auth/view_model/auth/auth_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/confirm_email/confirm_email_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/confirm_email/confirm_email_view_model_state.dart';
 import 'package:safqaseller/features/forgot_password/view_model/forgot_password_view_model.dart';
@@ -117,17 +121,7 @@ class _VerificationCodeViewBodyState extends State<VerificationCodeViewBody> {
 
   void _confirmEmailListener(BuildContext context, ConfirmEmailState state) {
     if (state is ConfirmEmailAutoLoginSuccess) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(S.of(context).emailConfirmedSuccessfully),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        HomeScreenView.routeName,
-        (route) => false,
-      );
+      unawaited(_navigateAfterAutoLogin(context));
     } else if (state is ConfirmEmailSuccess) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -155,6 +149,25 @@ class _VerificationCodeViewBodyState extends State<VerificationCodeViewBody> {
         ),
       );
     }
+  }
+
+  Future<void> _navigateAfterAutoLogin(BuildContext context) async {
+    // loginUser() persisted the session in cache; sync the in-memory auth cubit
+    // before opening Home so the complete-profile dialog condition can pass.
+    await getIt<AuthViewModel>().onLoginSuccess();
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(S.of(context).emailConfirmedSuccessfully),
+        backgroundColor: Colors.green,
+      ),
+    );
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      HomeScreenView.routeName,
+      (route) => false,
+      arguments: {'showCompleteProfile': true},
+    );
   }
 
   void _forgotPasswordListener(

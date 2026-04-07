@@ -61,17 +61,17 @@ class WalletViewBody extends StatelessWidget {
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final screenW = MediaQuery.of(context).size.width;
-                      final isNarrow = screenW < 340 ||
-                          constraints.maxWidth < 280;
+                      final isNarrow =
+                          screenW < 390 || constraints.maxWidth < 320;
                       return isNarrow
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _BalanceSection(balance: _mockBalance),
                                 SizedBox(height: 16.h),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.start,
+                                Wrap(
+                                  spacing: 20.w,
+                                  runSpacing: 12.h,
                                   children: [
                                     WalletActionButton(
                                       icon: Icons.add_rounded,
@@ -97,9 +97,10 @@ class WalletViewBody extends StatelessWidget {
                                   MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Flexible(
+                                Expanded(
                                   child: _BalanceSection(balance: _mockBalance),
                                 ),
+                                SizedBox(width: 12.w),
                                 Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
