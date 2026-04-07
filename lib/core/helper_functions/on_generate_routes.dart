@@ -3,6 +3,10 @@ import 'package:safqaseller/features/adaptive_layout/view/adaptive_layout_view.d
 import 'package:safqaseller/features/adaptive_layout/view/widgets/desktop_layout.dart';
 import 'package:safqaseller/features/adaptive_layout/view/widgets/mobile_layout.dart';
 import 'package:safqaseller/features/adaptive_layout/view/widgets/tablet_layout.dart';
+import 'package:safqaseller/features/auction/view/item_auction_view.dart';
+import 'package:safqaseller/features/auction/view/lot_auction_view.dart';
+import 'package:safqaseller/features/auction/view/lot_detail_view.dart';
+import 'package:safqaseller/features/auction/view/price_duration_view.dart';
 import 'package:safqaseller/features/auth/view/auth_route_args.dart';
 import 'package:safqaseller/features/auth/view/create_password_view.dart';
 import 'package:safqaseller/features/auth/view/forget_password_view.dart';
@@ -17,7 +21,9 @@ import 'package:safqaseller/features/complete_profile/view/identity_verification
 import 'package:safqaseller/features/complete_profile/view/legal_documents_view.dart';
 import 'package:safqaseller/features/complete_profile/view/seller_information_view.dart';
 import 'package:safqaseller/features/complete_profile/view/store_information_view.dart';
+import 'package:safqaseller/features/history/view/history_view.dart';
 import 'package:safqaseller/features/profile/view/profile_view.dart';
+import 'package:safqaseller/features/reviews/view/reviews_view.dart';
 import 'package:safqaseller/features/seller/view/seller_home_view.dart';
 import 'package:safqaseller/features/splash/view/splash_screen_view.dart';
 import 'package:safqaseller/features/subscription/view/subscription_view.dart';
@@ -78,6 +84,20 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
     // ── Profile ────────────────────────────────────────────────────────────
     case ProfileView.routeName:
       return MaterialPageRoute(builder: (_) => const ProfileView());
+    case HistoryView.routeName:
+      return MaterialPageRoute(builder: (_) => const HistoryView());
+    case ReviewsView.routeName:
+      return MaterialPageRoute(builder: (_) => const ReviewsView());
+
+    // ── Auction ────────────────────────────────────────────────────────────
+    case LotAuctionView.routeName:
+      return MaterialPageRoute(builder: (_) => const LotAuctionView());
+    case ItemAuctionView.routeName:
+      return MaterialPageRoute(builder: (_) => const ItemAuctionView());
+    case PriceDurationView.routeName:
+      return MaterialPageRoute(builder: (_) => const PriceDurationView());
+    case LotDetailView.routeName:
+      return MaterialPageRoute(builder: (_) => const LotDetailView());
 
     // ── Complete Profile ───────────────────────────────────────────────────
     case AccountTypeView.routeName:

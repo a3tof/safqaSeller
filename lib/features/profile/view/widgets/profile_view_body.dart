@@ -9,8 +9,10 @@ import 'package:safqaseller/features/profile/view/widgets/profile_header_section
 import 'package:safqaseller/features/profile/view/widgets/profile_info_field.dart';
 import 'package:safqaseller/features/profile/view/widgets/profile_menu_item.dart';
 import 'package:safqaseller/features/profile/view/widgets/profile_metrics_row.dart';
+import 'package:safqaseller/features/history/view/history_view.dart';
 import 'package:safqaseller/features/profile/view_model/profile_view_model.dart';
 import 'package:safqaseller/features/profile/view_model/profile_view_model_state.dart';
+import 'package:safqaseller/features/reviews/view/reviews_view.dart';
 import 'package:safqaseller/features/wallet/view/wallet_view.dart';
 import 'package:safqaseller/main.dart';
 import 'package:safqaseller/generated/l10n.dart';
@@ -95,7 +97,9 @@ class ProfileViewBody extends StatelessWidget {
             ProfileMenuItem(
               icon: Icons.access_time,
               label: S.of(context).kHistory,
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, HistoryView.routeName);
+              },
             ),
             SizedBox(height: 12.h),
             ProfileMenuItem(
@@ -107,7 +111,9 @@ class ProfileViewBody extends StatelessWidget {
             ProfileMenuItem(
               icon: Icons.star_outline,
               label: S.of(context).kReviewsRatings,
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, ReviewsView.routeName);
+              },
             ),
             SizedBox(height: 12.h),
             ProfileMenuItem(

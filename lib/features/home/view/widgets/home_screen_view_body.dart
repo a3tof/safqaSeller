@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
 import 'package:safqaseller/core/utils/app_images.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
+import 'package:safqaseller/features/auction/view/item_auction_view.dart';
+import 'package:safqaseller/features/auction/view/lot_auction_view.dart';
 import 'package:safqaseller/features/auth/view_model/auth/auth_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/auth/auth_view_model_state.dart';
 import 'package:safqaseller/features/home/view/widgets/complete_profile_dialog.dart';
@@ -125,7 +127,9 @@ class _HomeScreenViewBodyState extends State<HomeScreenViewBody> {
                             backgroundImage: Assets.imagesFrame1,
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, WalletView.routeName);
+                                context,
+                                LotAuctionView.routeName,
+                              );
                             },
                           ),
                           SizedBox(height: 16.h),
@@ -133,7 +137,12 @@ class _HomeScreenViewBodyState extends State<HomeScreenViewBody> {
                             label: S.of(context).kNewSingleAuction,
                             showAddIcon: true,
                             backgroundImage: Assets.imagesFrame1,
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                ItemAuctionView.routeName,
+                              );
+                            },
                           ),
                           SizedBox(height: 16.h),
                           Row(
