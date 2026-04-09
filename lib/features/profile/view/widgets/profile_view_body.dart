@@ -20,6 +20,10 @@ import 'package:safqaseller/generated/l10n.dart';
 class ProfileViewBody extends StatelessWidget {
   const ProfileViewBody({super.key});
 
+  Future<void> _refreshProfile(BuildContext context) async {
+    await context.read<ProfileViewModel>().fetchProfile(showLoadingState: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,109 +38,116 @@ class ProfileViewBody extends StatelessWidget {
           final phoneNumber = profileState is ProfileLoaded
               ? (profileState.phoneNumber ?? '—')
               : '—';
-          final logoBytes =
-              profileState is ProfileLoaded ? profileState.logoBytes : null;
-          final rating =
-              profileState is ProfileLoaded ? (profileState.rating ?? '0') : '0';
+          final logoBytes = profileState is ProfileLoaded
+              ? profileState.logoBytes
+              : null;
+          final rating = profileState is ProfileLoaded
+              ? (profileState.rating ?? '0')
+              : '0';
           final followersCount = profileState is ProfileLoaded
               ? (profileState.followersCount ?? '0')
               : '0';
           final auctionsCount = profileState is ProfileLoaded
               ? (profileState.auctionsCount ?? '0')
               : '0';
+          final cityLabel = profileState is ProfileLoaded
+              ? ((profileState.cityName?.trim().isNotEmpty ?? false)
+                    ? profileState.cityName!
+                    : (profileState.countryName?.trim().isNotEmpty ?? false)
+                    ? profileState.countryName!
+                    : S.of(context).kCairoEgypt)
+              : S.of(context).kCairoEgypt;
 
-          return SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-        child: Column(
-          children: [
-            // ── Profile Header (Avatar + Buttons) ──
-            ProfileHeaderSection(logoBytes: logoBytes),
-            SizedBox(height: 20.h),
+          return RefreshIndicator(
+            color: Theme.of(context).primaryColor,
+            onRefresh: () => _refreshProfile(context),
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              child: Column(
+                children: [
+                  // ── Profile Header (Avatar + Buttons) ──
+                  ProfileHeaderSection(logoBytes: logoBytes),
+                  SizedBox(height: 20.h),
 
-            // ── Metrics Row (Rating, Users, Deliveries) ──
-            ProfileMetricsRow(
-              rating: rating,
-              followersCount: followersCount,
-              auctionsCount: auctionsCount,
-            ),
-            SizedBox(height: 24.h),
+                  // ── Metrics Row (Rating, Users, Deliveries) ──
+                  ProfileMetricsRow(
+                    rating: rating,
+                    followersCount: followersCount,
+                    auctionsCount: auctionsCount,
+                  ),
+                  SizedBox(height: 24.h),
 
-            // ── User Info Fields — data from GET Auth/profile ──
-            ProfileInfoField(
-              icon: Icons.person_outline,
-              value: fullName,
-            ),
-            SizedBox(height: 12.h),
-            ProfileInfoField(
-              icon: Icons.email_outlined,
-              value: email,
-            ),
-            SizedBox(height: 12.h),
-            ProfileInfoField(
-              icon: Icons.phone_outlined,
-              value: phoneNumber,
-            ),
-            SizedBox(height: 12.h),
+                  // ── User Info Fields — data from GET Auth/profile ──
+                  ProfileInfoField(icon: Icons.person_outline, value: fullName),
+                  SizedBox(height: 12.h),
+                  ProfileInfoField(icon: Icons.email_outlined, value: email),
+                  SizedBox(height: 12.h),
+                  ProfileInfoField(
+                    icon: Icons.phone_outlined,
+                    value: phoneNumber,
+                  ),
+                  SizedBox(height: 12.h),
 
-            // ── Navigation Menu Items ──
-            ProfileMenuItem(
-              icon: Icons.account_balance_wallet_outlined,
-              label: S.of(context).kWallet,
-              onTap: () {
-                Navigator.pushNamed(context, WalletView.routeName);
-              },
+                  // ── Navigation Menu Items ──
+                  ProfileMenuItem(
+                    icon: Icons.account_balance_wallet_outlined,
+                    label: S.of(context).kWallet,
+                    onTap: () {
+                      Navigator.pushNamed(context, WalletView.routeName);
+                    },
+                  ),
+                  SizedBox(height: 12.h),
+                  ProfileMenuItem(
+                    icon: Icons.location_on_outlined,
+                    label: cityLabel,
+                    onTap: () {},
+                  ),
+                  SizedBox(height: 12.h),
+                  ProfileMenuItem(
+                    icon: Icons.access_time,
+                    label: S.of(context).kHistory,
+                    onTap: () {
+                      Navigator.pushNamed(context, HistoryView.routeName);
+                    },
+                  ),
+                  SizedBox(height: 12.h),
+                  ProfileMenuItem(
+                    icon: Icons.bar_chart_outlined,
+                    label: S.of(context).kStatistics,
+                    onTap: () {},
+                  ),
+                  SizedBox(height: 12.h),
+                  ProfileMenuItem(
+                    icon: Icons.star_outline,
+                    label: S.of(context).kReviewsRatings,
+                    onTap: () {
+                      Navigator.pushNamed(context, ReviewsView.routeName);
+                    },
+                  ),
+                  SizedBox(height: 12.h),
+                  ProfileMenuItem(
+                    icon: Icons.language_outlined,
+                    label: S.of(context).kChangeLanguage,
+                    onTap: () {
+                      _showLanguageSheet(context);
+                    },
+                  ),
+                  SizedBox(height: 12.h),
+                  ProfileMenuItem(
+                    icon: Icons.logout_rounded,
+                    label: S.of(context).kLogout,
+                    iconColor: Colors.red,
+                    textColor: Colors.red,
+                    onTap: () {
+                      context.read<LogoutViewModel>().logout();
+                    },
+                  ),
+                  SizedBox(height: 24.h),
+                ],
+              ),
             ),
-            SizedBox(height: 12.h),
-            ProfileMenuItem(
-              icon: Icons.location_on_outlined,
-              label: S.of(context).kCairoEgypt,
-              trailingIcon: Icons.keyboard_arrow_down,
-              onTap: () {},
-            ),
-            SizedBox(height: 12.h),
-            ProfileMenuItem(
-              icon: Icons.access_time,
-              label: S.of(context).kHistory,
-              onTap: () {
-                Navigator.pushNamed(context, HistoryView.routeName);
-              },
-            ),
-            SizedBox(height: 12.h),
-            ProfileMenuItem(
-              icon: Icons.bar_chart_outlined,
-              label: S.of(context).kStatistics,
-              onTap: () {},
-            ),
-            SizedBox(height: 12.h),
-            ProfileMenuItem(
-              icon: Icons.star_outline,
-              label: S.of(context).kReviewsRatings,
-              onTap: () {
-                Navigator.pushNamed(context, ReviewsView.routeName);
-              },
-            ),
-            SizedBox(height: 12.h),
-            ProfileMenuItem(
-              icon: Icons.language_outlined,
-              label: S.of(context).kChangeLanguage,
-              onTap: () {
-                _showLanguageSheet(context);
-              },
-            ),
-            SizedBox(height: 12.h),
-            ProfileMenuItem(
-              icon: Icons.logout_rounded,
-              label: S.of(context).kLogout,
-              iconColor: Colors.red,
-              textColor: Colors.red,
-              onTap: () {
-                context.read<LogoutViewModel>().logout();
-              },
-            ),
-            SizedBox(height: 24.h),
-          ],
-        ),
-      );
+          );
         },
       ),
     );

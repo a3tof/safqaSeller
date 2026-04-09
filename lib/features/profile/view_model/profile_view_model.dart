@@ -41,10 +41,13 @@ class ProfileViewModel extends Cubit<ProfileViewModelState> {
 
   /// Fetches the user profile (name, email, phone, logo) from
   /// GET seller/business-account and merges into state.
-  Future<void> fetchProfile() async {
+  Future<void> fetchProfile({bool showLoadingState = false}) async {
     final isCompleted =
         (cacheHelper.getData(key: CacheKeys.isProfileCompleted) as bool?) ??
         false;
+    if (showLoadingState) {
+      emit(ProfileInitial());
+    }
     try {
       final profile = await profileRepository.getProfile();
       emit(
