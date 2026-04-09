@@ -8,10 +8,12 @@ class WithdrawalViewModel extends Cubit<WithdrawalState> {
 
   WithdrawalViewModel(this.walletRepository) : super(WithdrawalInitial());
 
-  Future<void> withdraw(double amount) async {
+  Future<void> withdraw(double amount, {required int cardId}) async {
     emit(WithdrawalLoading());
     try {
-      await walletRepository.withdraw(WithdrawalRequest(amount: amount));
+      await walletRepository.withdraw(
+        WithdrawalRequest(amount: amount, cardId: cardId),
+      );
       emit(WithdrawalSuccess());
     } catch (e) {
       String msg = e.toString();

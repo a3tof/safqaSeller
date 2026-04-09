@@ -126,12 +126,30 @@ class AddCardRequest {
 
 class DepositRequest {
   final double amount;
-  const DepositRequest({required this.amount});
-  Map<String, dynamic> toJson() => {'amount': amount};
+  final int savedCardId;
+
+  const DepositRequest({
+    required this.amount,
+    this.savedCardId = 0,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'amount': amount,
+        'savedCardId': savedCardId,
+      };
 }
 
 class WithdrawalRequest {
   final double amount;
-  const WithdrawalRequest({required this.amount});
-  Map<String, dynamic> toJson() => {'amount': amount};
+  final int cardId;
+
+  const WithdrawalRequest({
+    required this.amount,
+    required this.cardId,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'amount': amount,
+        'cardId': cardId,
+      };
 }

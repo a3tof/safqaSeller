@@ -8,10 +8,12 @@ class DepositViewModel extends Cubit<DepositState> {
 
   DepositViewModel(this.walletRepository) : super(DepositInitial());
 
-  Future<void> deposit(double amount) async {
+  Future<void> deposit(double amount, {int savedCardId = 0}) async {
     emit(DepositLoading());
     try {
-      await walletRepository.deposit(DepositRequest(amount: amount));
+      await walletRepository.deposit(
+        DepositRequest(amount: amount, savedCardId: savedCardId),
+      );
       emit(DepositSuccess());
     } catch (e) {
       String msg = e.toString();

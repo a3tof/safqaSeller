@@ -21,22 +21,38 @@ class WalletRepository {
   // ── Deposit ───────────────────────────────────────────────────────────────
 
   Future<void> deposit(DepositRequest request) async {
-    final r = await dioHelper.postData(
-      endPoint: 'seller/Wallet/Deposit',
+    var r = await dioHelper.postData(
+      endPoint: 'Wallet/deposit',
       data: request.toJson(),
       requiresAuth: true,
     );
+    if (_isWalletNotFound(r)) {
+      await dioHelper.forceRefreshSession();
+      r = await dioHelper.postData(
+        endPoint: 'Wallet/deposit',
+        data: request.toJson(),
+        requiresAuth: true,
+      );
+    }
     _require(r);
   }
 
   // ── Withdrawal ────────────────────────────────────────────────────────────
 
   Future<void> withdraw(WithdrawalRequest request) async {
-    final r = await dioHelper.postData(
-      endPoint: 'seller/Wallet/Withdraw',
+    var r = await dioHelper.postData(
+      endPoint: 'Wallet/withdraw',
       data: request.toJson(),
       requiresAuth: true,
     );
+    if (_isWalletNotFound(r)) {
+      await dioHelper.forceRefreshSession();
+      r = await dioHelper.postData(
+        endPoint: 'Wallet/withdraw',
+        data: request.toJson(),
+        requiresAuth: true,
+      );
+    }
     _require(r);
   }
 
@@ -92,5 +108,11 @@ class WalletRepository {
     if (code != null && (code < 200 || code > 299)) {
       throw Exception(extractResponseError(r.data, code));
     }
+  }
+
+  bool _isWalletNotFound(Response<dynamic> r) {
+    if (r.statusCode != 400) return false;
+    final message = extractResponseError(r.data, r.statusCode).toLowerCase();
+    return message.contains('wallet not found');
   }
 }

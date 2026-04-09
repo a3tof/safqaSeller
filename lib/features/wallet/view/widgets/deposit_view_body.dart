@@ -65,17 +65,20 @@ class _DepositViewBodyState extends State<DepositViewBody> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(S.of(context).kEnterDepositAmount,
-                          style: TextStyles.medium20(context)),
+                      Text(
+                        S.of(context).kEnterDepositAmount,
+                        style: TextStyles.medium20(context),
+                      ),
                       SizedBox(height: 24.h),
-                      // Amount field
                       Container(
                         height: 56.h,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12.r),
                           border: Border.all(
-                              color: AppColors.primaryColor, width: 1.5),
+                            color: AppColors.primaryColor,
+                            width: 1.5,
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: AppColors.primaryColor.withValues(alpha: 0.08),
@@ -87,7 +90,8 @@ class _DepositViewBodyState extends State<DepositViewBody> {
                         child: TextFormField(
                           controller: _amountCtrl,
                           keyboardType: const TextInputType.numberWithOptions(
-                              decimal: true),
+                            decimal: true,
+                          ),
                           validator: (v) {
                             if (v == null || v.trim().isEmpty) {
                               return 'Enter an amount';
@@ -99,19 +103,26 @@ class _DepositViewBodyState extends State<DepositViewBody> {
                             return null;
                           },
                           style: TextStyle(
-                              fontSize: 20.sp, fontWeight: FontWeight.w500),
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.w, vertical: 16.h),
+                              horizontal: 16.w,
+                              vertical: 16.h,
+                            ),
                             hintText: '0.00',
                             hintStyle: TextStyle(
-                                fontSize: 20.sp, color: Colors.grey[400]),
+                              fontSize: 20.sp,
+                              color: Colors.grey[400],
+                            ),
                             prefixText: '\$ ',
                             prefixStyle: TextStyle(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.primaryColor),
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.primaryColor,
+                            ),
                           ),
                         ),
                       ),
@@ -141,7 +152,9 @@ class _DepositViewBodyState extends State<DepositViewBody> {
                                 width: 22.w,
                                 height: 22.w,
                                 child: const CircularProgressIndicator(
-                                    color: Colors.white, strokeWidth: 2),
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
                               )
                             : Text(
                                 'Deposit',

@@ -68,20 +68,13 @@ class DioHelper {
     return token;
   }
 
-  /// Calls Auth/refresh-token with the stored refresh token payload.
+  /// Calls Auth/refresh-token with the expired access token as a JSON string.
   /// Returns the new token on success, or falls back to the expired token.
   Future<String?> _refreshAccessToken(String expiredToken) async {
     try {
-      final storedRefresh =
-          _cacheHelper.getData(key: CacheKeys.refreshToken) as String?;
-      final tokenToSend =
-          (storedRefresh != null && storedRefresh.isNotEmpty)
-              ? storedRefresh
-              : expiredToken;
-
       final response = await dio.post<dynamic>(
         'Auth/refresh-token',
-        data: {'refreshToken': tokenToSend},
+        data: jsonEncode(expiredToken),
         options: Options(
           extra: {'_refreshing': true},
           contentType: 'application/json',
@@ -91,25 +84,7 @@ class DioHelper {
       if (response.statusCode != null &&
           response.statusCode! >= 200 &&
           response.statusCode! < 300) {
-        final body = _decodeIfString(response.data);
-        if (body is Map) {
-          final newToken = (body['Token'] ?? body['token']) as String?;
-          if (newToken != null && newToken.isNotEmpty) {
-            await _cacheHelper.saveData(
-                key: CacheKeys.token, value: newToken);
-            await _cacheHelper.saveData(
-              key: CacheKeys.tokenTime,
-              value: DateTime.now().toIso8601String(),
-            );
-            final newRefresh =
-                (body['RefreshToken'] ?? body['refreshToken']) as String?;
-            if (newRefresh != null) {
-              await _cacheHelper.saveData(
-                  key: CacheKeys.refreshToken, value: newRefresh);
-            }
-            return newToken;
-          }
-        }
+        return await _storeRefreshedSession(response.data);
       }
     } catch (e) {
       if (kDebugMode) debugPrint('Token refresh failed: $e');
@@ -118,31 +93,92 @@ class DioHelper {
     return expiredToken;
   }
 
+  /// Explicit refresh path using the stored refresh token object payload.
+  /// Useful when the backend needs a newly issued token with updated seller claims.
+  Future<String?> forceRefreshSession() async {
+    final refreshToken =
+        _cacheHelper.getData(key: CacheKeys.refreshToken) as String?;
+    if (refreshToken == null || refreshToken.isEmpty) return null;
+
+    try {
+      final response = await dio.post<dynamic>(
+        'Auth/refresh-token',
+        data: {'refreshToken': refreshToken},
+        options: Options(
+          extra: {'_refreshing': true},
+          contentType: Headers.jsonContentType,
+        ),
+      );
+
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return await _storeRefreshedSession(response.data);
+      }
+    } catch (e) {
+      if (kDebugMode) debugPrint('Explicit token refresh failed: $e');
+    }
+
+    return null;
+  }
+
+  Future<String?> _storeRefreshedSession(dynamic data) async {
+    final body = _decodeIfString(data);
+    if (body is! Map) return null;
+
+    final newToken = (body['Token'] ?? body['token']) as String?;
+    if (newToken == null || newToken.isEmpty) return null;
+
+    await _cacheHelper.saveData(key: CacheKeys.token, value: newToken);
+    await _cacheHelper.saveData(
+      key: CacheKeys.tokenTime,
+      value: DateTime.now().toIso8601String(),
+    );
+
+    final newRefresh = (body['RefreshToken'] ?? body['refreshToken']) as String?;
+    if (newRefresh != null && newRefresh.isNotEmpty) {
+      await _cacheHelper.saveData(
+        key: CacheKeys.refreshToken,
+        value: newRefresh,
+      );
+    }
+
+    return newToken;
+  }
+
   Future<Response<dynamic>> postData({
     required String endPoint,
     required Map<String, dynamic> data,
     Map<String, dynamic>? queryParams,
     bool requiresAuth = false,
   }) async {
-    return dio.post<dynamic>(
-      endPoint,
-      data: data,
-      queryParameters: queryParams,
-      options: Options(
-        contentType: Headers.jsonContentType,
-        extra: {'requiresAuth': requiresAuth},
-      ),
-    );
+    try {
+      return await dio.post<dynamic>(
+        endPoint,
+        data: data,
+        queryParameters: queryParams,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          extra: {'requiresAuth': requiresAuth},
+        ),
+      );
+    } on DioException catch (e) {
+      throw Exception(_dioConnectionError(e));
+    }
   }
 
   Future<Response<dynamic>> postNoBody({
     required String endPoint,
     bool requiresAuth = false,
   }) async {
-    return dio.post<dynamic>(
-      endPoint,
-      options: Options(extra: {'requiresAuth': requiresAuth}),
-    );
+    try {
+      return await dio.post<dynamic>(
+        endPoint,
+        options: Options(extra: {'requiresAuth': requiresAuth}),
+      );
+    } on DioException catch (e) {
+      throw Exception(_dioConnectionError(e));
+    }
   }
 
   Future<Response<dynamic>> getData({
@@ -150,11 +186,15 @@ class DioHelper {
     Map<String, dynamic>? queryParams,
     bool requiresAuth = false,
   }) async {
-    return dio.get<dynamic>(
-      endPoint,
-      queryParameters: queryParams,
-      options: Options(extra: {'requiresAuth': requiresAuth}),
-    );
+    try {
+      return await dio.get<dynamic>(
+        endPoint,
+        queryParameters: queryParams,
+        options: Options(extra: {'requiresAuth': requiresAuth}),
+      );
+    } on DioException catch (e) {
+      throw Exception(_dioConnectionError(e));
+    }
   }
 
   Future<Response<dynamic>> postFormData({
@@ -163,14 +203,18 @@ class DioHelper {
     Map<String, dynamic>? queryParams,
     bool requiresAuth = false,
   }) async {
-    return dio.post<dynamic>(
-      endPoint,
-      data: data,
-      queryParameters: queryParams,
-      options: Options(
-        extra: {'requiresAuth': requiresAuth},
-      ),
-    );
+    try {
+      return await dio.post<dynamic>(
+        endPoint,
+        data: data,
+        queryParameters: queryParams,
+        options: Options(
+          extra: {'requiresAuth': requiresAuth},
+        ),
+      );
+    } on DioException catch (e) {
+      throw Exception(_dioConnectionError(e));
+    }
   }
 
   Future<Response<dynamic>> putData({
@@ -178,24 +222,32 @@ class DioHelper {
     required Map<String, dynamic> data,
     bool requiresAuth = false,
   }) async {
-    return dio.put<dynamic>(
-      endPoint,
-      data: data,
-      options: Options(
-        contentType: Headers.jsonContentType,
-        extra: {'requiresAuth': requiresAuth},
-      ),
-    );
+    try {
+      return await dio.put<dynamic>(
+        endPoint,
+        data: data,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          extra: {'requiresAuth': requiresAuth},
+        ),
+      );
+    } on DioException catch (e) {
+      throw Exception(_dioConnectionError(e));
+    }
   }
 
   Future<Response<dynamic>> deleteData({
     required String endPoint,
     bool requiresAuth = false,
   }) async {
-    return dio.delete<dynamic>(
-      endPoint,
-      options: Options(extra: {'requiresAuth': requiresAuth}),
-    );
+    try {
+      return await dio.delete<dynamic>(
+        endPoint,
+        options: Options(extra: {'requiresAuth': requiresAuth}),
+      );
+    } on DioException catch (e) {
+      throw Exception(_dioConnectionError(e));
+    }
   }
 
   Future<Response<dynamic>> deleteWithBody({
@@ -203,14 +255,18 @@ class DioHelper {
     required Map<String, dynamic> data,
     bool requiresAuth = false,
   }) async {
-    return dio.delete<dynamic>(
-      endPoint,
-      data: data,
-      options: Options(
-        contentType: Headers.jsonContentType,
-        extra: {'requiresAuth': requiresAuth},
-      ),
-    );
+    try {
+      return await dio.delete<dynamic>(
+        endPoint,
+        data: data,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          extra: {'requiresAuth': requiresAuth},
+        ),
+      );
+    } on DioException catch (e) {
+      throw Exception(_dioConnectionError(e));
+    }
   }
 }
 
@@ -344,6 +400,23 @@ String extractResponseError(dynamic data, int? statusCode) {
   if (body is String && body.isNotEmpty) return body;
 
   return 'Server error (${statusCode ?? '?'})';
+}
+
+String _dioConnectionError(DioException e) {
+  switch (e.type) {
+    case DioExceptionType.connectionError:
+      return 'No internet connection. Please check your network and try again.';
+    case DioExceptionType.connectionTimeout:
+    case DioExceptionType.sendTimeout:
+    case DioExceptionType.receiveTimeout:
+      return 'Request timed out. Please try again.';
+    case DioExceptionType.badCertificate:
+      return 'Secure connection failed. Please try again.';
+    case DioExceptionType.cancel:
+      return 'Request was cancelled.';
+    default:
+      return e.message ?? 'An unexpected network error occurred.';
+  }
 }
 
 dynamic _decodeIfString(dynamic data) {

@@ -11,6 +11,8 @@ import 'package:safqaseller/features/auth/view_model/logout/logout_view_model.da
 import 'package:safqaseller/features/auth/view_model/register/register_view_model.dart';
 import 'package:safqaseller/features/forgot_password/model/repositories/forgot_password_repository.dart';
 import 'package:safqaseller/features/forgot_password/view_model/forgot_password_view_model.dart';
+import 'package:safqaseller/features/history/model/repositories/history_repository.dart';
+import 'package:safqaseller/features/history/view_model/history_view_model.dart';
 import 'package:safqaseller/features/profile/model/repositories/profile_repository.dart';
 import 'package:safqaseller/features/profile/view_model/profile_view_model.dart';
 import 'package:safqaseller/features/seller/model/repositories/seller_repository.dart';
@@ -62,6 +64,9 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton(
     () => ProfileRepository(dioHelper: getIt()),
   );
+  getIt.registerLazySingleton(
+    () => HistoryRepository(dioHelper: getIt()),
+  );
 
   // 4. Global ViewModels (singletons — live for the app lifetime)
   getIt.registerLazySingleton(() => AuthViewModel(getIt()));
@@ -87,6 +92,7 @@ Future<void> setupServiceLocator() async {
   );
   getIt.registerFactory(() => NotificationsViewModel(getIt()));
   getIt.registerFactory(() => HomeViewModel(getIt()));
+  getIt.registerFactory(() => HistoryViewModel(getIt()));
 }
 
 String _generateDeviceId() {
