@@ -20,7 +20,7 @@ class ChangePasswordRepository {
 
     final body = response.data;
     if (body is Map<String, dynamic> && body['isSuccess'] == true) {
-      await dioHelper.refreshSessionWithStoredToken();
+      await dioHelper.forceRefreshSession();
       return;
     }
 
