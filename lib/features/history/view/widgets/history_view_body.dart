@@ -17,6 +17,75 @@ class HistoryViewBody extends StatefulWidget {
 }
 
 class _HistoryViewBodyState extends State<HistoryViewBody> {
+  late final TextEditingController _searchController;
+  late final FocusNode _searchFocusNode;
+  bool _isSearching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+    _searchFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _toggleSearch() {
+    setState(() {
+      _isSearching = !_isSearching;
+      if (!_isSearching) {
+        _searchController.clear();
+      }
+    });
+
+    if (_isSearching) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _searchFocusNode.requestFocus();
+        }
+      });
+    }
+  }
+
+  List<HistoryItem> _filterItems(List<HistoryItem> items) {
+    final query = _searchController.text.trim().toLowerCase();
+    if (query.isEmpty) return items;
+
+    return items.where((item) {
+      final searchableValues = [
+        item.title,
+        item.lotNumber,
+        _statusLabel(item.status),
+      ];
+
+      return searchableValues.any(
+        (value) => value.toLowerCase().contains(query),
+      );
+    }).toList();
+  }
+
+  String _statusLabel(AuctionStatus status) {
+    switch (status) {
+      case AuctionStatus.upcoming:
+        return 'upcoming';
+      case AuctionStatus.active:
+        return 'active';
+      case AuctionStatus.endingSoon:
+        return 'ending soon';
+      case AuctionStatus.finished:
+        return 'finished';
+      case AuctionStatus.canceled:
+        return 'canceled';
+      case AuctionStatus.sold:
+        return 'sold';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,18 +103,35 @@ class _HistoryViewBodyState extends State<HistoryViewBody> {
             size: 22.sp,
           ),
         ),
-        title: Text(
-          'History',
-          style: TextStyles.bold28(context).copyWith(
-            color: AppColors.primaryColor,
-            fontFamily: 'AlegreyaSC',
-          ),
-        ),
+        title: _isSearching
+            ? TextField(
+                controller: _searchController,
+                focusNode: _searchFocusNode,
+                onChanged: (_) => setState(() {}),
+                textInputAction: TextInputAction.search,
+                style: TextStyles.medium16(
+                  context,
+                ).copyWith(color: AppColors.primaryColor),
+                decoration: InputDecoration(
+                  hintText: 'Search history',
+                  hintStyle: TextStyles.regular14(
+                    context,
+                  ).copyWith(color: const Color(0xFF999999)),
+                  border: InputBorder.none,
+                ),
+              )
+            : Text(
+                'History',
+                style: TextStyles.bold28(context).copyWith(
+                  color: AppColors.primaryColor,
+                  fontFamily: 'AlegreyaSC',
+                ),
+              ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: _toggleSearch,
             icon: Icon(
-              Icons.search_rounded,
+              _isSearching ? Icons.close_rounded : Icons.search_rounded,
               color: AppColors.primaryColor,
               size: 26.sp,
             ),
@@ -62,6 +148,7 @@ class _HistoryViewBodyState extends State<HistoryViewBody> {
                 items: _skeletonHistoryItems,
                 currentPage: 1,
                 totalPages: 5,
+                isSearchActive: false,
                 onRefresh: () async {},
                 onPageSelected: (_) {},
               ),
@@ -99,11 +186,15 @@ class _HistoryViewBodyState extends State<HistoryViewBody> {
           }
 
           final success = state as HistorySuccess;
+          final filteredItems = _filterItems(success.items);
+          final isSearchActive = _searchController.text.trim().isNotEmpty;
+
           return _HistoryList(
-            totalCount: success.totalCount,
-            items: success.items,
+            totalCount: isSearchActive ? filteredItems.length : success.totalCount,
+            items: filteredItems,
             currentPage: success.currentPage,
             totalPages: success.totalPages,
+            isSearchActive: isSearchActive,
             onRefresh: () => context.read<HistoryViewModel>().refresh(),
             onPageSelected: (page) =>
                 context.read<HistoryViewModel>().goToPage(page),
@@ -120,6 +211,7 @@ class _HistoryList extends StatelessWidget {
     required this.items,
     required this.currentPage,
     required this.totalPages,
+    required this.isSearchActive,
     required this.onRefresh,
     required this.onPageSelected,
   });
@@ -128,6 +220,7 @@ class _HistoryList extends StatelessWidget {
   final List<HistoryItem> items;
   final int currentPage;
   final int totalPages;
+  final bool isSearchActive;
   final Future<void> Function() onRefresh;
   final ValueChanged<int> onPageSelected;
 
@@ -150,7 +243,9 @@ class _HistoryList extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.5,
               child: Center(
                 child: Text(
-                  'No history found.',
+                  isSearchActive
+                      ? 'No matching history found.'
+                      : 'No history found.',
                   style: TextStyles.regular14(
                     context,
                   ).copyWith(color: const Color(0xFF666666)),
@@ -164,7 +259,7 @@ class _HistoryList extends StatelessWidget {
                 child: HistoryCard(item: item),
               ),
             ),
-          if (hasItems && totalPages > 1)
+          if (hasItems && totalPages > 1 && !isSearchActive)
             Padding(
               padding: EdgeInsets.only(top: 8.h),
               child: _HistoryPagination(
