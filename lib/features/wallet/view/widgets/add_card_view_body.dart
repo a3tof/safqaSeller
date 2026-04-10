@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/core/utils/app_color.dart';
@@ -23,6 +24,21 @@ class _AddCardViewBodyState extends State<AddCardViewBody> {
   final _holderCtrl = TextEditingController();
   final _labelCtrl = TextEditingController();
 
+  static final List<TextInputFormatter> _cardNumberFormatters = [
+    FilteringTextInputFormatter.digitsOnly,
+    _CardNumberInputFormatter(),
+  ];
+
+  static final List<TextInputFormatter> _expiryDateFormatters = [
+    FilteringTextInputFormatter.digitsOnly,
+    _ExpiryDateInputFormatter(),
+  ];
+
+  static final List<TextInputFormatter> _cvvFormatters = [
+    FilteringTextInputFormatter.digitsOnly,
+    LengthLimitingTextInputFormatter(3),
+  ];
+
   @override
   void dispose() {
     _cardNumberCtrl.dispose();
@@ -35,15 +51,49 @@ class _AddCardViewBodyState extends State<AddCardViewBody> {
 
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
+
+    final sanitizedCardNumber = _cardNumberCtrl.text.replaceAll(' ', '');
+    final sanitizedExpiry = _expiryCtrl.text.trim();
+    final sanitizedCvv = _cvvCtrl.text.trim();
+
     context.read<AddCardViewModel>().addCard(
           AddCardRequest(
-            cardNumber: _cardNumberCtrl.text.trim(),
-            expiryDate: _expiryCtrl.text.trim(),
-            cvv: _cvvCtrl.text.trim(),
+            cardNumber: sanitizedCardNumber,
+            expiryDate: sanitizedExpiry,
+            cvv: sanitizedCvv,
             cardholderName: _holderCtrl.text.trim(),
             label: _labelCtrl.text.trim().isEmpty ? null : _labelCtrl.text.trim(),
           ),
         );
+  }
+
+  String? _validateCardNumber(String? value) {
+    final digits = value?.replaceAll(' ', '') ?? '';
+    if (digits.isEmpty) return 'Required';
+    if (digits.length != 16) return 'Card number must be 16 digits';
+    return null;
+  }
+
+  String? _validateExpiryDate(String? value) {
+    final expiry = value?.trim() ?? '';
+    if (expiry.isEmpty) return 'Required';
+    if (!RegExp(r'^\d{2}/\d{2}$').hasMatch(expiry)) {
+      return 'Expiry date must be in MM/YY format';
+    }
+
+    final month = int.tryParse(expiry.substring(0, 2));
+    if (month == null || month < 1 || month > 12) {
+      return 'Enter a valid month';
+    }
+
+    return null;
+  }
+
+  String? _validateCvv(String? value) {
+    final cvv = value?.trim() ?? '';
+    if (cvv.isEmpty) return 'Required';
+    if (cvv.length != 3) return 'CVV must be 3 digits';
+    return null;
   }
 
   @override
@@ -108,9 +158,8 @@ class _AddCardViewBodyState extends State<AddCardViewBody> {
                               hint: 'Card Number',
                               keyboardType: TextInputType.number,
                               maxLength: 19,
-                              validator: (v) => v == null || v.trim().isEmpty
-                                  ? 'Required'
-                                  : null,
+                              inputFormatters: _cardNumberFormatters,
+                              validator: _validateCardNumber,
                             ),
                             SizedBox(height: 16.h),
                             Row(
@@ -120,10 +169,9 @@ class _AddCardViewBodyState extends State<AddCardViewBody> {
                                     controller: _expiryCtrl,
                                     hint: 'Expiry Date',
                                     keyboardType: TextInputType.datetime,
-                                    validator: (v) =>
-                                        v == null || v.trim().isEmpty
-                                        ? 'Required'
-                                        : null,
+                                    maxLength: 5,
+                                    inputFormatters: _expiryDateFormatters,
+                                    validator: _validateExpiryDate,
                                   ),
                                 ),
                                 SizedBox(width: 9.w),
@@ -132,12 +180,10 @@ class _AddCardViewBodyState extends State<AddCardViewBody> {
                                     controller: _cvvCtrl,
                                     hint: 'CVV',
                                     keyboardType: TextInputType.number,
-                                    maxLength: 4,
+                                    maxLength: 3,
+                                    inputFormatters: _cvvFormatters,
                                     obscureText: true,
-                                    validator: (v) =>
-                                        v == null || v.trim().isEmpty
-                                        ? 'Required'
-                                        : null,
+                                    validator: _validateCvv,
                                   ),
                                 ),
                               ],
@@ -210,6 +256,7 @@ class _CardField extends StatelessWidget {
     required this.hint,
     this.keyboardType,
     this.maxLength,
+    this.inputFormatters,
     this.obscureText = false,
     this.validator,
   });
@@ -218,6 +265,7 @@ class _CardField extends StatelessWidget {
   final String hint;
   final TextInputType? keyboardType;
   final int? maxLength;
+  final List<TextInputFormatter>? inputFormatters;
   final bool obscureText;
   final String? Function(String?)? validator;
 
@@ -242,6 +290,7 @@ class _CardField extends StatelessWidget {
         controller: controller,
         keyboardType: keyboardType,
         maxLength: maxLength,
+        inputFormatters: inputFormatters,
         obscureText: obscureText,
         validator: validator,
         style: TextStyle(fontSize: 14.sp, color: Colors.black),
@@ -259,5 +308,108 @@ class _CardField extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _CardNumberInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final digitsOnly = newValue.text.replaceAll(RegExp(r'\D'), '');
+    final truncated = digitsOnly.length > 16
+        ? digitsOnly.substring(0, 16)
+        : digitsOnly;
+    final formatted = _formatCardNumber(truncated);
+    final selectionIndex = _calculateCardNumberSelection(
+      formatted,
+      truncated.length,
+      newValue.selection.extentOffset,
+    );
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: selectionIndex),
+    );
+  }
+
+  static String _formatCardNumber(String value) {
+    final buffer = StringBuffer();
+    for (var index = 0; index < value.length; index++) {
+      if (index > 0 && index % 4 == 0) {
+        buffer.write(' ');
+      }
+      buffer.write(value[index]);
+    }
+    return buffer.toString();
+  }
+
+  static int _calculateCardNumberSelection(
+    String formatted,
+    int digitsLength,
+    int rawSelection,
+  ) {
+    final digitsSeen = rawSelection.clamp(0, digitsLength);
+    var cursorPosition = 0;
+    var digitsPlaced = 0;
+    while (cursorPosition < formatted.length && digitsPlaced < digitsSeen) {
+      if (formatted[cursorPosition] != ' ') {
+        digitsPlaced++;
+      }
+      cursorPosition++;
+    }
+
+    return cursorPosition.clamp(0, formatted.length);
+  }
+}
+
+class _ExpiryDateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final digitsOnly = newValue.text.replaceAll(RegExp(r'\D'), '');
+    final truncated = digitsOnly.length > 4
+        ? digitsOnly.substring(0, 4)
+        : digitsOnly;
+    final formatted = _formatExpiryDate(truncated);
+    final selectionIndex = _calculateSelection(
+      formatted,
+      truncated.length,
+      newValue.selection.extentOffset,
+    );
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: selectionIndex),
+    );
+  }
+
+  static String _formatExpiryDate(String value) {
+    if (value.length <= 2) {
+      return value.length == 2 ? '$value/' : value;
+    }
+
+    return '${value.substring(0, 2)}/${value.substring(2)}';
+  }
+
+  static int _calculateSelection(
+    String formatted,
+    int digitsLength,
+    int rawSelection,
+  ) {
+    final digitsSeen = rawSelection.clamp(0, digitsLength);
+    var cursorPosition = 0;
+    var digitsPlaced = 0;
+    while (cursorPosition < formatted.length && digitsPlaced < digitsSeen) {
+      if (formatted[cursorPosition] != '/') {
+        digitsPlaced++;
+      }
+      cursorPosition++;
+    }
+
+    return cursorPosition.clamp(0, formatted.length);
   }
 }
