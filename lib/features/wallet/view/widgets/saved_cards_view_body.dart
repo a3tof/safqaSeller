@@ -18,6 +18,12 @@ class SavedCardsViewBody extends StatelessWidget {
     await context.read<WalletViewModel>().loadWallet();
   }
 
+  Future<void> _openAddCard(BuildContext context) async {
+    final cardAdded = await Navigator.pushNamed(context, AddCardView.routeName);
+    if (!context.mounted || cardAdded != true) return;
+    await _refresh(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,8 +48,7 @@ class SavedCardsViewBody extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () =>
-                Navigator.pushNamed(context, AddCardView.routeName),
+            onPressed: () => _openAddCard(context),
             icon: Icon(Icons.add_rounded,
                 color: AppColors.primaryColor, size: 28.sp),
           ),
@@ -88,8 +93,7 @@ class SavedCardsViewBody extends StatelessWidget {
                               .copyWith(color: Colors.grey)),
                       SizedBox(height: 16.h),
                       ElevatedButton(
-                        onPressed: () =>
-                            Navigator.pushNamed(context, AddCardView.routeName),
+                        onPressed: () => _openAddCard(context),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primaryColor),
                         child: Text(S.of(context).kAddCard,
