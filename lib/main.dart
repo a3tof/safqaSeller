@@ -1,15 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/core/helper_functions/on_generate_routes.dart';
 import 'package:safqaseller/core/services/background_notification_worker.dart';
+import 'package:safqaseller/core/services/foreground_notification_poller.dart';
 import 'package:safqaseller/core/services/notification_service.dart';
 import 'package:safqaseller/core/service_locator.dart';
 import 'package:safqaseller/core/storage/cache_helper.dart';
 import 'package:safqaseller/core/storage/cache_keys.dart';
 import 'package:safqaseller/features/adaptive_layout/view/adaptive_layout_view.dart';
 import 'package:safqaseller/features/auth/view_model/auth/auth_view_model.dart';
+import 'package:safqaseller/features/auth/view_model/auth/auth_view_model_state.dart';
 import 'package:safqaseller/features/profile/view_model/profile_view_model.dart';
 import 'package:safqaseller/generated/l10n.dart';
 import 'package:workmanager/workmanager.dart';
@@ -47,11 +51,13 @@ class SafqaSeller extends StatefulWidget {
 
 class _SafqaSellerState extends State<SafqaSeller> {
   Locale _locale = const Locale('en');
+  StreamSubscription<AuthViewModelState>? _authSubscription;
 
   @override
   void initState() {
     super.initState();
     _loadLocale();
+    _bindForegroundNotificationPolling();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getIt<NotificationService>().handleInitialNotificationNavigation();
     });
@@ -73,6 +79,29 @@ class _SafqaSellerState extends State<SafqaSeller> {
   }
 
   void setLocale(Locale locale) => setState(() => _locale = locale);
+
+  void _bindForegroundNotificationPolling() {
+    final authViewModel = getIt<AuthViewModel>();
+    _handleAuthState(authViewModel.state);
+    _authSubscription = authViewModel.stream.listen(_handleAuthState);
+  }
+
+  void _handleAuthState(AuthViewModelState state) {
+    final poller = getIt<ForegroundNotificationPoller>();
+    if (state is AuthAuthenticated) {
+      poller.start();
+      return;
+    }
+
+    poller.stop();
+  }
+
+  @override
+  void dispose() {
+    _authSubscription?.cancel();
+    getIt<ForegroundNotificationPoller>().stop();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

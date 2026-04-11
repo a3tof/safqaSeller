@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:safqaseller/core/network/dio_client.dart';
+import 'package:safqaseller/core/services/foreground_notification_poller.dart';
 import 'package:safqaseller/core/services/notification_service.dart';
 import 'package:safqaseller/core/storage/cache_helper.dart';
 import 'package:safqaseller/core/storage/cache_keys.dart';
@@ -57,6 +58,13 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton(() => DioHelper(cacheHelper: getIt()));
   getIt.registerLazySingleton(
     () => NotificationService(cacheHelper: getIt(), navigatorKey: getIt()),
+  );
+  getIt.registerLazySingleton(
+    () => ForegroundNotificationPoller(
+      notificationsRepository: getIt(),
+      notificationService: getIt(),
+      cacheHelper: getIt(),
+    ),
   );
 
   getIt.registerLazySingleton(

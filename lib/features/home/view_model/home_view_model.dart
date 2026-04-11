@@ -7,6 +7,14 @@ class HomeViewModel extends Cubit<HomeViewModelState> {
 
   HomeViewModel(this._repository) : super(HomeInitial());
 
+  @override
+  void emit(HomeViewModelState state) {
+    if (isClosed) {
+      return;
+    }
+    super.emit(state);
+  }
+
   Future<void> loadHomeData() async {
     emit(HomeLoading());
     try {
