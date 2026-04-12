@@ -91,7 +91,7 @@ class WalletRepository {
 
   Future<void> deleteCard(int cardId) async {
     final r = await dioHelper.deleteData(
-      endPoint: 'seller/Wallet/Cards/$cardId',
+      endPoint: 'Card/Delete-Card/$cardId',
       requiresAuth: true,
     );
     _require(r);
