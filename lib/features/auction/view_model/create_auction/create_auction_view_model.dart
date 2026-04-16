@@ -76,7 +76,8 @@ class CreateAuctionViewModel extends Cubit<CreateAuctionViewModelState> {
   Future<void> submitAuction({
     required double startingPrice,
     required int bidIncrement,
-    required int durationInDays,
+    required DateTime startDate,
+    required DateTime endDate,
   }) async {
     final request = draftRequest;
     if (request == null) {
@@ -87,7 +88,8 @@ class CreateAuctionViewModel extends Cubit<CreateAuctionViewModelState> {
     final updatedRequest = request.copyWith(
       startingPrice: startingPrice,
       bidIncrement: bidIncrement,
-      durationInDays: durationInDays,
+      startDate: startDate,
+      endDate: endDate,
     );
 
     emit(CreateAuctionSubmitting());
@@ -97,7 +99,8 @@ class CreateAuctionViewModel extends Cubit<CreateAuctionViewModelState> {
         description: updatedRequest.description,
         startingPrice: updatedRequest.startingPrice,
         bidIncrement: updatedRequest.bidIncrement,
-        durationInDays: updatedRequest.durationInDays,
+        startDate: updatedRequest.startDate!,
+        endDate: updatedRequest.endDate!,
         headImage: updatedRequest.headImage,
         items: updatedRequest.items,
       );

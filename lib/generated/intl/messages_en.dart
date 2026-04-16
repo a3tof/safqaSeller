@@ -23,6 +23,84 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "addNewCard": MessageLookupByLibrary.simpleMessage("Add new card"),
+    "auctionAddItem": MessageLookupByLibrary.simpleMessage("Add Item"),
+    "auctionBidIncrement": MessageLookupByLibrary.simpleMessage(
+      "Bid Increment",
+    ),
+    "auctionBoostPublish": MessageLookupByLibrary.simpleMessage(
+      "Boost & Publish",
+    ),
+    "auctionCategory": MessageLookupByLibrary.simpleMessage("Category"),
+    "auctionChangesSaved": MessageLookupByLibrary.simpleMessage(
+      "Changes saved successfully",
+    ),
+    "auctionCondition": MessageLookupByLibrary.simpleMessage("Condition"),
+    "auctionCount": MessageLookupByLibrary.simpleMessage("Count"),
+    "auctionDate": MessageLookupByLibrary.simpleMessage("Auction Date"),
+    "auctionDeleteButton": MessageLookupByLibrary.simpleMessage(
+      "Delete Auction",
+    ),
+    "auctionDeleteConfirmMessage": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to delete this auction? This action cannot be undone.",
+    ),
+    "auctionDeleteSuccess": MessageLookupByLibrary.simpleMessage(
+      "Auction deleted successfully",
+    ),
+    "auctionDetailsDocs": MessageLookupByLibrary.simpleMessage(
+      "Details & Docs",
+    ),
+    "auctionDraftMissing": MessageLookupByLibrary.simpleMessage(
+      "Auction draft is missing.",
+    ),
+    "auctionDuration": MessageLookupByLibrary.simpleMessage("Auction Duration"),
+    "auctionEditSuccess": MessageLookupByLibrary.simpleMessage(
+      "Auction updated successfully",
+    ),
+    "auctionEditTitle": MessageLookupByLibrary.simpleMessage("Edit Auction"),
+    "auctionEndDate": MessageLookupByLibrary.simpleMessage("End Date"),
+    "auctionEndDateAfterStart": MessageLookupByLibrary.simpleMessage(
+      "End date must be after start date.",
+    ),
+    "auctionEndsIn": MessageLookupByLibrary.simpleMessage("Ends in"),
+    "auctionItem": MessageLookupByLibrary.simpleMessage("Item"),
+    "auctionLoadError": MessageLookupByLibrary.simpleMessage(
+      "Failed to load auction details",
+    ),
+    "auctionLotDescription": MessageLookupByLibrary.simpleMessage(
+      "Lot Description",
+    ),
+    "auctionLotDetails": MessageLookupByLibrary.simpleMessage("Lot Details"),
+    "auctionNew": MessageLookupByLibrary.simpleMessage("New"),
+    "auctionPriceDuration": MessageLookupByLibrary.simpleMessage(
+      "Price & Duration",
+    ),
+    "auctionPublishing": MessageLookupByLibrary.simpleMessage("Publishing..."),
+    "auctionSaveEdits": MessageLookupByLibrary.simpleMessage("Save edits"),
+    "auctionSelectEndDateError": MessageLookupByLibrary.simpleMessage(
+      "Please select an end date.",
+    ),
+    "auctionSelectStartDateError": MessageLookupByLibrary.simpleMessage(
+      "Please select a start date.",
+    ),
+    "auctionSpecify": MessageLookupByLibrary.simpleMessage("Specify"),
+    "auctionStartDate": MessageLookupByLibrary.simpleMessage("Start Date"),
+    "auctionStartsIn": MessageLookupByLibrary.simpleMessage("Starts in"),
+    "auctionTimeLeft": MessageLookupByLibrary.simpleMessage("Time Left"),
+    "auctionTitle": MessageLookupByLibrary.simpleMessage("Title"),
+    "auctionUsed": MessageLookupByLibrary.simpleMessage("Used"),
+    "auctionUsedLikeNew": MessageLookupByLibrary.simpleMessage("Used-Like New"),
+    "auctionValidBidIncrementError": MessageLookupByLibrary.simpleMessage(
+      "Please enter a valid bid increment.",
+    ),
+    "auctionValidDurationError": MessageLookupByLibrary.simpleMessage(
+      "Please enter a valid duration.",
+    ),
+    "auctionValidStartingPriceError": MessageLookupByLibrary.simpleMessage(
+      "Please enter a valid starting price.",
+    ),
+    "auctionWarrantyInfo": MessageLookupByLibrary.simpleMessage(
+      "Warranty INFO",
+    ),
     "birthdate": MessageLookupByLibrary.simpleMessage("Birthdate"),
     "card": MessageLookupByLibrary.simpleMessage("Card"),
     "chatNoConversations": MessageLookupByLibrary.simpleMessage(
@@ -91,35 +169,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "historyExport": MessageLookupByLibrary.simpleMessage("Export"),
     "historyFinalPrice": MessageLookupByLibrary.simpleMessage("Final Price"),
     "historyLotLabel": MessageLookupByLibrary.simpleMessage("Lot"),
-    "auctionAddItem": MessageLookupByLibrary.simpleMessage("Add Item"),
-    "auctionCategory": MessageLookupByLibrary.simpleMessage("Category"),
-    "auctionChangesSaved": MessageLookupByLibrary.simpleMessage(
-      "Changes saved successfully",
-    ),
-    "auctionCondition": MessageLookupByLibrary.simpleMessage("Condition"),
-    "auctionCount": MessageLookupByLibrary.simpleMessage("Count"),
-    "auctionDetailsDocs": MessageLookupByLibrary.simpleMessage(
-      "Details & Docs",
-    ),
-    "auctionEditTitle": MessageLookupByLibrary.simpleMessage("Edit Auction"),
-    "auctionEndsIn": MessageLookupByLibrary.simpleMessage("Ends in"),
-    "auctionItem": MessageLookupByLibrary.simpleMessage("Item"),
-    "auctionLotDescription": MessageLookupByLibrary.simpleMessage(
-      "Lot Description",
-    ),
-    "auctionLotDetails": MessageLookupByLibrary.simpleMessage("Lot Details"),
-    "auctionNew": MessageLookupByLibrary.simpleMessage("New"),
-    "auctionSaveEdits": MessageLookupByLibrary.simpleMessage("Save edits"),
-    "auctionStartsIn": MessageLookupByLibrary.simpleMessage("Starts in"),
-    "auctionTimeLeft": MessageLookupByLibrary.simpleMessage("Time Left"),
-    "auctionTitle": MessageLookupByLibrary.simpleMessage("Title"),
-    "auctionUsed": MessageLookupByLibrary.simpleMessage("Used"),
-    "auctionUsedLikeNew": MessageLookupByLibrary.simpleMessage(
-      "Used-Like New",
-    ),
-    "auctionWarrantyInfo": MessageLookupByLibrary.simpleMessage(
-      "Warranty INFO",
-    ),
     "historyNoItems": MessageLookupByLibrary.simpleMessage("No history found."),
     "historyNoMatchingItems": MessageLookupByLibrary.simpleMessage(
       "No matching history found.",

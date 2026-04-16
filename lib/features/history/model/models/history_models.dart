@@ -1,13 +1,6 @@
 import 'package:intl/intl.dart';
 
-enum AuctionStatus {
-  upcoming,
-  active,
-  endingSoon,
-  finished,
-  canceled,
-  sold,
-}
+enum AuctionStatus { upcoming, active, endingSoon, finished, canceled, sold }
 
 class HistoryItem {
   final int id;
@@ -59,7 +52,8 @@ class HistoryItem {
     );
 
     return HistoryItem(
-      id: _asInt(
+      id:
+          _asInt(
             json['id'] ??
                 json['Id'] ??
                 json['auctionId'] ??
@@ -68,7 +62,8 @@ class HistoryItem {
                 json['LotId'],
           ) ??
           0,
-      lotNumber: _firstNonEmptyString([
+      lotNumber:
+          _firstNonEmptyString([
             json['lotNumber'],
             json['LotNumber'],
             json['lotNo'],
@@ -79,7 +74,8 @@ class HistoryItem {
             json['Tag'],
           ]) ??
           '#${_asInt(json['id'] ?? json['Id']) ?? 0}',
-      title: _firstNonEmptyString([
+      title:
+          _firstNonEmptyString([
             json['title'],
             json['Title'],
             json['name'],
@@ -93,7 +89,8 @@ class HistoryItem {
           ]) ??
           'Auction',
       status: status,
-      bidsCount: _asInt(
+      bidsCount:
+          _asInt(
             json['bidsCount'] ??
                 json['BidsCount'] ??
                 json['bidCount'] ??
@@ -163,13 +160,13 @@ class HistoryPage {
     required int pageSize,
   }) {
     final map = data is Map<String, dynamic> ? data : null;
-    final items = _extractItems(data)
-        .whereType<Map<String, dynamic>>()
-        .map(HistoryItem.fromJson)
-        .toList();
+    final items = _extractItems(
+      data,
+    ).whereType<Map<String, dynamic>>().map(HistoryItem.fromJson).toList();
 
     final explicitTotal = _extractTotalCount(map);
-    final resolvedTotal = explicitTotal ??
+    final resolvedTotal =
+        explicitTotal ??
         ((items.length < pageSize)
             ? ((page - 1) * pageSize) + items.length
             : (page * pageSize) + 1);
@@ -186,6 +183,7 @@ class HistoryPage {
 List<dynamic> _extractItems(dynamic data) {
   if (data is List) return data;
   if (data is! Map<String, dynamic>) return const [];
+  if (_looksLikeHistoryItem(data)) return [data];
 
   final direct = [
     data['items'],
@@ -200,17 +198,49 @@ List<dynamic> _extractItems(dynamic data) {
     data['Auctions'],
     data['records'],
     data['Records'],
+    data['result'],
+    data['Result'],
+    data['payload'],
+    data['Payload'],
+    data['value'],
+    data['Value'],
+    data['list'],
+    data['List'],
+    data['rows'],
+    data['Rows'],
   ];
 
   for (final value in direct) {
     if (value is List) return value;
     if (value is Map<String, dynamic>) {
+      if (_looksLikeHistoryItem(value)) return [value];
       final nested = _extractItems(value);
       if (nested.isNotEmpty) return nested;
     }
   }
 
   return const [];
+}
+
+bool _looksLikeHistoryItem(Map<String, dynamic> json) {
+  final title = _firstNonEmptyString([
+    json['title'],
+    json['Title'],
+    json['name'],
+    json['Name'],
+    json['itemTitle'],
+    json['ItemTitle'],
+  ]);
+  final id = _asInt(
+    json['id'] ??
+        json['Id'] ??
+        json['auctionId'] ??
+        json['AuctionId'] ??
+        json['lotId'] ??
+        json['LotId'],
+  );
+  final status = json['status'] ?? json['Status'] ?? json['auctionStatus'];
+  return id != null || title != null || status != null;
 }
 
 int? _extractTotalCount(Map<String, dynamic>? map) {
@@ -291,6 +321,8 @@ String? _extractImageUrl(Map<String, dynamic> json) {
     json['ImageUrl'],
     json['image'],
     json['Image'],
+    json['headImage'],
+    json['HeadImage'],
     json['mainImage'],
     json['MainImage'],
     json['thumbnail'],

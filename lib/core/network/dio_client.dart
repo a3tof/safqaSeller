@@ -249,6 +249,24 @@ class DioHelper {
     }
   }
 
+  Future<Response<dynamic>> putFormData({
+    required String endPoint,
+    required FormData data,
+    Map<String, dynamic>? queryParams,
+    bool requiresAuth = false,
+  }) async {
+    try {
+      return await dio.put<dynamic>(
+        endPoint,
+        data: data,
+        queryParameters: queryParams,
+        options: Options(extra: {'requiresAuth': requiresAuth}),
+      );
+    } on DioException catch (e) {
+      throw Exception(_dioConnectionError(e));
+    }
+  }
+
   Future<Response<dynamic>> deleteData({
     required String endPoint,
     bool requiresAuth = false,

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:safqaseller/core/network/dio_client.dart';
+import 'package:safqaseller/features/auction/model/models/auction_detail_model.dart';
 import 'package:safqaseller/features/auction/model/models/category_attribute_model.dart';
 import 'package:safqaseller/features/auction/model/models/category_model.dart';
 import 'package:safqaseller/features/auction/model/models/create_auction_request_model.dart';
@@ -46,7 +47,8 @@ class AuctionRepository {
     required String description,
     required double startingPrice,
     required int bidIncrement,
-    required int durationInDays,
+    required DateTime startDate,
+    required DateTime endDate,
     required List<AuctionItemModel> items,
     XFile? headImage,
   }) async {
@@ -57,13 +59,14 @@ class AuctionRepository {
       MapEntry('Description', description),
       MapEntry('StartingPrice', _numberToString(startingPrice)),
       MapEntry('BidIncrement', bidIncrement.toString()),
-      MapEntry('DurationInDays', durationInDays.toString()),
+      MapEntry('StartDate', startDate.toIso8601String()),
+      MapEntry('EndDate', endDate.toIso8601String()),
     ]);
 
     if (headImage != null) {
       formData.files.add(
         MapEntry(
-          'HeadImage',
+          'Image',
           await MultipartFile.fromFile(
             headImage.path,
             filename: headImage.name,
@@ -128,6 +131,104 @@ class AuctionRepository {
     }
   }
 
+  Future<AuctionDetailModel> viewAuction(int id) async {
+    final response = await dioHelper.getData(
+      endPoint: 'Auction/View/$id',
+      requiresAuth: true,
+    );
+    _requireSuccess(response);
+
+    final body = _asMap(response.data);
+    return AuctionDetailModel.fromJson(body);
+  }
+
+  Future<void> editAuction({
+    required int id,
+    required EditAuctionRequestModel request,
+  }) async {
+    final formData = FormData();
+
+    formData.fields.addAll([
+      MapEntry('title', request.title),
+      MapEntry('Description', request.description),
+    ]);
+
+    if (request.image != null) {
+      formData.files.add(
+        MapEntry(
+          'Image',
+          await MultipartFile.fromFile(
+            request.image!.path,
+            filename: request.image!.name,
+          ),
+        ),
+      );
+    }
+
+    for (var itemIndex = 0; itemIndex < request.items.length; itemIndex++) {
+      final item = request.items[itemIndex];
+      formData.fields.addAll([
+        MapEntry('Items[$itemIndex].id', item.id.toString()),
+        MapEntry('Items[$itemIndex].title', item.title),
+        MapEntry('Items[$itemIndex].count', item.count.toString()),
+        MapEntry('Items[$itemIndex].description', item.description),
+        MapEntry('Items[$itemIndex].warrantyInfo', item.warrantyInfo),
+        MapEntry('Items[$itemIndex].condition', item.condition.toString()),
+        MapEntry('Items[$itemIndex].categoryId', item.categoryId.toString()),
+      ]);
+
+      for (final image in item.images) {
+        formData.files.add(
+          MapEntry(
+            'Items[$itemIndex].images',
+            await MultipartFile.fromFile(image.path, filename: image.name),
+          ),
+        );
+      }
+
+      for (
+        var attributeIndex = 0;
+        attributeIndex < item.attributes.length;
+        attributeIndex++
+      ) {
+        final attribute = item.attributes[attributeIndex];
+        formData.fields.addAll([
+          MapEntry(
+            'Items[$itemIndex].attributes[$attributeIndex].categoryAttributeId',
+            attribute.categoryAttributeId.toString(),
+          ),
+          MapEntry(
+            'Items[$itemIndex].attributes[$attributeIndex].value',
+            attribute.value,
+          ),
+        ]);
+      }
+    }
+
+    final response = await dioHelper.putFormData(
+      endPoint: 'Auction/edit/$id',
+      data: formData,
+      requiresAuth: true,
+    );
+    _requireSuccess(response);
+    _requireBackendSuccess(
+      response.data,
+      fallbackMessage: 'Update auction failed',
+    );
+  }
+
+  Future<void> deleteAuction(int id) async {
+    final response = await dioHelper.deleteData(
+      endPoint: 'Auction/Delete/$id',
+      requiresAuth: true,
+    );
+    _requireSuccess(response);
+    _requireBackendSuccess(
+      response.data,
+      fallbackMessage: 'Delete auction failed',
+    );
+  }
+
   void _requireSuccess(Response<dynamic> response) {
     final statusCode = response.statusCode;
     if (statusCode == null || statusCode < 200 || statusCode >= 300) {
@@ -152,6 +253,18 @@ class AuctionRepository {
       return decoded.map((key, value) => MapEntry(key.toString(), value));
     }
     return const {};
+  }
+
+  void _requireBackendSuccess(dynamic data, {required String fallbackMessage}) {
+    final body = _asMap(data);
+    if (body.isEmpty) {
+      return;
+    }
+
+    final isSuccess = body['isSuccess'] ?? body['IsSuccess'];
+    if (isSuccess == false) {
+      throw Exception(body['message'] ?? body['Message'] ?? fallbackMessage);
+    }
   }
 
   dynamic _decodeIfNeeded(dynamic data) {

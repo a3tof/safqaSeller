@@ -9,6 +9,7 @@ import 'package:safqaseller/features/history/view/history_view.dart';
 import 'package:safqaseller/features/seller/view/seller_home_view.dart';
 import 'package:safqaseller/features/auction/view_model/create_auction/create_auction_view_model.dart';
 import 'package:safqaseller/features/auction/view_model/create_auction/create_auction_view_model_state.dart';
+import 'package:safqaseller/generated/l10n.dart';
 
 class PriceDurationView extends StatefulWidget {
   const PriceDurationView({super.key});
@@ -23,16 +24,18 @@ class _PriceDurationViewState extends State<PriceDurationView> {
   final TextEditingController _startingPriceController =
       TextEditingController();
   final TextEditingController _customBidController = TextEditingController();
-  final TextEditingController _customDurationController =
-      TextEditingController();
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
   String _selectedBid = '500';
-  String _selectedDuration = '7 days';
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   @override
   void dispose() {
     _startingPriceController.dispose();
     _customBidController.dispose();
-    _customDurationController.dispose();
+    _startDateController.dispose();
+    _endDateController.dispose();
     super.dispose();
   }
 
@@ -53,32 +56,84 @@ class _PriceDurationViewState extends State<PriceDurationView> {
   int? _resolveBidIncrement() {
     String normalize(String value) => value.replaceAll(',', '').trim();
 
-    final source = _selectedBid == 'Specify'
+    final source = _selectedBid == S.of(context).auctionSpecify
         ? _customBidController.text
         : _selectedBid;
     return int.tryParse(normalize(source));
   }
 
-  int? _resolveDuration() {
-    if (_selectedDuration == 'Specify') {
-      return int.tryParse(_customDurationController.text.trim());
+  Future<void> _pickDateTime({required bool isStart}) async {
+    final now = DateTime.now();
+    final initial = isStart
+        ? (_startDate ?? now)
+        : (_endDate ?? _startDate?.add(const Duration(days: 1)) ?? now);
+
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: isStart ? now : (_startDate ?? now),
+      lastDate: DateTime(now.year + 5),
+    );
+    if (pickedDate == null || !mounted) {
+      return;
     }
-    return int.tryParse(_selectedDuration.split(' ').first);
+
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(initial),
+    );
+    if (pickedTime == null || !mounted) {
+      return;
+    }
+
+    final selected = DateTime(
+      pickedDate.year,
+      pickedDate.month,
+      pickedDate.day,
+      pickedTime.hour,
+      pickedTime.minute,
+    );
+
+    setState(() {
+      if (isStart) {
+        _startDate = selected;
+        _startDateController.text = _formatDateTime(selected);
+        if (_endDate != null && !_endDate!.isAfter(selected)) {
+          _endDate = null;
+          _endDateController.clear();
+        }
+      } else {
+        _endDate = selected;
+        _endDateController.text = _formatDateTime(selected);
+      }
+    });
   }
 
-  String _auctionEndLabel() {
-    final days = _resolveDuration();
-    if (days == null || days <= 0) {
-      return 'Select a valid duration';
+  String _formatDateTime(DateTime value) {
+    final locale = Localizations.localeOf(context).toString();
+    return DateFormat('d MMM yyyy, h:mm a', locale).format(value);
+  }
+
+  String _durationLabel(S s) {
+    if (_startDate == null || _endDate == null) {
+      return '--';
     }
-    final endDate = DateTime.now().add(Duration(days: days));
-    return DateFormat('EEE, MMM d, yyyy h:mm a').format(endDate);
+
+    final difference = _endDate!.difference(_startDate!);
+    if (difference.inMinutes <= 0) {
+      return s.auctionEndDateAfterStart;
+    }
+
+    final days = difference.inDays;
+    final hours = difference.inHours.remainder(24);
+    return '${days}d : ${hours}h';
   }
 
   Future<void> _submitAuction() async {
+    final s = S.of(context);
     final cubit = _maybeCubit(context);
     if (cubit == null) {
-      _showMessage('Auction draft is missing.');
+      _showMessage(s.auctionDraftMissing);
       return;
     }
 
@@ -86,26 +141,36 @@ class _PriceDurationViewState extends State<PriceDurationView> {
       _startingPriceController.text.replaceAll(',', '').trim(),
     );
     if (startingPrice == null || startingPrice <= 0) {
-      _showMessage('Please enter a valid starting price.');
+      _showMessage(s.auctionValidStartingPriceError);
       return;
     }
 
     final bidIncrement = _resolveBidIncrement();
     if (bidIncrement == null || bidIncrement <= 0) {
-      _showMessage('Please enter a valid bid increment.');
+      _showMessage(s.auctionValidBidIncrementError);
       return;
     }
 
-    final durationInDays = _resolveDuration();
-    if (durationInDays == null || durationInDays <= 0) {
-      _showMessage('Please enter a valid duration.');
+    if (_startDate == null) {
+      _showMessage(s.auctionSelectStartDateError);
+      return;
+    }
+
+    if (_endDate == null) {
+      _showMessage(s.auctionSelectEndDateError);
+      return;
+    }
+
+    if (!_endDate!.isAfter(_startDate!)) {
+      _showMessage(s.auctionEndDateAfterStart);
       return;
     }
 
     await cubit.submitAuction(
       startingPrice: startingPrice,
       bidIncrement: bidIncrement,
-      durationInDays: durationInDays,
+      startDate: _startDate!,
+      endDate: _endDate!,
     );
   }
 
@@ -120,23 +185,25 @@ class _PriceDurationViewState extends State<PriceDurationView> {
             context,
             HistoryView.routeName,
             (route) =>
-                route.settings.name == SellerHomeView.routeName || route.isFirst,
+                route.settings.name == SellerHomeView.routeName ||
+                route.isFirst,
           );
         }
       },
       builder: (context, state) {
+        final s = S.of(context);
         final isSubmitting = state is CreateAuctionSubmitting;
 
         return Scaffold(
           backgroundColor: Colors.white,
-          appBar: buildAppBar(context: context, title: 'Price & Duration'),
+          appBar: buildAppBar(context: context, title: s.auctionPriceDuration),
           body: SafeArea(
             child: Padding(
               padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const _SectionLabel(label: 'Starting Price'),
+                  _SectionLabel(label: s.historyStartingPrice),
                   SizedBox(height: 6.h),
                   _InputField(
                     controller: _startingPriceController,
@@ -145,7 +212,7 @@ class _PriceDurationViewState extends State<PriceDurationView> {
                     ),
                   ),
                   SizedBox(height: 16.h),
-                  const _SectionLabel(label: 'Bid Increment'),
+                  _SectionLabel(label: s.auctionBidIncrement),
                   SizedBox(height: 6.h),
                   Row(
                     children: [
@@ -185,94 +252,50 @@ class _PriceDurationViewState extends State<PriceDurationView> {
                       SizedBox(width: 8.w),
                       Expanded(
                         child: _ChoiceChipBox(
-                          label: 'Specify',
-                          selected: _selectedBid == 'Specify',
+                          label: s.auctionSpecify,
+                          selected: _selectedBid == s.auctionSpecify,
                           onTap: () {
-                            setState(() => _selectedBid = 'Specify');
+                            setState(() => _selectedBid = s.auctionSpecify);
                           },
                         ),
                       ),
                     ],
                   ),
-                  if (_selectedBid == 'Specify') ...[
+                  if (_selectedBid == s.auctionSpecify) ...[
                     SizedBox(height: 8.h),
                     _InputField(
                       controller: _customBidController,
-                      hintText: 'Enter bid increment',
+                      hintText: s.auctionBidIncrement,
                       keyboardType: TextInputType.number,
                     ),
                   ],
                   SizedBox(height: 18.h),
-                  const _SectionLabel(label: 'Auction Duration'),
+                  _SectionLabel(label: s.auctionDate),
                   SizedBox(height: 6.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _ChoiceChipBox(
-                          label: '1 day',
-                          selected: _selectedDuration == '1 day',
-                          onTap: () {
-                            setState(() => _selectedDuration = '1 day');
-                          },
-                        ),
-                      ),
-                      SizedBox(width: 8.w),
-                      Expanded(
-                        child: _ChoiceChipBox(
-                          label: '3 days',
-                          selected: _selectedDuration == '3 days',
-                          onTap: () {
-                            setState(() => _selectedDuration = '3 days');
-                          },
-                        ),
-                      ),
-                    ],
+                  _DateField(
+                    controller: _startDateController,
+                    hintText: s.auctionStartDate,
+                    onTap: () => _pickDateTime(isStart: true),
                   ),
                   SizedBox(height: 8.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _ChoiceChipBox(
-                          label: '7 days',
-                          selected: _selectedDuration == '7 days',
-                          onTap: () {
-                            setState(() => _selectedDuration = '7 days');
-                          },
-                        ),
-                      ),
-                      SizedBox(width: 8.w),
-                      Expanded(
-                        child: _ChoiceChipBox(
-                          label: 'Specify',
-                          selected: _selectedDuration == 'Specify',
-                          onTap: () {
-                            setState(() => _selectedDuration = 'Specify');
-                          },
-                        ),
-                      ),
-                    ],
+                  _DateField(
+                    controller: _endDateController,
+                    hintText: s.auctionEndDate,
+                    onTap: () => _pickDateTime(isStart: false),
                   ),
-                  if (_selectedDuration == 'Specify') ...[
-                    SizedBox(height: 8.h),
-                    _InputField(
-                      controller: _customDurationController,
-                      hintText: 'Enter number of days',
-                      keyboardType: TextInputType.number,
-                    ),
-                  ],
                   SizedBox(height: 18.h),
                   Center(
                     child: Column(
                       children: [
                         Text(
-                          'Your auction ends on',
+                          s.auctionDuration,
                           style: TextStyles.regular12(
                             context,
                           ).copyWith(color: const Color(0xFF666666)),
                         ),
                         SizedBox(height: 4.h),
                         Text(
-                          _auctionEndLabel(),
+                          _durationLabel(s),
                           style: TextStyles.semiBold14(
                             context,
                           ).copyWith(color: AppColors.primaryColor),
@@ -282,7 +305,9 @@ class _PriceDurationViewState extends State<PriceDurationView> {
                   ),
                   const Spacer(),
                   _PrimaryButton(
-                    label: isSubmitting ? 'Publishing...' : 'Boost & Publish',
+                    label: isSubmitting
+                        ? s.auctionPublishing
+                        : s.auctionBoostPublish,
                     onTap: isSubmitting ? null : _submitAuction,
                   ),
                 ],
@@ -291,6 +316,51 @@ class _PriceDurationViewState extends State<PriceDurationView> {
           ),
         );
       },
+    );
+  }
+}
+
+class _DateField extends StatelessWidget {
+  const _DateField({
+    required this.controller,
+    required this.hintText,
+    required this.onTap,
+  });
+
+  final TextEditingController controller;
+  final String hintText;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      readOnly: true,
+      onTap: onTap,
+      style: TextStyles.semiBold14(
+        context,
+      ).copyWith(color: AppColors.primaryColor),
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: TextStyles.regular12(
+          context,
+        ).copyWith(color: const Color(0xFF9A9A9A)),
+        suffixIcon: Icon(
+          Icons.calendar_today_outlined,
+          color: AppColors.primaryColor,
+          size: 20.sp,
+        ),
+        isDense: true,
+        contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4.r),
+          borderSide: const BorderSide(color: Color(0xFFE4E4E4)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4.r),
+          borderSide: const BorderSide(color: AppColors.primaryColor),
+        ),
+      ),
     );
   }
 }

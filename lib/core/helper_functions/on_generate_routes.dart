@@ -10,8 +10,10 @@ import 'package:safqaseller/features/auction/view/lot_auction_view.dart';
 import 'package:safqaseller/features/auction/view/edit_auction_view.dart';
 import 'package:safqaseller/features/auction/view/lot_detail_route_args.dart';
 import 'package:safqaseller/features/auction/view/lot_detail_view.dart';
+import 'package:safqaseller/features/auction/view_model/auction_detail/auction_detail_view_model.dart';
 import 'package:safqaseller/features/auction/view/price_duration_view.dart';
 import 'package:safqaseller/features/auction/view_model/create_auction/create_auction_view_model.dart';
+import 'package:safqaseller/features/auction/view_model/edit_auction/edit_auction_view_model.dart';
 import 'package:safqaseller/features/auth/view/auth_route_args.dart';
 import 'package:safqaseller/features/auth/view/create_password_view.dart';
 import 'package:safqaseller/features/auth/view/forget_password_view.dart';
@@ -135,13 +137,23 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
       if (args == null) {
         return MaterialPageRoute(builder: (_) => const HistoryView());
       }
-      return MaterialPageRoute(builder: (_) => LotDetailView(args: args));
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => getIt<AuctionDetailViewModel>(),
+          child: LotDetailView(args: args),
+        ),
+      );
     case EditAuctionView.routeName:
       final args = settings.arguments as LotDetailRouteArgs?;
       if (args == null) {
         return MaterialPageRoute(builder: (_) => const HistoryView());
       }
-      return MaterialPageRoute(builder: (_) => EditAuctionView(args: args));
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => getIt<EditAuctionViewModel>(),
+          child: EditAuctionView(args: args),
+        ),
+      );
 
     // ── Complete Profile ───────────────────────────────────────────────────
     case AccountTypeView.routeName:

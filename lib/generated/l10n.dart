@@ -2199,6 +2199,166 @@ class S {
     );
   }
 
+  /// `Price & Duration`
+  String get auctionPriceDuration {
+    return Intl.message(
+      'Price & Duration',
+      name: 'auctionPriceDuration',
+      desc: 'Price and duration screen title',
+      args: [],
+    );
+  }
+
+  /// `Bid Increment`
+  String get auctionBidIncrement {
+    return Intl.message(
+      'Bid Increment',
+      name: 'auctionBidIncrement',
+      desc: 'Bid increment section title',
+      args: [],
+    );
+  }
+
+  /// `Auction Date`
+  String get auctionDate {
+    return Intl.message(
+      'Auction Date',
+      name: 'auctionDate',
+      desc: 'Auction date section title',
+      args: [],
+    );
+  }
+
+  /// `Start Date`
+  String get auctionStartDate {
+    return Intl.message(
+      'Start Date',
+      name: 'auctionStartDate',
+      desc: 'Auction start date field hint',
+      args: [],
+    );
+  }
+
+  /// `End Date`
+  String get auctionEndDate {
+    return Intl.message(
+      'End Date',
+      name: 'auctionEndDate',
+      desc: 'Auction end date field hint',
+      args: [],
+    );
+  }
+
+  /// `Auction Duration`
+  String get auctionDuration {
+    return Intl.message(
+      'Auction Duration',
+      name: 'auctionDuration',
+      desc: 'Auction duration label',
+      args: [],
+    );
+  }
+
+  /// `Boost & Publish`
+  String get auctionBoostPublish {
+    return Intl.message(
+      'Boost & Publish',
+      name: 'auctionBoostPublish',
+      desc: 'Publish auction button label',
+      args: [],
+    );
+  }
+
+  /// `Publishing...`
+  String get auctionPublishing {
+    return Intl.message(
+      'Publishing...',
+      name: 'auctionPublishing',
+      desc: 'Publishing auction button label',
+      args: [],
+    );
+  }
+
+  /// `Specify`
+  String get auctionSpecify {
+    return Intl.message(
+      'Specify',
+      name: 'auctionSpecify',
+      desc: 'Specify custom value option',
+      args: [],
+    );
+  }
+
+  /// `Auction draft is missing.`
+  String get auctionDraftMissing {
+    return Intl.message(
+      'Auction draft is missing.',
+      name: 'auctionDraftMissing',
+      desc: 'Missing auction draft validation',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid starting price.`
+  String get auctionValidStartingPriceError {
+    return Intl.message(
+      'Please enter a valid starting price.',
+      name: 'auctionValidStartingPriceError',
+      desc: 'Invalid starting price validation',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid bid increment.`
+  String get auctionValidBidIncrementError {
+    return Intl.message(
+      'Please enter a valid bid increment.',
+      name: 'auctionValidBidIncrementError',
+      desc: 'Invalid bid increment validation',
+      args: [],
+    );
+  }
+
+  /// `Please select a start date.`
+  String get auctionSelectStartDateError {
+    return Intl.message(
+      'Please select a start date.',
+      name: 'auctionSelectStartDateError',
+      desc: 'Missing start date validation',
+      args: [],
+    );
+  }
+
+  /// `Please select an end date.`
+  String get auctionSelectEndDateError {
+    return Intl.message(
+      'Please select an end date.',
+      name: 'auctionSelectEndDateError',
+      desc: 'Missing end date validation',
+      args: [],
+    );
+  }
+
+  /// `End date must be after start date.`
+  String get auctionEndDateAfterStart {
+    return Intl.message(
+      'End date must be after start date.',
+      name: 'auctionEndDateAfterStart',
+      desc: 'End date ordering validation',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid duration.`
+  String get auctionValidDurationError {
+    return Intl.message(
+      'Please enter a valid duration.',
+      name: 'auctionValidDurationError',
+      desc: 'Invalid duration validation',
+      args: [],
+    );
+  }
+
   /// `Starts in`
   String get auctionStartsIn {
     return Intl.message(
@@ -2355,6 +2515,56 @@ class S {
       'Changes saved successfully',
       name: 'auctionChangesSaved',
       desc: 'Edit auction success message',
+      args: [],
+    );
+  }
+
+  /// `Delete Auction`
+  String get auctionDeleteButton {
+    return Intl.message(
+      'Delete Auction',
+      name: 'auctionDeleteButton',
+      desc: 'Delete auction action label',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete this auction? This action cannot be undone.`
+  String get auctionDeleteConfirmMessage {
+    return Intl.message(
+      'Are you sure you want to delete this auction? This action cannot be undone.',
+      name: 'auctionDeleteConfirmMessage',
+      desc: 'Delete auction confirmation message',
+      args: [],
+    );
+  }
+
+  /// `Auction deleted successfully`
+  String get auctionDeleteSuccess {
+    return Intl.message(
+      'Auction deleted successfully',
+      name: 'auctionDeleteSuccess',
+      desc: 'Delete auction success message',
+      args: [],
+    );
+  }
+
+  /// `Auction updated successfully`
+  String get auctionEditSuccess {
+    return Intl.message(
+      'Auction updated successfully',
+      name: 'auctionEditSuccess',
+      desc: 'Edit auction success message from API',
+      args: [],
+    );
+  }
+
+  /// `Failed to load auction details`
+  String get auctionLoadError {
+    return Intl.message(
+      'Failed to load auction details',
+      name: 'auctionLoadError',
+      desc: 'Auction details load failure fallback',
       args: [],
     );
   }

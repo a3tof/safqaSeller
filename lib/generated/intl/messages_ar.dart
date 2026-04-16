@@ -23,6 +23,78 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "addNewCard": MessageLookupByLibrary.simpleMessage("إضافة بطاقة جديدة"),
+    "auctionAddItem": MessageLookupByLibrary.simpleMessage("إضافة عنصر"),
+    "auctionBidIncrement": MessageLookupByLibrary.simpleMessage("قيمة الزيادة"),
+    "auctionBoostPublish": MessageLookupByLibrary.simpleMessage("تعزيز ونشر"),
+    "auctionCategory": MessageLookupByLibrary.simpleMessage("الفئة"),
+    "auctionChangesSaved": MessageLookupByLibrary.simpleMessage(
+      "تم حفظ التعديلات بنجاح",
+    ),
+    "auctionCondition": MessageLookupByLibrary.simpleMessage("الحالة"),
+    "auctionCount": MessageLookupByLibrary.simpleMessage("العدد"),
+    "auctionDate": MessageLookupByLibrary.simpleMessage("تاريخ المزاد"),
+    "auctionDeleteButton": MessageLookupByLibrary.simpleMessage("حذف المزاد"),
+    "auctionDeleteConfirmMessage": MessageLookupByLibrary.simpleMessage(
+      "هل أنت متأكد أنك تريد حذف هذا المزاد؟ لا يمكن التراجع عن هذا الإجراء.",
+    ),
+    "auctionDeleteSuccess": MessageLookupByLibrary.simpleMessage(
+      "تم حذف المزاد بنجاح",
+    ),
+    "auctionDetailsDocs": MessageLookupByLibrary.simpleMessage(
+      "التفاصيل والمستندات",
+    ),
+    "auctionDraftMissing": MessageLookupByLibrary.simpleMessage(
+      "مسودة المزاد غير موجودة.",
+    ),
+    "auctionDuration": MessageLookupByLibrary.simpleMessage("مدة المزاد"),
+    "auctionEditSuccess": MessageLookupByLibrary.simpleMessage(
+      "تم تحديث المزاد بنجاح",
+    ),
+    "auctionEditTitle": MessageLookupByLibrary.simpleMessage("تعديل المزاد"),
+    "auctionEndDate": MessageLookupByLibrary.simpleMessage("تاريخ النهاية"),
+    "auctionEndDateAfterStart": MessageLookupByLibrary.simpleMessage(
+      "يجب أن يكون تاريخ النهاية بعد تاريخ البداية.",
+    ),
+    "auctionEndsIn": MessageLookupByLibrary.simpleMessage("ينتهي في"),
+    "auctionItem": MessageLookupByLibrary.simpleMessage("العنصر"),
+    "auctionLoadError": MessageLookupByLibrary.simpleMessage(
+      "فشل في تحميل تفاصيل المزاد",
+    ),
+    "auctionLotDescription": MessageLookupByLibrary.simpleMessage("وصف اللوت"),
+    "auctionLotDetails": MessageLookupByLibrary.simpleMessage("تفاصيل اللوت"),
+    "auctionNew": MessageLookupByLibrary.simpleMessage("جديد"),
+    "auctionPriceDuration": MessageLookupByLibrary.simpleMessage(
+      "السعر والمدة",
+    ),
+    "auctionPublishing": MessageLookupByLibrary.simpleMessage("جاري النشر..."),
+    "auctionSaveEdits": MessageLookupByLibrary.simpleMessage("حفظ التعديلات"),
+    "auctionSelectEndDateError": MessageLookupByLibrary.simpleMessage(
+      "يرجى اختيار تاريخ النهاية.",
+    ),
+    "auctionSelectStartDateError": MessageLookupByLibrary.simpleMessage(
+      "يرجى اختيار تاريخ البداية.",
+    ),
+    "auctionSpecify": MessageLookupByLibrary.simpleMessage("تحديد"),
+    "auctionStartDate": MessageLookupByLibrary.simpleMessage("تاريخ البداية"),
+    "auctionStartsIn": MessageLookupByLibrary.simpleMessage("يبدأ في"),
+    "auctionTimeLeft": MessageLookupByLibrary.simpleMessage("الوقت المتبقي"),
+    "auctionTitle": MessageLookupByLibrary.simpleMessage("العنوان"),
+    "auctionUsed": MessageLookupByLibrary.simpleMessage("مستعمل"),
+    "auctionUsedLikeNew": MessageLookupByLibrary.simpleMessage(
+      "مستعمل كالجديد",
+    ),
+    "auctionValidBidIncrementError": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال قيمة زيادة صحيحة.",
+    ),
+    "auctionValidDurationError": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال مدة صحيحة.",
+    ),
+    "auctionValidStartingPriceError": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال سعر بداية صحيح.",
+    ),
+    "auctionWarrantyInfo": MessageLookupByLibrary.simpleMessage(
+      "معلومات الضمان",
+    ),
     "birthdate": MessageLookupByLibrary.simpleMessage("تاريخ الميلاد"),
     "card": MessageLookupByLibrary.simpleMessage("بطاقة"),
     "chatNoConversations": MessageLookupByLibrary.simpleMessage(
@@ -77,35 +149,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "historyExport": MessageLookupByLibrary.simpleMessage("تصدير"),
     "historyFinalPrice": MessageLookupByLibrary.simpleMessage("السعر النهائي"),
     "historyLotLabel": MessageLookupByLibrary.simpleMessage("قطعة"),
-    "auctionAddItem": MessageLookupByLibrary.simpleMessage("إضافة عنصر"),
-    "auctionCategory": MessageLookupByLibrary.simpleMessage("الفئة"),
-    "auctionChangesSaved": MessageLookupByLibrary.simpleMessage(
-      "تم حفظ التعديلات بنجاح",
-    ),
-    "auctionCondition": MessageLookupByLibrary.simpleMessage("الحالة"),
-    "auctionCount": MessageLookupByLibrary.simpleMessage("العدد"),
-    "auctionDetailsDocs": MessageLookupByLibrary.simpleMessage(
-      "التفاصيل والمستندات",
-    ),
-    "auctionEditTitle": MessageLookupByLibrary.simpleMessage("تعديل المزاد"),
-    "auctionEndsIn": MessageLookupByLibrary.simpleMessage("ينتهي في"),
-    "auctionItem": MessageLookupByLibrary.simpleMessage("العنصر"),
-    "auctionLotDescription": MessageLookupByLibrary.simpleMessage("وصف اللوت"),
-    "auctionLotDetails": MessageLookupByLibrary.simpleMessage("تفاصيل اللوت"),
-    "auctionNew": MessageLookupByLibrary.simpleMessage("جديد"),
-    "auctionSaveEdits": MessageLookupByLibrary.simpleMessage(
-      "حفظ التعديلات",
-    ),
-    "auctionStartsIn": MessageLookupByLibrary.simpleMessage("يبدأ في"),
-    "auctionTimeLeft": MessageLookupByLibrary.simpleMessage("الوقت المتبقي"),
-    "auctionTitle": MessageLookupByLibrary.simpleMessage("العنوان"),
-    "auctionUsed": MessageLookupByLibrary.simpleMessage("مستعمل"),
-    "auctionUsedLikeNew": MessageLookupByLibrary.simpleMessage(
-      "مستعمل كالجديد",
-    ),
-    "auctionWarrantyInfo": MessageLookupByLibrary.simpleMessage(
-      "معلومات الضمان",
-    ),
     "historyNoItems": MessageLookupByLibrary.simpleMessage("لا يوجد سجل."),
     "historyNoMatchingItems": MessageLookupByLibrary.simpleMessage(
       "لا توجد نتائج مطابقة في السجل.",

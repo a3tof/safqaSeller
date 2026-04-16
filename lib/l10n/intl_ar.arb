@@ -816,6 +816,70 @@
   "@auctionEditTitle": {
     "description": "Edit auction screen title"
   },
+  "auctionPriceDuration": "السعر والمدة",
+  "@auctionPriceDuration": {
+    "description": "Price and duration screen title"
+  },
+  "auctionBidIncrement": "قيمة الزيادة",
+  "@auctionBidIncrement": {
+    "description": "Bid increment section title"
+  },
+  "auctionDate": "تاريخ المزاد",
+  "@auctionDate": {
+    "description": "Auction date section title"
+  },
+  "auctionStartDate": "تاريخ البداية",
+  "@auctionStartDate": {
+    "description": "Auction start date field hint"
+  },
+  "auctionEndDate": "تاريخ النهاية",
+  "@auctionEndDate": {
+    "description": "Auction end date field hint"
+  },
+  "auctionDuration": "مدة المزاد",
+  "@auctionDuration": {
+    "description": "Auction duration label"
+  },
+  "auctionBoostPublish": "تعزيز ونشر",
+  "@auctionBoostPublish": {
+    "description": "Publish auction button label"
+  },
+  "auctionPublishing": "جاري النشر...",
+  "@auctionPublishing": {
+    "description": "Publishing auction button label"
+  },
+  "auctionSpecify": "تحديد",
+  "@auctionSpecify": {
+    "description": "Specify custom value option"
+  },
+  "auctionDraftMissing": "مسودة المزاد غير موجودة.",
+  "@auctionDraftMissing": {
+    "description": "Missing auction draft validation"
+  },
+  "auctionValidStartingPriceError": "يرجى إدخال سعر بداية صحيح.",
+  "@auctionValidStartingPriceError": {
+    "description": "Invalid starting price validation"
+  },
+  "auctionValidBidIncrementError": "يرجى إدخال قيمة زيادة صحيحة.",
+  "@auctionValidBidIncrementError": {
+    "description": "Invalid bid increment validation"
+  },
+  "auctionSelectStartDateError": "يرجى اختيار تاريخ البداية.",
+  "@auctionSelectStartDateError": {
+    "description": "Missing start date validation"
+  },
+  "auctionSelectEndDateError": "يرجى اختيار تاريخ النهاية.",
+  "@auctionSelectEndDateError": {
+    "description": "Missing end date validation"
+  },
+  "auctionEndDateAfterStart": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية.",
+  "@auctionEndDateAfterStart": {
+    "description": "End date ordering validation"
+  },
+  "auctionValidDurationError": "يرجى إدخال مدة صحيحة.",
+  "@auctionValidDurationError": {
+    "description": "Invalid duration validation"
+  },
   "auctionStartsIn": "يبدأ في",
   "@auctionStartsIn": {
     "description": "Auction start info label"
@@ -879,6 +943,26 @@
   "auctionChangesSaved": "تم حفظ التعديلات بنجاح",
   "@auctionChangesSaved": {
     "description": "Edit auction success message"
+  },
+  "auctionDeleteButton": "حذف المزاد",
+  "@auctionDeleteButton": {
+    "description": "Delete auction action label"
+  },
+  "auctionDeleteConfirmMessage": "هل أنت متأكد أنك تريد حذف هذا المزاد؟ لا يمكن التراجع عن هذا الإجراء.",
+  "@auctionDeleteConfirmMessage": {
+    "description": "Delete auction confirmation message"
+  },
+  "auctionDeleteSuccess": "تم حذف المزاد بنجاح",
+  "@auctionDeleteSuccess": {
+    "description": "Delete auction success message"
+  },
+  "auctionEditSuccess": "تم تحديث المزاد بنجاح",
+  "@auctionEditSuccess": {
+    "description": "Edit auction success message from API"
+  },
+  "auctionLoadError": "فشل في تحميل تفاصيل المزاد",
+  "@auctionLoadError": {
+    "description": "Auction details load failure fallback"
   },
   "auctionNew": "جديد",
   "@auctionNew": {

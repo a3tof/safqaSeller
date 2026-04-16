@@ -5,7 +5,8 @@ class CreateAuctionRequestModel {
   final String description;
   final double startingPrice;
   final int bidIncrement;
-  final int durationInDays;
+  final DateTime? startDate;
+  final DateTime? endDate;
   final XFile? headImage;
   final List<AuctionItemModel> items;
 
@@ -14,7 +15,8 @@ class CreateAuctionRequestModel {
     required this.description,
     required this.startingPrice,
     required this.bidIncrement,
-    required this.durationInDays,
+    required this.startDate,
+    required this.endDate,
     required this.headImage,
     required this.items,
   });
@@ -24,7 +26,10 @@ class CreateAuctionRequestModel {
     String? description,
     double? startingPrice,
     int? bidIncrement,
-    int? durationInDays,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool clearStartDate = false,
+    bool clearEndDate = false,
     XFile? headImage,
     bool clearHeadImage = false,
     List<AuctionItemModel>? items,
@@ -34,7 +39,8 @@ class CreateAuctionRequestModel {
       description: description ?? this.description,
       startingPrice: startingPrice ?? this.startingPrice,
       bidIncrement: bidIncrement ?? this.bidIncrement,
-      durationInDays: durationInDays ?? this.durationInDays,
+      startDate: clearStartDate ? null : (startDate ?? this.startDate),
+      endDate: clearEndDate ? null : (endDate ?? this.endDate),
       headImage: clearHeadImage ? null : (headImage ?? this.headImage),
       items: items ?? this.items,
     );
@@ -71,4 +77,13 @@ class ItemAttributeValueModel {
     required this.categoryAttributeId,
     required this.value,
   });
+
+  factory ItemAttributeValueModel.fromJson(Map<String, dynamic> json) {
+    return ItemAttributeValueModel(
+      categoryAttributeId:
+          (json['categoryAttributeId'] ?? json['CategoryAttributeId'] ?? 0)
+              as int,
+      value: (json['value'] ?? json['Value'] ?? '').toString(),
+    );
+  }
 }

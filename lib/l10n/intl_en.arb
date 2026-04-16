@@ -816,6 +816,70 @@
   "@auctionEditTitle": {
     "description": "Edit auction screen title"
   },
+  "auctionPriceDuration": "Price & Duration",
+  "@auctionPriceDuration": {
+    "description": "Price and duration screen title"
+  },
+  "auctionBidIncrement": "Bid Increment",
+  "@auctionBidIncrement": {
+    "description": "Bid increment section title"
+  },
+  "auctionDate": "Auction Date",
+  "@auctionDate": {
+    "description": "Auction date section title"
+  },
+  "auctionStartDate": "Start Date",
+  "@auctionStartDate": {
+    "description": "Auction start date field hint"
+  },
+  "auctionEndDate": "End Date",
+  "@auctionEndDate": {
+    "description": "Auction end date field hint"
+  },
+  "auctionDuration": "Auction Duration",
+  "@auctionDuration": {
+    "description": "Auction duration label"
+  },
+  "auctionBoostPublish": "Boost & Publish",
+  "@auctionBoostPublish": {
+    "description": "Publish auction button label"
+  },
+  "auctionPublishing": "Publishing...",
+  "@auctionPublishing": {
+    "description": "Publishing auction button label"
+  },
+  "auctionSpecify": "Specify",
+  "@auctionSpecify": {
+    "description": "Specify custom value option"
+  },
+  "auctionDraftMissing": "Auction draft is missing.",
+  "@auctionDraftMissing": {
+    "description": "Missing auction draft validation"
+  },
+  "auctionValidStartingPriceError": "Please enter a valid starting price.",
+  "@auctionValidStartingPriceError": {
+    "description": "Invalid starting price validation"
+  },
+  "auctionValidBidIncrementError": "Please enter a valid bid increment.",
+  "@auctionValidBidIncrementError": {
+    "description": "Invalid bid increment validation"
+  },
+  "auctionSelectStartDateError": "Please select a start date.",
+  "@auctionSelectStartDateError": {
+    "description": "Missing start date validation"
+  },
+  "auctionSelectEndDateError": "Please select an end date.",
+  "@auctionSelectEndDateError": {
+    "description": "Missing end date validation"
+  },
+  "auctionEndDateAfterStart": "End date must be after start date.",
+  "@auctionEndDateAfterStart": {
+    "description": "End date ordering validation"
+  },
+  "auctionValidDurationError": "Please enter a valid duration.",
+  "@auctionValidDurationError": {
+    "description": "Invalid duration validation"
+  },
   "auctionStartsIn": "Starts in",
   "@auctionStartsIn": {
     "description": "Auction start info label"
@@ -879,6 +943,26 @@
   "auctionChangesSaved": "Changes saved successfully",
   "@auctionChangesSaved": {
     "description": "Edit auction success message"
+  },
+  "auctionDeleteButton": "Delete Auction",
+  "@auctionDeleteButton": {
+    "description": "Delete auction action label"
+  },
+  "auctionDeleteConfirmMessage": "Are you sure you want to delete this auction? This action cannot be undone.",
+  "@auctionDeleteConfirmMessage": {
+    "description": "Delete auction confirmation message"
+  },
+  "auctionDeleteSuccess": "Auction deleted successfully",
+  "@auctionDeleteSuccess": {
+    "description": "Delete auction success message"
+  },
+  "auctionEditSuccess": "Auction updated successfully",
+  "@auctionEditSuccess": {
+    "description": "Edit auction success message from API"
+  },
+  "auctionLoadError": "Failed to load auction details",
+  "@auctionLoadError": {
+    "description": "Auction details load failure fallback"
   },
   "auctionNew": "New",
   "@auctionNew": {

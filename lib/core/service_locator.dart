@@ -7,7 +7,9 @@ import 'package:safqaseller/core/services/notification_service.dart';
 import 'package:safqaseller/core/storage/cache_helper.dart';
 import 'package:safqaseller/core/storage/cache_keys.dart';
 import 'package:safqaseller/features/auction/model/repositories/auction_repository.dart';
+import 'package:safqaseller/features/auction/view_model/auction_detail/auction_detail_view_model.dart';
 import 'package:safqaseller/features/auction/view_model/create_auction/create_auction_view_model.dart';
+import 'package:safqaseller/features/auction/view_model/edit_auction/edit_auction_view_model.dart';
 import 'package:safqaseller/features/auth/model/repositories/auth_repository.dart';
 import 'package:safqaseller/features/auth/view_model/auth/auth_view_model.dart';
 import 'package:safqaseller/features/auth/view_model/confirm_email/confirm_email_view_model.dart';
@@ -117,6 +119,8 @@ Future<void> setupServiceLocator() async {
   getIt.registerFactory(() => EditAccountViewModel(getIt()));
   getIt.registerFactory(() => SubscriptionViewModel(getIt()));
   getIt.registerFactory(() => CreateAuctionViewModel(getIt()));
+  getIt.registerFactory(() => AuctionDetailViewModel(getIt()));
+  getIt.registerFactory(() => EditAuctionViewModel(getIt()));
 }
 
 String _generateDeviceId() {

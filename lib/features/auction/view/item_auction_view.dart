@@ -212,7 +212,8 @@ class _ItemAuctionViewBodyState extends State<_ItemAuctionViewBody> {
         description: _descriptionController.text.trim(),
         startingPrice: 0,
         bidIncrement: 0,
-        durationInDays: 0,
+        startDate: null,
+        endDate: null,
         headImage: _headImage,
         items: [
           AuctionItemModel(
