@@ -81,6 +81,7 @@ class CardModel {
               .toString(),
       label: (json['label'] ??
               json['Label'] ??
+              json['cardlabel'] ??
               json['cardLabel'] ??
               json['CardLabel'])
           ?.toString(),
