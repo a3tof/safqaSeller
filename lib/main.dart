@@ -8,6 +8,7 @@ import 'package:safqaseller/core/helper_functions/on_generate_routes.dart';
 import 'package:safqaseller/core/services/background_notification_worker.dart';
 import 'package:safqaseller/core/services/foreground_notification_poller.dart';
 import 'package:safqaseller/core/services/notification_service.dart';
+import 'package:safqaseller/core/network/dio_client.dart';
 import 'package:safqaseller/core/service_locator.dart';
 import 'package:safqaseller/core/storage/cache_helper.dart';
 import 'package:safqaseller/core/storage/cache_keys.dart';
@@ -31,6 +32,8 @@ void main() async {
     existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
   );
 
+  await getIt<DioHelper>().ensureSessionIsValid();
+
   // Restore persisted auth + profile state before app starts.
   getIt<AuthViewModel>().loadFromCache();
   getIt<ProfileViewModel>().loadFromCache();
@@ -49,13 +52,14 @@ class SafqaSeller extends StatefulWidget {
   State<SafqaSeller> createState() => _SafqaSellerState();
 }
 
-class _SafqaSellerState extends State<SafqaSeller> {
+class _SafqaSellerState extends State<SafqaSeller> with WidgetsBindingObserver {
   Locale _locale = const Locale('en');
   StreamSubscription<AuthViewModelState>? _authSubscription;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _loadLocale();
     _bindForegroundNotificationPolling();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -97,7 +101,19 @@ class _SafqaSellerState extends State<SafqaSeller> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) {
+      return;
+    }
+
+    if (getIt<AuthViewModel>().state is AuthAuthenticated) {
+      unawaited(getIt<DioHelper>().ensureSessionIsValid(redirectToLogin: true));
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _authSubscription?.cancel();
     getIt<ForegroundNotificationPoller>().stop();
     super.dispose();

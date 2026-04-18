@@ -1,13 +1,19 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:safqaseller/core/config/app_config.dart';
+import 'package:safqaseller/core/service_locator.dart';
 import 'package:safqaseller/core/storage/cache_helper.dart';
 import 'package:safqaseller/core/storage/cache_keys.dart';
+import 'package:safqaseller/features/auth/view/signin_view.dart';
+import 'package:safqaseller/features/auth/view_model/auth/auth_view_model.dart';
+import 'package:safqaseller/features/profile/view_model/profile_view_model.dart';
 
 class DioHelper {
   final Dio dio;
   final CacheHelper _cacheHelper;
+  bool _isExpiringSession = false;
 
   DioHelper({required CacheHelper cacheHelper})
     : _cacheHelper = cacheHelper,
@@ -38,6 +44,20 @@ class DioHelper {
           }
           handler.next(options);
         },
+        onResponse: (response, handler) async {
+          final options = response.requestOptions;
+          final shouldHandleUnauthorized =
+              options.extra['requiresAuth'] == true &&
+              options.extra['_refreshing'] != true &&
+              options.extra['_skipSessionExpiry'] != true &&
+              response.statusCode == 401;
+
+          if (shouldHandleUnauthorized) {
+            await _expireSession();
+          }
+
+          handler.next(response);
+        },
       ),
     );
 
@@ -60,15 +80,29 @@ class DioHelper {
       final tokenTime = DateTime.tryParse(tokenTimeStr);
       if (tokenTime != null &&
           DateTime.now().difference(tokenTime).inHours >= 5) {
-        return await _refreshAccessToken(token);
+        final refreshByRefreshToken = await _refreshWithRefreshToken();
+        if (refreshByRefreshToken.token != null) {
+          return refreshByRefreshToken.token;
+        }
+
+        final refreshByAccessToken = await _refreshWithAccessToken(token);
+        if (refreshByAccessToken.token != null) {
+          return refreshByAccessToken.token;
+        }
+
+        if (refreshByRefreshToken.rejected || refreshByAccessToken.rejected) {
+          await _expireSession(redirectToLogin: false);
+          return null;
+        }
+
+        return token;
       }
     }
     return token;
   }
 
   /// Calls Auth/refresh-token with the expired access token as a JSON string.
-  /// Returns the new token on success, or falls back to the expired token.
-  Future<String?> _refreshAccessToken(String expiredToken) async {
+  Future<_RefreshAttempt> _refreshWithAccessToken(String expiredToken) async {
     try {
       final response = await dio.post<dynamic>(
         'Auth/refresh-token',
@@ -82,13 +116,16 @@ class DioHelper {
       if (response.statusCode != null &&
           response.statusCode! >= 200 &&
           response.statusCode! < 300) {
-        return await _storeRefreshedSession(response.data);
+        return _RefreshAttempt(
+          token: await _storeRefreshedSession(response.data),
+        );
       }
+
+      return _RefreshAttempt(rejected: _isRejectedRefreshStatus(response.statusCode));
     } catch (e) {
       if (kDebugMode) debugPrint('Token refresh failed: $e');
     }
-    // Fall back — let the server decide what to do with the expired token.
-    return expiredToken;
+    return const _RefreshAttempt();
   }
 
   /// Explicit refresh path using the stored refresh token object payload.
@@ -98,26 +135,8 @@ class DioHelper {
         _cacheHelper.getData(key: CacheKeys.refreshToken) as String?;
     if (refreshToken == null || refreshToken.isEmpty) return null;
 
-    try {
-      final response = await dio.post<dynamic>(
-        'Auth/refresh-token',
-        data: {'refreshToken': refreshToken},
-        options: Options(
-          extra: {'_refreshing': true},
-          contentType: Headers.jsonContentType,
-        ),
-      );
-
-      if (response.statusCode != null &&
-          response.statusCode! >= 200 &&
-          response.statusCode! < 300) {
-        return await _storeRefreshedSession(response.data);
-      }
-    } catch (e) {
-      if (kDebugMode) debugPrint('Explicit token refresh failed: $e');
-    }
-
-    return null;
+    final result = await _refreshWithRefreshToken();
+    return result.token;
   }
 
   /// Explicit refresh path using the currently cached access token as JSON string.
@@ -128,7 +147,8 @@ class DioHelper {
       return null;
     }
 
-    return _refreshAccessToken(token);
+    final result = await _refreshWithAccessToken(token);
+    return result.token;
   }
 
   /// Stores auth/session tokens from a successful backend response.
@@ -159,6 +179,85 @@ class DioHelper {
     }
 
     return newToken;
+  }
+
+  Future<bool> ensureSessionIsValid({bool redirectToLogin = false}) async {
+    final token = await _getValidToken();
+    if (token == null || token.isEmpty) {
+      final isLoggedIn = _cacheHelper.getData(key: CacheKeys.isLoggedIn) == true;
+      if (isLoggedIn) {
+        await _expireSession(redirectToLogin: redirectToLogin);
+      }
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<_RefreshAttempt> _refreshWithRefreshToken() async {
+    final refreshToken =
+        _cacheHelper.getData(key: CacheKeys.refreshToken) as String?;
+    if (refreshToken == null || refreshToken.isEmpty) {
+      return const _RefreshAttempt();
+    }
+
+    try {
+      final response = await dio.post<dynamic>(
+        'Auth/refresh-token',
+        data: {'refreshToken': refreshToken},
+        options: Options(
+          extra: {'_refreshing': true},
+          contentType: Headers.jsonContentType,
+        ),
+      );
+
+      if (response.statusCode != null &&
+          response.statusCode! >= 200 &&
+          response.statusCode! < 300) {
+        return _RefreshAttempt(
+          token: await _storeRefreshedSession(response.data),
+        );
+      }
+
+      return _RefreshAttempt(rejected: _isRejectedRefreshStatus(response.statusCode));
+    } catch (e) {
+      if (kDebugMode) debugPrint('Explicit token refresh failed: $e');
+    }
+
+    return const _RefreshAttempt();
+  }
+
+  bool _isRejectedRefreshStatus(int? statusCode) {
+    return statusCode == 400 || statusCode == 401 || statusCode == 403;
+  }
+
+  Future<void> _expireSession({bool redirectToLogin = true}) async {
+    if (_isExpiringSession) {
+      return;
+    }
+
+    _isExpiringSession = true;
+    try {
+      await getIt<AuthViewModel>().logout();
+      await getIt<ProfileViewModel>().reset();
+
+      if (!redirectToLogin) {
+        return;
+      }
+
+      final navigatorKey = getIt<GlobalKey<NavigatorState>>();
+      final navigatorState = navigatorKey.currentState;
+      if (navigatorState == null) {
+        return;
+      }
+
+      navigatorState.pushNamedAndRemoveUntil(
+        SigninView.routeName,
+        (route) => false,
+      );
+    } finally {
+      _isExpiringSession = false;
+    }
   }
 
   Future<Response<dynamic>> postData({
@@ -463,3 +562,10 @@ dynamic _decodeIfString(dynamic data) {
 }
 
 String? _str(dynamic v) => v is String ? v : null;
+
+class _RefreshAttempt {
+  final String? token;
+  final bool rejected;
+
+  const _RefreshAttempt({this.token, this.rejected = false});
+}
