@@ -93,6 +93,6 @@ final response = await _dio.getData(
 
 ## App-wide Singletons
 
-`AuthViewModel` and `ProfileViewModel` are registered as **singletons** and exposed via `MultiBlocProvider` in `main.dart`. Access them with `context.read<AuthViewModel>()` anywhere in the tree.
+`AuthViewModel`, `ProfileViewModel`, `ThemeViewModel`, and `LocalizationViewModel` are registered as **singletons** and exposed via `MultiBlocProvider` in `main.dart`. Access them with `context.read<ThemeViewModel>()` anywhere in the tree.
 
 All other Cubits are **factories** — instantiated fresh per screen via `BlocProvider(create: (_) => getIt<MyCubit>())`.

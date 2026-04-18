@@ -6,24 +6,32 @@ alwaysApply: false
 
 # Styling Conventions
 
-## Colors — `AppColors`
+## Colors & Theming (Dark Mode Aware)
 
-Always use `AppColors` constants. Never use raw `Color(0x...)` inline.
+Always use `Theme.of(context)` to resolve colors. **Never** use raw `Color(0x...)`, `Colors.white`, or `Colors.black` directly in UI widgets. Do not call `AppColors` directly from UI widgets, as it bypasses the theme engine.
 
 ```dart
 // ✅ GOOD
-color: AppColors.primaryColor
+color: Theme.of(context).colorScheme.primary,
+color: Theme.of(context).colorScheme.onSurface,
+color: Theme.of(context).cardColor,
 
 // ❌ BAD
-color: Color(0xFF023E8A)
+color: AppColors.primaryColor // Inflexible for theme changes
+color: Colors.white // Breaks dark mode backgrounds
+color: Colors.black // Breaks dark mode text
+color: Color(0xFF023E8A) // Hardcoded colors
 ```
 
-| Constant | Hex | Use |
-|---|---|---|
-| `primaryColor` | `#023E8A` | Primary actions, active states |
-| `lightPrimaryColor` | `#023E8A` | Same as primary (alias) |
-| `secondaryColor` | `#E6F1FF` | Backgrounds, chips, badges |
-| `lightsecondaryColor` | `#FFFFFF` | White surfaces |
+**Common semantic mappings:**
+- **Backgrounds:** `Theme.of(context).scaffoldBackgroundColor`
+- **Cards / Containers:** `Theme.of(context).cardColor`
+- **App/Title Text:** `Theme.of(context).colorScheme.onSurface` (Never `Colors.black`)
+- **Hint Text / Subtitles:** `Theme.of(context).hintColor`
+- **Primary Actions:** `Theme.of(context).colorScheme.primary` (Text inside: `colorScheme.onPrimary` or `Colors.white`)
+- **Action Buttons Background fading:** Use `Theme.of(context).colorScheme.primary.withOpacity(0.1)` instead of hardcoded pastel generic colors.
+
+**Important Note on `const`**: When injecting `Theme.of(context)` into a widget tree, remove `const` from parents that wrap the `Theme` call (e.g. `const BoxDecoration` -> `BoxDecoration`).
 
 ## Typography — `TextStyles`
 
