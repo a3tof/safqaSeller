@@ -1,65 +1,45 @@
 ---
-description: Project architecture, folder structure, routing, and DI conventions
+description: Core Safqa Seller architecture and implementation conventions
 alwaysApply: true
 ---
 
 # safqaSeller — Project Structure
 
-## Architecture
+Feature-first Flutter app using **MVVM naming**, **Cubit** state management, **GetIt** dependency injection, and a single shared **DioHelper** for networking. There is no separate domain/use-case layer.
 
-Feature-first layout with **MVVM naming** + **Cubit** state management. No standalone domain/use-case layer.
+## Folder Shape
 
-```
-lib/
-├── core/
-│   ├── config/        # AppConfig — base URL, API key, OAuth IDs
-│   ├── helper_functions/on_generate_routes.dart  # Named-route switch
-│   ├── network/dio_client.dart   # DioHelper (single HTTP client)
-│   ├── service_locator.dart      # GetIt registrations
-│   ├── storage/                  # CacheHelper (SharedPreferences) + CacheKeys
-│   ├── utils/                    # AppColors, TextStyles, AppImages, AppConstants
-│   └── widgets/                  # Shared reusable widgets
-└── features/<feature>/
-    ├── view/
-    │   ├── <feature>_view.dart
-    │   └── widgets/              # Local widgets (never in core/)
-    ├── view_model/
-    │   └── <flow>/
-    │       ├── <flow>_view_model.dart   # Cubit
-    │       └── <flow>_view_model_state.dart
-    └── model/
-        ├── repositories/<feature>_repository.dart
-        └── models/
-```
+- `lib/core/` holds app-wide infrastructure: `config`, `network`, `service_locator`, `storage`, `utils`, shared `widgets`, and route generation.
+- `lib/features/<feature>/view/` contains screens and feature-scoped widgets.
+- `lib/features/<feature>/view_model/<flow>/` contains Cubits and their state files.
+- `lib/features/<feature>/model/repositories/` contains repository classes.
+- `lib/features/<feature>/model/models/` contains request/response models.
 
-## Feature List
+## Bootstrap Rules
 
-`adaptive_layout`, `auction`, `auth`, `complete_profile`, `forgot_password`, `history`, `home`, `notifications`, `on_boarding`, `profile`, `reviews`, `seller`, `splash`, `subscription`, `terms_and_conditions`, `wallet`
+- App startup happens in `lib/main.dart`: initialize bindings, service locator, notifications, background work, session validation, cached auth/profile restoration, then `runApp`.
+- `AuthViewModel` and `ProfileViewModel` are app-wide and provided near the root via `MultiBlocProvider`.
+- The app supports both `en` and `ar`; `MaterialApp` locale and font family are selected at runtime.
 
-## Adding a New Feature
+## Dependency Injection
 
-1. Create folder `lib/features/<name>/` with `view/`, `view_model/`, `model/` sub-folders.
-2. Add screen routes to `on_generate_routes.dart` using a string constant `routeName` on the view class.
-3. Register repository as `registerLazySingleton` and Cubit as `registerFactory` in `service_locator.dart`.
-4. Add route args class to `view/` if the route needs parameters.
+- Repositories and infrastructure services use `getIt.registerLazySingleton(...)`.
+- Screen-scoped Cubits use `getIt.registerFactory(...)`.
+- App-wide long-lived view models such as `AuthViewModel` and `ProfileViewModel` stay singleton/lazy-singleton.
+- Create Cubits from `getIt`, not from `context.read`.
 
 ## Routing
 
-- All routes live in `lib/core/helper_functions/on_generate_routes.dart` (named-route switch).
-- Every screen exposes `static const String routeName = '/my-route';`.
-- Pass arguments via `RouteSettings.arguments`; create a typed args class in the feature's `view/` folder.
+- All named routes live in `lib/core/helper_functions/on_generate_routes.dart`.
+- Every screen should expose a `static const String routeName`.
+- If a route needs data, create a typed args class in that feature's `view/` folder and read it from `RouteSettings.arguments`.
+- If a screen needs an existing Cubit instance, pass it with `BlocProvider.value`; otherwise create a fresh Cubit with `getIt`.
 
-## Dependency Injection (GetIt)
+## Implementation Conventions
 
-```dart
-// ✅ Repositories → lazySingleton
-getIt.registerLazySingleton<MyRepository>(() => MyRepository(getIt()));
-
-// ✅ Cubits → factory (new instance per screen)
-getIt.registerFactory<MyCubit>(() => MyCubit(getIt()));
-
-// ✅ App-wide singletons (e.g. AuthViewModel, ProfileViewModel) → registerSingleton
-getIt.registerSingleton<AuthViewModel>(AuthViewModel(getIt()));
-```
-
-Retrieve with `getIt<T>()`. Never use `context.read` to create a Cubit — always from `getIt`.
+- New features should follow `view/`, `view_model/`, and `model/` subfolders from day one.
+- Keep feature widgets inside that feature's `view/widgets/`; only truly shared widgets belong in `lib/core/widgets/`.
+- Keep API access inside repositories; views and Cubits should not call Dio directly.
+- Use `AppConfig` as the source of truth for backend and OAuth config. `AppConstants` is only a compatibility shim.
+- Do not hardcode localized UI strings in widgets; use `S.of(context)` and update the ARB files.
+- Do not manually edit generated localization files under `lib/generated/`; regenerate them from the ARB sources.
