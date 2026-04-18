@@ -20,16 +20,53 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ar';
 
-  static String m0(index) => "يرجى ملء جميع الحقول المطلوبة للعنصر ${index}.";
+  static String m0(index) => "يرجى إدخال عدد للعنصر ${index}.";
 
-  static String m1(index) => "يرجى إدخال عدد صحيح للعنصر ${index}.";
+  static String m1(index) => "يرجى إدخال وصف للعنصر ${index}.";
+
+  static String m2(index) => "يرجى إدخال عنوان للعنصر ${index}.";
+
+  static String m3(index) => "يرجى إدخال معلومات الضمان للعنصر ${index}.";
+
+  static String m4(index) => "يرجى إدخال عدد صحيح للعنصر ${index}.";
+
+  static String m5(attribute) => "يرجى إدخال رقم صحيح للحقل ${attribute}.";
+
+  static String m6(attribute, index) =>
+      "يرجى إدخال رقم صحيح للحقل ${attribute} في العنصر ${index}.";
+
+  static String m7(index) =>
+      "تعذر تحميل خصائص العنصر ${index}. يرجى إعادة المحاولة أو اختيار فئة أخرى.";
+
+  static String m8(index) => "يرجى ملء جميع الحقول المطلوبة للعنصر ${index}.";
+
+  static String m9(index) => "يرجى إدخال عدد صحيح للعنصر ${index}.";
+
+  static String m10(attribute) => "يرجى إدخال ${attribute}.";
+
+  static String m11(attribute, index) =>
+      "يرجى إدخال ${attribute} للعنصر ${index}.";
+
+  static String m12(index) => "يرجى اختيار فئة للعنصر ${index}.";
+
+  static String m13(name) => "تم اختيار: ${name}";
+
+  static String m14(count) => "تم اختيار ${count} صورة";
+
+  static String m15(count) => "منذ ${count} يوم";
+
+  static String m16(count) => "منذ ${count} ساعة";
+
+  static String m17(count) => "منذ ${count} دقيقة";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "addNewCard": MessageLookupByLibrary.simpleMessage("إضافة بطاقة جديدة"),
+    "auctionAddImages": MessageLookupByLibrary.simpleMessage("إضافة صور +"),
     "auctionAddItem": MessageLookupByLibrary.simpleMessage("إضافة عنصر"),
+    "auctionAttributes": MessageLookupByLibrary.simpleMessage("الخصائص"),
     "auctionBidIncrement": MessageLookupByLibrary.simpleMessage("قيمة الزيادة"),
-    "auctionBoostPublish": MessageLookupByLibrary.simpleMessage("تعزيز ونشر"),
+    "auctionBoostPublish": MessageLookupByLibrary.simpleMessage("نشر"),
     "auctionCategory": MessageLookupByLibrary.simpleMessage("الفئة"),
     "auctionChangesSaved": MessageLookupByLibrary.simpleMessage(
       "تم حفظ التعديلات بنجاح",
@@ -37,7 +74,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "auctionCondition": MessageLookupByLibrary.simpleMessage("الحالة"),
     "auctionCount": MessageLookupByLibrary.simpleMessage("العدد"),
     "auctionDate": MessageLookupByLibrary.simpleMessage("تاريخ المزاد"),
-    "auctionDeleteButton": MessageLookupByLibrary.simpleMessage("حذف المزاد"),
+    "auctionDeleteButton": MessageLookupByLibrary.simpleMessage("حذف"),
     "auctionDeleteConfirmMessage": MessageLookupByLibrary.simpleMessage(
       "هل أنت متأكد أنك تريد حذف هذا المزاد؟ لا يمكن التراجع عن هذا الإجراء.",
     ),
@@ -60,26 +97,98 @@ class MessageLookup extends MessageLookupByLibrary {
       "يجب أن يكون تاريخ النهاية بعد تاريخ البداية.",
     ),
     "auctionEndsIn": MessageLookupByLibrary.simpleMessage("ينتهي في"),
+    "auctionEnterDescriptionError": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال الوصف.",
+    ),
+    "auctionEnterItemCount": m0,
+    "auctionEnterItemDescription": m1,
+    "auctionEnterItemTitle": m2,
+    "auctionEnterItemTitleSingle": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال عنوان العنصر.",
+    ),
+    "auctionEnterItemWarrantyInfo": m3,
+    "auctionEnterLotDescription": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال وصف المزاد.",
+    ),
+    "auctionEnterLotTitle": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال عنوان اللوت.",
+    ),
+    "auctionEnterValidCountError": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال عدد صحيح.",
+    ),
+    "auctionEnterValidItemCount": m4,
+    "auctionEnterWarrantyInfoError": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال معلومات الضمان.",
+    ),
+    "auctionFalse": MessageLookupByLibrary.simpleMessage("لا"),
+    "auctionHeadImage": MessageLookupByLibrary.simpleMessage(
+      "الصورة الرئيسية +",
+    ),
+    "auctionInvalidNumberForAttribute": m5,
+    "auctionInvalidNumberForItemAttribute": m6,
     "auctionItem": MessageLookupByLibrary.simpleMessage("العنصر"),
-    "auctionItemFieldsRequired": m0,
-    "auctionItemInvalidCount": m1,
+    "auctionItemAttributesLoadError": m7,
+    "auctionItemAuctionTitle": MessageLookupByLibrary.simpleMessage(
+      "مزاد عنصر",
+    ),
+    "auctionItemFieldsRequired": m8,
+    "auctionItemInvalidCount": m9,
+    "auctionLoadCategoryAttributesError": MessageLookupByLibrary.simpleMessage(
+      "تعذر تحميل خصائص الفئة. جرّب فئة أخرى.",
+    ),
+    "auctionLoadCategoryAttributesForItemError":
+        MessageLookupByLibrary.simpleMessage(
+          "تعذر تحميل خصائص الفئة لهذا العنصر. جرّب فئة أخرى أو أعد المحاولة لاحقًا.",
+        ),
+    "auctionLoadCategoryAttributesForThisItemError":
+        MessageLookupByLibrary.simpleMessage(
+          "تعذر تحميل خصائص الفئة لهذا العنصر.",
+        ),
     "auctionLoadError": MessageLookupByLibrary.simpleMessage(
       "فشل في تحميل تفاصيل المزاد",
     ),
-    "auctionLotDescription": MessageLookupByLibrary.simpleMessage("وصف اللوت"),
-    "auctionLotDetails": MessageLookupByLibrary.simpleMessage("تفاصيل اللوت"),
+    "auctionLoadingCategories": MessageLookupByLibrary.simpleMessage(
+      "جاري تحميل الفئات...",
+    ),
+    "auctionLotAuctionTitle": MessageLookupByLibrary.simpleMessage("مزاد جماعي"),
+    "auctionLotDescription": MessageLookupByLibrary.simpleMessage("وصف المزاد"),
+    "auctionLotDetails": MessageLookupByLibrary.simpleMessage("تفاصيل المزاد"),
     "auctionNew": MessageLookupByLibrary.simpleMessage("جديد"),
+    "auctionNoCategoriesFound": MessageLookupByLibrary.simpleMessage(
+      "لا توجد فئات",
+    ),
     "auctionPriceDuration": MessageLookupByLibrary.simpleMessage(
       "السعر والمدة",
     ),
+    "auctionProvideAttribute": m10,
+    "auctionProvideItemAttribute": m11,
     "auctionPublishing": MessageLookupByLibrary.simpleMessage("جاري النشر..."),
+    "auctionRemove": MessageLookupByLibrary.simpleMessage("إزالة"),
+    "auctionSaveContinue": MessageLookupByLibrary.simpleMessage("حفظ ومتابعة"),
     "auctionSaveEdits": MessageLookupByLibrary.simpleMessage("حفظ التعديلات"),
+    "auctionSelectCategoryError": MessageLookupByLibrary.simpleMessage(
+      "يرجى اختيار فئة.",
+    ),
+    "auctionSelectCategoryHint": MessageLookupByLibrary.simpleMessage(
+      "اختر الفئة",
+    ),
+    "auctionSelectCategoryPerItem": MessageLookupByLibrary.simpleMessage(
+      "اختر فئة لكل عنصر بالأسفل.",
+    ),
+    "auctionSelectDate": MessageLookupByLibrary.simpleMessage("اختر التاريخ"),
+    "auctionSelectDateTime": MessageLookupByLibrary.simpleMessage(
+      "اختر التاريخ والوقت",
+    ),
     "auctionSelectEndDateError": MessageLookupByLibrary.simpleMessage(
       "يرجى اختيار تاريخ النهاية.",
     ),
+    "auctionSelectItemCategory": m12,
     "auctionSelectStartDateError": MessageLookupByLibrary.simpleMessage(
       "يرجى اختيار تاريخ البداية.",
     ),
+    "auctionSelectValue": MessageLookupByLibrary.simpleMessage("اختر القيمة"),
+    "auctionSelectedFile": m13,
+    "auctionSelectedImagesCount": m14,
     "auctionSpecify": MessageLookupByLibrary.simpleMessage("تحديد"),
     "auctionStartDate": MessageLookupByLibrary.simpleMessage("تاريخ البداية"),
     "auctionStartsIn": MessageLookupByLibrary.simpleMessage("يبدأ في"),
@@ -91,6 +200,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "auctionTimeLeft": MessageLookupByLibrary.simpleMessage("الوقت المتبقي"),
     "auctionTitle": MessageLookupByLibrary.simpleMessage("العنوان"),
+    "auctionTrue": MessageLookupByLibrary.simpleMessage("نعم"),
     "auctionUsed": MessageLookupByLibrary.simpleMessage("مستعمل"),
     "auctionUsedLikeNew": MessageLookupByLibrary.simpleMessage(
       "مستعمل كالجديد",
@@ -178,6 +288,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "historyStatusFinished": MessageLookupByLibrary.simpleMessage("منتهي"),
     "historyStatusSold": MessageLookupByLibrary.simpleMessage("تم البيع"),
     "historyStatusUpcoming": MessageLookupByLibrary.simpleMessage("قادم"),
+    "homeWelcomeGreeting": MessageLookupByLibrary.simpleMessage("مرحباً!"),
     "invalidOtp": MessageLookupByLibrary.simpleMessage("رمز التحقق غير صالح"),
     "kAccountNameBenef": MessageLookupByLibrary.simpleMessage(
       "اسم الحساب / اسم المستفيد",
@@ -191,6 +302,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "kAppearsAtTheTop3D": MessageLookupByLibrary.simpleMessage(
       "يظهر في أعلى نتائج البحث لمدة 3 أيام",
     ),
+    "kArabic": MessageLookupByLibrary.simpleMessage("العربية"),
     "kBankName": MessageLookupByLibrary.simpleMessage("اسم البنك"),
     "kBasic": MessageLookupByLibrary.simpleMessage("الأساسية"),
     "kBasicAnalytics": MessageLookupByLibrary.simpleMessage("تحليلات أساسية"),
@@ -387,6 +499,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "logIn": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
     "male": MessageLookupByLibrary.simpleMessage("ذكر"),
     "newPassword": MessageLookupByLibrary.simpleMessage("كلمة المرور الجديدة"),
+    "notificationsCancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
+    "notificationsDaysAgo": m15,
+    "notificationsDelete": MessageLookupByLibrary.simpleMessage("حذف"),
+    "notificationsEmpty": MessageLookupByLibrary.simpleMessage(
+      "لا توجد إشعارات حتى الآن",
+    ),
+    "notificationsHoursAgo": m16,
+    "notificationsJustNow": MessageLookupByLibrary.simpleMessage("الآن"),
+    "notificationsMarkAll": MessageLookupByLibrary.simpleMessage("تحديد الكل"),
+    "notificationsMinutesAgo": m17,
+    "notificationsOptionsTitle": MessageLookupByLibrary.simpleMessage(
+      "خيارات الإشعار",
+    ),
+    "notificationsTitle": MessageLookupByLibrary.simpleMessage("الإشعارات"),
     "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
       "صفقة تحوّل عملية المزادات الطويلة إلى تجربة رقمية سريعة ومضمونة، أدر مزاداتك من أي مكان.",
     ),
@@ -419,6 +545,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "كلمتا المرور غير متطابقتين",
     ),
     "phoneNumber": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
+    "profileLanguageDialogMessage": MessageLookupByLibrary.simpleMessage(
+      "اختر اللغة التي تريد استخدامها.",
+    ),
+    "profileLogoutDialogMessage": MessageLookupByLibrary.simpleMessage(
+      "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+    ),
     "resend": MessageLookupByLibrary.simpleMessage("إعادة الإرسال"),
     "retry": MessageLookupByLibrary.simpleMessage("إعادة المحاولة"),
     "savedCard": MessageLookupByLibrary.simpleMessage("البطاقة المحفوظة"),

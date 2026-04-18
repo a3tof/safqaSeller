@@ -389,7 +389,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                   SizedBox(height: 12.h),
                   ProfileMenuItem(
                     icon: Icons.notifications_outlined,
-                    label: 'Notifications',
+                    label: S.of(context).notificationsTitle,
                     trailing: IgnorePointer(
                       child: Switch.adaptive(
                         value: _notificationsEnabled,

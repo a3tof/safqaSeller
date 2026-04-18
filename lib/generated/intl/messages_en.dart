@@ -20,21 +20,57 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(index) =>
+  static String m0(index) => "Please enter a count for item ${index}.";
+
+  static String m1(index) => "Please enter a description for item ${index}.";
+
+  static String m2(index) => "Please enter a title for item ${index}.";
+
+  static String m3(index) => "Please enter warranty info for item ${index}.";
+
+  static String m4(index) => "Please enter a valid count for item ${index}.";
+
+  static String m5(attribute) =>
+      "Please enter a valid number for ${attribute}.";
+
+  static String m6(attribute, index) =>
+      "Please enter a valid number for ${attribute} in item ${index}.";
+
+  static String m7(index) =>
+      "Could not load attributes for item ${index}. Please retry or choose another category.";
+
+  static String m8(index) =>
       "Please fill all required fields for item ${index}.";
 
-  static String m1(index) => "Please enter a valid count for item ${index}.";
+  static String m9(index) => "Please enter a valid count for item ${index}.";
+
+  static String m10(attribute) => "Please provide ${attribute}.";
+
+  static String m11(attribute, index) =>
+      "Please provide ${attribute} for item ${index}.";
+
+  static String m12(index) => "Please select a category for item ${index}.";
+
+  static String m13(name) => "Selected: ${name}";
+
+  static String m14(count) => "${count} image(s) selected";
+
+  static String m15(count) => "${count} day(s) ago";
+
+  static String m16(count) => "${count} hr ago";
+
+  static String m17(count) => "${count} min ago";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "addNewCard": MessageLookupByLibrary.simpleMessage("Add new card"),
+    "auctionAddImages": MessageLookupByLibrary.simpleMessage("Add Images +"),
     "auctionAddItem": MessageLookupByLibrary.simpleMessage("Add Item"),
+    "auctionAttributes": MessageLookupByLibrary.simpleMessage("Attributes"),
     "auctionBidIncrement": MessageLookupByLibrary.simpleMessage(
       "Bid Increment",
     ),
-    "auctionBoostPublish": MessageLookupByLibrary.simpleMessage(
-      "Boost & Publish",
-    ),
+    "auctionBoostPublish": MessageLookupByLibrary.simpleMessage("Publish"),
     "auctionCategory": MessageLookupByLibrary.simpleMessage("Category"),
     "auctionChangesSaved": MessageLookupByLibrary.simpleMessage(
       "Changes saved successfully",
@@ -42,9 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "auctionCondition": MessageLookupByLibrary.simpleMessage("Condition"),
     "auctionCount": MessageLookupByLibrary.simpleMessage("Count"),
     "auctionDate": MessageLookupByLibrary.simpleMessage("Auction Date"),
-    "auctionDeleteButton": MessageLookupByLibrary.simpleMessage(
-      "Delete Auction",
-    ),
+    "auctionDeleteButton": MessageLookupByLibrary.simpleMessage("Delete"),
     "auctionDeleteConfirmMessage": MessageLookupByLibrary.simpleMessage(
       "Are you sure you want to delete this auction? This action cannot be undone.",
     ),
@@ -67,28 +101,102 @@ class MessageLookup extends MessageLookupByLibrary {
       "End date must be after start date.",
     ),
     "auctionEndsIn": MessageLookupByLibrary.simpleMessage("Ends in"),
+    "auctionEnterDescriptionError": MessageLookupByLibrary.simpleMessage(
+      "Please enter the description.",
+    ),
+    "auctionEnterItemCount": m0,
+    "auctionEnterItemDescription": m1,
+    "auctionEnterItemTitle": m2,
+    "auctionEnterItemTitleSingle": MessageLookupByLibrary.simpleMessage(
+      "Please enter the item title.",
+    ),
+    "auctionEnterItemWarrantyInfo": m3,
+    "auctionEnterLotDescription": MessageLookupByLibrary.simpleMessage(
+      "Please enter the lot description.",
+    ),
+    "auctionEnterLotTitle": MessageLookupByLibrary.simpleMessage(
+      "Please enter the lot title.",
+    ),
+    "auctionEnterValidCountError": MessageLookupByLibrary.simpleMessage(
+      "Please enter a valid count.",
+    ),
+    "auctionEnterValidItemCount": m4,
+    "auctionEnterWarrantyInfoError": MessageLookupByLibrary.simpleMessage(
+      "Please enter warranty info.",
+    ),
+    "auctionFalse": MessageLookupByLibrary.simpleMessage("False"),
+    "auctionHeadImage": MessageLookupByLibrary.simpleMessage("Head Image +"),
+    "auctionInvalidNumberForAttribute": m5,
+    "auctionInvalidNumberForItemAttribute": m6,
     "auctionItem": MessageLookupByLibrary.simpleMessage("Item"),
-    "auctionItemFieldsRequired": m0,
-    "auctionItemInvalidCount": m1,
+    "auctionItemAttributesLoadError": m7,
+    "auctionItemAuctionTitle": MessageLookupByLibrary.simpleMessage(
+      "Item Auction",
+    ),
+    "auctionItemFieldsRequired": m8,
+    "auctionItemInvalidCount": m9,
+    "auctionLoadCategoryAttributesError": MessageLookupByLibrary.simpleMessage(
+      "Could not load category attributes. Try another category.",
+    ),
+    "auctionLoadCategoryAttributesForItemError":
+        MessageLookupByLibrary.simpleMessage(
+          "Could not load category attributes for this item. Try another category or retry later.",
+        ),
+    "auctionLoadCategoryAttributesForThisItemError":
+        MessageLookupByLibrary.simpleMessage(
+          "Could not load category attributes for this item.",
+        ),
     "auctionLoadError": MessageLookupByLibrary.simpleMessage(
       "Failed to load auction details",
+    ),
+    "auctionLoadingCategories": MessageLookupByLibrary.simpleMessage(
+      "Loading categories...",
+    ),
+    "auctionLotAuctionTitle": MessageLookupByLibrary.simpleMessage(
+      "Lot Auction",
     ),
     "auctionLotDescription": MessageLookupByLibrary.simpleMessage(
       "Lot Description",
     ),
     "auctionLotDetails": MessageLookupByLibrary.simpleMessage("Lot Details"),
     "auctionNew": MessageLookupByLibrary.simpleMessage("New"),
+    "auctionNoCategoriesFound": MessageLookupByLibrary.simpleMessage(
+      "No categories found",
+    ),
     "auctionPriceDuration": MessageLookupByLibrary.simpleMessage(
       "Price & Duration",
     ),
+    "auctionProvideAttribute": m10,
+    "auctionProvideItemAttribute": m11,
     "auctionPublishing": MessageLookupByLibrary.simpleMessage("Publishing..."),
+    "auctionRemove": MessageLookupByLibrary.simpleMessage("Remove"),
+    "auctionSaveContinue": MessageLookupByLibrary.simpleMessage(
+      "Save & Continue",
+    ),
     "auctionSaveEdits": MessageLookupByLibrary.simpleMessage("Save edits"),
+    "auctionSelectCategoryError": MessageLookupByLibrary.simpleMessage(
+      "Please select a category.",
+    ),
+    "auctionSelectCategoryHint": MessageLookupByLibrary.simpleMessage(
+      "Select category",
+    ),
+    "auctionSelectCategoryPerItem": MessageLookupByLibrary.simpleMessage(
+      "Select a category for each item below.",
+    ),
+    "auctionSelectDate": MessageLookupByLibrary.simpleMessage("Select date"),
+    "auctionSelectDateTime": MessageLookupByLibrary.simpleMessage(
+      "Select date & time",
+    ),
     "auctionSelectEndDateError": MessageLookupByLibrary.simpleMessage(
       "Please select an end date.",
     ),
+    "auctionSelectItemCategory": m12,
     "auctionSelectStartDateError": MessageLookupByLibrary.simpleMessage(
       "Please select a start date.",
     ),
+    "auctionSelectValue": MessageLookupByLibrary.simpleMessage("Select value"),
+    "auctionSelectedFile": m13,
+    "auctionSelectedImagesCount": m14,
     "auctionSpecify": MessageLookupByLibrary.simpleMessage("Specify"),
     "auctionStartDate": MessageLookupByLibrary.simpleMessage("Start Date"),
     "auctionStartsIn": MessageLookupByLibrary.simpleMessage("Starts in"),
@@ -100,6 +208,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "auctionTimeLeft": MessageLookupByLibrary.simpleMessage("Time Left"),
     "auctionTitle": MessageLookupByLibrary.simpleMessage("Title"),
+    "auctionTrue": MessageLookupByLibrary.simpleMessage("True"),
     "auctionUsed": MessageLookupByLibrary.simpleMessage("Used"),
     "auctionUsedLikeNew": MessageLookupByLibrary.simpleMessage("Used-Like New"),
     "auctionValidBidIncrementError": MessageLookupByLibrary.simpleMessage(
@@ -199,6 +308,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "historyStatusFinished": MessageLookupByLibrary.simpleMessage("Finished"),
     "historyStatusSold": MessageLookupByLibrary.simpleMessage("Sold"),
     "historyStatusUpcoming": MessageLookupByLibrary.simpleMessage("Upcoming"),
+    "homeWelcomeGreeting": MessageLookupByLibrary.simpleMessage("Welcome!"),
     "invalidOtp": MessageLookupByLibrary.simpleMessage("Invalid OTP"),
     "kAccountNameBenef": MessageLookupByLibrary.simpleMessage(
       "Account Name / Beneficiary Name",
@@ -212,6 +322,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "kAppearsAtTheTop3D": MessageLookupByLibrary.simpleMessage(
       "Appears at the top of search results for 3 days",
     ),
+    "kArabic": MessageLookupByLibrary.simpleMessage("Arabic"),
     "kBankName": MessageLookupByLibrary.simpleMessage("Bank Name"),
     "kBasic": MessageLookupByLibrary.simpleMessage("Basic"),
     "kBasicAnalytics": MessageLookupByLibrary.simpleMessage("Basic Analytics"),
@@ -396,7 +507,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "kUploadNationalId": MessageLookupByLibrary.simpleMessage(
       "Upload National ID (Front)",
     ),
-    "kUploadOwner": MessageLookupByLibrary.simpleMessage("Upload Owner\\"),
+    "kUploadOwner": MessageLookupByLibrary.simpleMessage(
+      "Upload owner's national ID (front)",
+    ),
     "kUploadOwners": MessageLookupByLibrary.simpleMessage(
       "Upload Owner\'s National ID",
     ),
@@ -412,6 +525,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "logIn": MessageLookupByLibrary.simpleMessage("Log In"),
     "male": MessageLookupByLibrary.simpleMessage("Male"),
     "newPassword": MessageLookupByLibrary.simpleMessage("New Password"),
+    "notificationsCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "notificationsDaysAgo": m15,
+    "notificationsDelete": MessageLookupByLibrary.simpleMessage("Delete"),
+    "notificationsEmpty": MessageLookupByLibrary.simpleMessage(
+      "No notifications yet",
+    ),
+    "notificationsHoursAgo": m16,
+    "notificationsJustNow": MessageLookupByLibrary.simpleMessage("Just now"),
+    "notificationsMarkAll": MessageLookupByLibrary.simpleMessage("Mark all"),
+    "notificationsMinutesAgo": m17,
+    "notificationsOptionsTitle": MessageLookupByLibrary.simpleMessage(
+      "Notification Options",
+    ),
+    "notificationsTitle": MessageLookupByLibrary.simpleMessage("Notifications"),
     "onBoardingSubtitle1": MessageLookupByLibrary.simpleMessage(
       "Safqa transforms the long auction process into a fast, guaranteed digital experience, manage your auctions wherever you are.",
     ),
@@ -444,6 +571,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Passwords do not match",
     ),
     "phoneNumber": MessageLookupByLibrary.simpleMessage("Phone Number"),
+    "profileLanguageDialogMessage": MessageLookupByLibrary.simpleMessage(
+      "Choose the language you want to use.",
+    ),
+    "profileLogoutDialogMessage": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to log out?",
+    ),
     "resend": MessageLookupByLibrary.simpleMessage("Resend"),
     "retry": MessageLookupByLibrary.simpleMessage("Retry"),
     "savedCard": MessageLookupByLibrary.simpleMessage("Saved Card"),

@@ -479,7 +479,7 @@
   "@kUploadTaxId": {
     "description": "Auto-generated"
   },
-  "kUploadOwner": "Upload Owner\\",
+  "kUploadOwner": "Upload owner's national ID (front)",
   "@kUploadOwner": {
     "description": "Auto-generated"
   },
@@ -852,7 +852,7 @@
   "@auctionDuration": {
     "description": "Auction duration label"
   },
-  "auctionBoostPublish": "Boost & Publish",
+  "auctionBoostPublish": "Publish",
   "@auctionBoostPublish": {
     "description": "Publish auction button label"
   },
@@ -982,7 +982,7 @@
   "@auctionChangesSaved": {
     "description": "Edit auction success message"
   },
-  "auctionDeleteButton": "Delete Auction",
+  "auctionDeleteButton": "Delete",
   "@auctionDeleteButton": {
     "description": "Delete auction action label"
   },
@@ -1093,6 +1093,10 @@
   "currentPassword": "Current Password",
   "@currentPassword": {
     "description": "Current password field label"
+  },
+  "homeWelcomeGreeting": "Welcome!",
+  "@homeWelcomeGreeting": {
+    "description": "Greeting shown above store name on home screen header"
   },
   "notificationsTitle": "Notifications",
   "@notificationsTitle": {

@@ -852,7 +852,7 @@
   "@auctionDuration": {
     "description": "Auction duration label"
   },
-  "auctionBoostPublish": "تعزيز ونشر",
+  "auctionBoostPublish": "نشر",
   "@auctionBoostPublish": {
     "description": "Publish auction button label"
   },
@@ -912,7 +912,7 @@
   "@auctionUsed": {
     "description": "Used condition label"
   },
-  "auctionLotDetails": "تفاصيل اللوت",
+  "auctionLotDetails": "تفاصيل المزاد",
   "@auctionLotDetails": {
     "description": "Lot details section title"
   },
@@ -944,7 +944,7 @@
   "@auctionAddItem": {
     "description": "Add item action label"
   },
-  "auctionLotDescription": "وصف اللوت",
+  "auctionLotDescription": "وصف المزاد",
   "@auctionLotDescription": {
     "description": "Lot description section title"
   },
@@ -982,7 +982,7 @@
   "@auctionChangesSaved": {
     "description": "Edit auction success message"
   },
-  "auctionDeleteButton": "حذف المزاد",
+  "auctionDeleteButton": "حذف",
   "@auctionDeleteButton": {
     "description": "Delete auction action label"
   },
@@ -1094,6 +1094,10 @@
   "@currentPassword": {
     "description": "Current password field label"
   },
+  "homeWelcomeGreeting": "مرحباً!",
+  "@homeWelcomeGreeting": {
+    "description": "Greeting shown above store name on home screen header"
+  },
   "notificationsTitle": "الإشعارات",
   "@notificationsTitle": {
     "description": "Notifications screen title"
@@ -1149,7 +1153,7 @@
       }
     }
   },
-  "auctionLotAuctionTitle": "مزاد لوت",
+  "auctionLotAuctionTitle": "مزاد جماعي",
   "@auctionLotAuctionTitle": {
     "description": "Lot auction creation screen title"
   },
@@ -1233,7 +1237,7 @@
   "@auctionEnterLotTitle": {
     "description": "Validation when lot title is empty"
   },
-  "auctionEnterLotDescription": "يرجى إدخال وصف اللوت.",
+  "auctionEnterLotDescription": "يرجى إدخال وصف المزاد.",
   "@auctionEnterLotDescription": {
     "description": "Validation when lot description is empty"
   },

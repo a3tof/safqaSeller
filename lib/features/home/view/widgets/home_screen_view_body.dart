@@ -344,7 +344,7 @@ class _GreetingRow extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Welcome!',
+                        S.of(context).homeWelcomeGreeting,
                         style: TextStyles.regular18(
                           context,
                         ).copyWith(color: const Color(0xFF808080)),
