@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/core/service_locator.dart';
@@ -24,6 +25,7 @@ import 'package:safqaseller/features/profile/view_model/profile_view_model.dart'
 import 'package:safqaseller/features/wallet/view/wallet_view.dart';
 import 'package:safqaseller/generated/l10n.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreenViewBody extends StatefulWidget {
   const HomeScreenViewBody({super.key, this.showCompleteProfile = false});
@@ -79,6 +81,22 @@ class _HomeScreenViewBodyState extends State<HomeScreenViewBody> {
     await Navigator.pushNamed(context, NotificationsView.routeName);
     if (mounted) {
       getIt<NotificationsViewModel>().loadNotifications();
+    }
+  }
+
+  Future<void> _openStatistics() async {
+    try {
+      final launched = await launchUrl(
+        Uri.parse('https://www.mohamedhamdy.dev/'),
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched) return;
+    } on PlatformException {
+      debugPrint(
+        'Failed to launch statistics URL: plugin channel unavailable.',
+      );
+    } catch (_) {
+      debugPrint('Failed to launch statistics URL.');
     }
   }
 
@@ -204,7 +222,7 @@ class _HomeScreenViewBodyState extends State<HomeScreenViewBody> {
                                         child: HomeActionCard(
                                           label: S.of(context).kStatistics,
                                           backgroundImage: Assets.imagesFrame2,
-                                          onTap: () {},
+                                          onTap: _openStatistics,
                                         ),
                                       ),
                                     ],
