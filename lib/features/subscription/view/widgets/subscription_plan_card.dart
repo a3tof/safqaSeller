@@ -64,6 +64,9 @@ class SubscriptionPlanCard extends StatelessWidget {
         final buttonColor = canUpgrade
             ? primary
             : primary.withValues(alpha: 0.55);
+        final cardBorderColor = isCurrentPlan
+            ? primary.withValues(alpha: 0.22)
+            : primary.withValues(alpha: 0.12);
 
         return SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -75,72 +78,78 @@ class SubscriptionPlanCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: theme.cardColor,
                   borderRadius: BorderRadius.circular(18.r),
-                  border: Border.all(
-                    color: primary.withValues(alpha: 0.12),
-                  ),
+                  border: Border.all(color: cardBorderColor),
                   boxShadow: [
                     BoxShadow(
-                      color: theme.colorScheme.shadow.withValues(
-                        alpha: 0.08,
-                      ),
+                      color: theme.colorScheme.shadow.withValues(alpha: 0.08),
                       blurRadius: 24,
                       offset: const Offset(0, 10),
                     ),
                   ],
                 ),
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(20.w, 24.h, 20.w, 22.h),
-                  child: Column(
-                    children: [
-                      Text(
-                        plan.name,
-                        style: TextStyles.bold22(
-                          context,
-                        ).copyWith(color: primary),
-                      ),
-                      SizedBox(height: 18.h),
-                      Icon(
-                        Icons.campaign_outlined,
-                        size: 56.sp,
-                        color: primary,
-                      ),
-                      SizedBox(height: 14.h),
-                      Text(
-                        plan.price,
-                        style: TextStyles.bold28(
-                          context,
-                        ).copyWith(color: primary),
-                      ),
-                      SizedBox(height: 28.h),
-                      ...plan.features.map(
-                        (feature) => Padding(
-                          padding: EdgeInsets.only(bottom: 12.h),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.check_circle_rounded,
-                                color: primary,
-                                size: 20.sp,
-                              ),
-                              SizedBox(width: 12.w),
-                              Expanded(
-                                child: Text(
-                                  feature,
-                                  style: TextStyles.regular14(
-                                    context,
-                                  ).copyWith(
-                                    color: theme.colorScheme.onSurface,
-                                    height: 1.35,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                clipBehavior: Clip.antiAlias,
+                child: Stack(
+                  children: [
+                    if (isCurrentPlan)
+                      Positioned.fill(
+                        child: ColoredBox(
+                          color: primary.withValues(alpha: 0.09),
                         ),
                       ),
-                    ],
-                  ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(20.w, 24.h, 20.w, 22.h),
+                      child: Column(
+                        children: [
+                          Text(
+                            plan.name,
+                            style: TextStyles.bold22(
+                              context,
+                            ).copyWith(color: primary),
+                          ),
+                          SizedBox(height: 18.h),
+                          Icon(
+                            Icons.campaign_outlined,
+                            size: 56.sp,
+                            color: primary,
+                          ),
+                          SizedBox(height: 14.h),
+                          Text(
+                            plan.price,
+                            style: TextStyles.bold28(
+                              context,
+                            ).copyWith(color: primary),
+                          ),
+                          SizedBox(height: 28.h),
+                          ...plan.features.map(
+                            (feature) => Padding(
+                              padding: EdgeInsets.only(bottom: 12.h),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.check_circle_rounded,
+                                    color: primary,
+                                    size: 20.sp,
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Expanded(
+                                    child: Text(
+                                      feature,
+                                      style: TextStyles.regular14(context)
+                                          .copyWith(
+                                            color: theme.colorScheme.onSurface,
+                                            height: 1.35,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 24.h),
