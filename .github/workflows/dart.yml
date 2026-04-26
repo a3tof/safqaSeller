@@ -20,13 +20,13 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # 🔥 مهم جدًا: ده بيظبط ios بالكامل (including Podfile sync)
-      - name: Build iOS (prepare)
+      - name: Prepare iOS project
         run: flutter build ios --no-codesign
 
       - name: Install CocoaPods dependencies
         run: |
           cd ios
+          pod deintegrate
           pod install --repo-update
 
       - name: Build iOS App (release)
