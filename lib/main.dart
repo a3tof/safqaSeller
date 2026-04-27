@@ -141,6 +141,15 @@ class _SafqaSellerState extends State<SafqaSeller> with WidgetsBindingObserver {
               return MaterialApp(
                 navigatorKey: getIt<GlobalKey<NavigatorState>>(),
                 debugShowCheckedModeBanner: false,
+                builder: (context, child) {
+                  return GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    child: child,
+                  );
+                },
                 theme: AppTheme.lightTheme(fontFamily),
                 darkTheme: AppTheme.darkTheme(fontFamily),
                 themeMode: themeMode,
