@@ -35,7 +35,7 @@ class _SellerInformationViewState extends State<SellerInformationView> {
   final _descController = TextEditingController();
 
   String _selectedPhoneCode = '+20';
-  int _selectedBusinessType = 0; // 0 = Personal, 1 = Business
+  int _selectedBusinessType = 1; // 1 = Personal, 2 = Business
 
   File? _logoFile;
 
@@ -57,7 +57,7 @@ class _SellerInformationViewState extends State<SellerInformationView> {
   void initState() {
     super.initState();
     if (widget.accountType.toString().toLowerCase().contains('business')) {
-      _selectedBusinessType = 1;
+      _selectedBusinessType = 2;
     }
     _loadApiCountries();
   }
@@ -139,7 +139,7 @@ class _SellerInformationViewState extends State<SellerInformationView> {
       child: BlocConsumer<SellerViewModel, SellerViewModelState>(
         listener: (context, state) {
           if (state is SellerCreated) {
-            if (_selectedBusinessType == 1) {
+            if (_selectedBusinessType == 2) {
               Navigator.pushNamed(context, LegalDocumentsView.routeName);
             } else {
               Navigator.pushNamed(

@@ -18,10 +18,8 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(
-      _current != null,
-      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
-    );
+    assert(_current != null,
+        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
     return _current!;
   }
 
@@ -43,10 +41,8 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(
-      instance != null,
-      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
-    );
+    assert(instance != null,
+        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
     return instance!;
   }
 
@@ -1808,22 +1804,42 @@ class S {
 
   /// `Basic`
   String get kBasic {
-    return Intl.message('Basic', name: 'kBasic', desc: '', args: []);
+    return Intl.message(
+      'Basic',
+      name: 'kBasic',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Premium`
   String get kPremium {
-    return Intl.message('Premium', name: 'kPremium', desc: '', args: []);
+    return Intl.message(
+      'Premium',
+      name: 'kPremium',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Elite`
   String get kElite {
-    return Intl.message('Elite', name: 'kElite', desc: '', args: []);
+    return Intl.message(
+      'Elite',
+      name: 'kElite',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Boost Now`
   String get kBoostNow {
-    return Intl.message('Boost Now', name: 'kBoostNow', desc: '', args: []);
+    return Intl.message(
+      'Boost Now',
+      name: 'kBoostNow',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Upgrade to Premium`
@@ -1838,7 +1854,12 @@ class S {
 
   /// `Go Elite`
   String get kGoElite {
-    return Intl.message('Go Elite', name: 'kGoElite', desc: '', args: []);
+    return Intl.message(
+      'Go Elite',
+      name: 'kGoElite',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Appears at the top of search results for 24 hours`
