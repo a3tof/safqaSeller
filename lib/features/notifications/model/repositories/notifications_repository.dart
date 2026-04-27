@@ -42,6 +42,9 @@ class NotificationsRepository {
       );
     }
 
+    // 403 = seller profile not yet complete; treat as empty list.
+    if (r.statusCode == 403) return [];
+
     _require(r);
     final list = r.data as List<dynamic>;
     return list
