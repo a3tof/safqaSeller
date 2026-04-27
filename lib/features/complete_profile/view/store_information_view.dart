@@ -54,7 +54,10 @@ class _StoreInformationViewState extends State<StoreInformationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: buildAppBar(context: context, title: S.of(context).kStoreInformation),
+      appBar: buildAppBar(
+        context: context,
+        title: S.of(context).kStoreInformation,
+      ),
       body: SafeArea(
         child: Form(
           key: _formKey,
@@ -66,18 +69,20 @@ class _StoreInformationViewState extends State<StoreInformationView> {
                 SizedBox(height: 8.h),
                 Text(
                   'Verify your business now to build buyer trust and boost your sales',
-                  style: TextStyles.regular14(context).copyWith(
-                    color: const Color(0xFF444444),
-                    height: 1.5,
-                  ),
+                  style: TextStyles.regular14(
+                    context,
+                  ).copyWith(color: Theme.of(context).hintColor, height: 1.5),
                 ),
                 SizedBox(height: 20.h),
 
                 // Legal Business Name
                 _FieldLabel(label: S.of(context).kLegalBusinessName),
                 SizedBox(height: 6.h),
-                _buildInputField(_nameController, 'Store Name',
-                    keyboardType: TextInputType.name),
+                _buildInputField(
+                  _nameController,
+                  'Store Name',
+                  keyboardType: TextInputType.name,
+                ),
                 SizedBox(height: 16.h),
 
                 // Business Number
@@ -87,8 +92,7 @@ class _StoreInformationViewState extends State<StoreInformationView> {
                   phoneController: _phoneController,
                   countries: _countries,
                   selectedCode: _selectedPhoneCode,
-                  onCodeChanged: (c) =>
-                      setState(() => _selectedPhoneCode = c),
+                  onCodeChanged: (c) => setState(() => _selectedPhoneCode = c),
                 ),
                 SizedBox(height: 16.h),
 
@@ -100,11 +104,11 @@ class _StoreInformationViewState extends State<StoreInformationView> {
                     Expanded(
                       child: _DropdownField(
                         value: _selectedCountry,
-                        items:
-                            _countries.map((c) => c['name']!).toList(),
+                        items: _countries.map((c) => c['name']!).toList(),
                         hint: 'Country',
                         onChanged: (v) => setState(
-                            () => _selectedCountry = v ?? _selectedCountry),
+                          () => _selectedCountry = v ?? _selectedCountry,
+                        ),
                       ),
                     ),
                     SizedBox(width: 12.w),
@@ -113,8 +117,8 @@ class _StoreInformationViewState extends State<StoreInformationView> {
                         value: _selectedCity,
                         items: _cities,
                         hint: 'City',
-                        onChanged: (v) => setState(
-                            () => _selectedCity = v ?? _selectedCity),
+                        onChanged: (v) =>
+                            setState(() => _selectedCity = v ?? _selectedCity),
                       ),
                     ),
                   ],
@@ -135,11 +139,10 @@ class _StoreInformationViewState extends State<StoreInformationView> {
 
                 CustomButton(
                   onPressed: () {
-                    Navigator.pushNamed(
-                        context, LegalDocumentsView.routeName);
+                    Navigator.pushNamed(context, LegalDocumentsView.routeName);
                   },
                   text: 'Save & Continue',
-                  textColor: Colors.white,
+                  textColor: Theme.of(context).colorScheme.onPrimary,
                   backgroundColor: Theme.of(context).colorScheme.primary,
                 ),
                 SizedBox(height: 16.h),
@@ -159,8 +162,10 @@ class _StoreInformationViewState extends State<StoreInformationView> {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
-      style: TextStyles.regular14(context).copyWith(color: Colors.black87),
-      decoration: _inputDecoration(hint),
+      style: TextStyles.regular14(
+        context,
+      ).copyWith(color: Theme.of(context).colorScheme.onSurface),
+      decoration: _inputDecoration(context, hint),
     );
   }
 }
@@ -175,8 +180,9 @@ class _FieldLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       label,
-      style: TextStyles.semiBold16(context)
-          .copyWith(color: Theme.of(context).colorScheme.primary),
+      style: TextStyles.semiBold16(
+        context,
+      ).copyWith(color: Theme.of(context).colorScheme.primary),
     );
   }
 }
@@ -196,34 +202,40 @@ class _PhoneRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
         Container(
           height: 48.h,
           padding: EdgeInsets.symmetric(horizontal: 8.w),
           decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFFDDE3EE)),
+            border: Border.all(color: theme.colorScheme.outline),
             borderRadius: BorderRadius.circular(8.r),
-            color: Colors.white,
+            color: theme.cardColor,
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: selectedCode,
-              icon: Icon(Icons.arrow_drop_down,
-                  size: 18.sp, color: Colors.grey),
+              dropdownColor: theme.cardColor,
+              icon: Icon(
+                Icons.arrow_drop_down,
+                size: 18.sp,
+                color: theme.hintColor,
+              ),
               items: countries.map((c) {
                 return DropdownMenuItem<String>(
                   value: c['code'],
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(c['flag']!,
-                          style: TextStyle(fontSize: 18.sp)),
+                      Text(c['flag']!, style: TextStyle(fontSize: 18.sp)),
                       SizedBox(width: 4.w),
                       Text(
                         c['code']!,
-                        style: TextStyles.regular13(context)
-                            .copyWith(color: Colors.black87),
+                        style: TextStyles.regular13(
+                          context,
+                        ).copyWith(color: theme.colorScheme.onSurface),
                       ),
                     ],
                   ),
@@ -240,9 +252,10 @@ class _PhoneRow extends StatelessWidget {
           child: TextFormField(
             controller: phoneController,
             keyboardType: TextInputType.phone,
-            style:
-                TextStyles.regular14(context).copyWith(color: Colors.black87),
-            decoration: _inputDecoration('Phone Number'),
+            style: TextStyles.regular14(
+              context,
+            ).copyWith(color: theme.colorScheme.onSurface),
+            decoration: _inputDecoration(context, 'Phone Number'),
           ),
         ),
       ],
@@ -265,26 +278,32 @@ class _DropdownField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       height: 48.h,
       padding: EdgeInsets.symmetric(horizontal: 12.w),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFDDE3EE)),
+        border: Border.all(color: theme.colorScheme.outline),
         borderRadius: BorderRadius.circular(8.r),
-        color: Colors.white,
+        color: theme.cardColor,
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: value,
           isExpanded: true,
-          icon: Icon(Icons.arrow_drop_down,
-              size: 20.sp, color: Colors.grey),
-          style: TextStyles.regular14(context)
-              .copyWith(color: Colors.black87),
-          items: items
-              .map((item) =>
-                  DropdownMenuItem(value: item, child: Text(item)))
-              .toList(),
+          dropdownColor: theme.cardColor,
+          icon: Icon(
+            Icons.arrow_drop_down,
+            size: 20.sp,
+            color: theme.hintColor,
+          ),
+          style: TextStyles.regular14(
+            context,
+          ).copyWith(color: theme.colorScheme.onSurface),
+          items: items.map((item) {
+            return DropdownMenuItem(value: item, child: Text(item));
+          }).toList(),
           onChanged: onChanged,
         ),
       ),
@@ -297,25 +316,28 @@ class _ImagePickerBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: () {},
       child: Container(
         width: double.infinity,
         height: 52.h,
         decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFFDDE3EE)),
+          border: Border.all(color: theme.colorScheme.outline),
           borderRadius: BorderRadius.circular(8.r),
-          color: Colors.white,
+          color: theme.cardColor,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               'Add Image ',
-              style: TextStyles.regular14(context)
-                  .copyWith(color: const Color(0xFF999999)),
+              style: TextStyles.regular14(
+                context,
+              ).copyWith(color: theme.hintColor),
             ),
-            Icon(Icons.add, size: 18.sp, color: const Color(0xFF999999)),
+            Icon(Icons.add, size: 18.sp, color: theme.hintColor),
           ],
         ),
       ),
@@ -339,7 +361,8 @@ class _DescriptionFieldState extends State<_DescriptionField> {
   void initState() {
     super.initState();
     widget.controller.addListener(
-        () => setState(() => _charCount = widget.controller.text.length));
+      () => setState(() => _charCount = widget.controller.text.length),
+    );
   }
 
   @override
@@ -351,11 +374,13 @@ class _DescriptionFieldState extends State<_DescriptionField> {
           maxLength: _maxChars,
           maxLines: 4,
           minLines: 4,
-          buildCounter: (_, {required currentLength, required isFocused, maxLength}) =>
-              const SizedBox.shrink(),
-          style:
-              TextStyles.regular14(context).copyWith(color: Colors.black87),
-          decoration: _inputDecoration('').copyWith(
+          buildCounter:
+              (_, {required currentLength, required isFocused, maxLength}) =>
+                  const SizedBox.shrink(),
+          style: TextStyles.regular14(
+            context,
+          ).copyWith(color: Theme.of(context).colorScheme.onSurface),
+          decoration: _inputDecoration(context, '').copyWith(
             contentPadding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 28.h),
           ),
         ),
@@ -364,8 +389,9 @@ class _DescriptionFieldState extends State<_DescriptionField> {
           right: 10.w,
           child: Text(
             '$_charCount/$_maxChars',
-            style: TextStyles.regular12(context)
-                .copyWith(color: const Color(0xFF999999)),
+            style: TextStyles.regular12(
+              context,
+            ).copyWith(color: Theme.of(context).hintColor),
           ),
         ),
       ],
@@ -373,32 +399,31 @@ class _DescriptionFieldState extends State<_DescriptionField> {
   }
 }
 
-InputDecoration _inputDecoration(String hint) {
+InputDecoration _inputDecoration(BuildContext context, String hint) {
+  final theme = Theme.of(context);
+
   return InputDecoration(
     hintText: hint,
-    hintStyle: const TextStyle(
-      fontSize: 14,
-      color: Color(0xFF999999),
-      fontWeight: FontWeight.w400,
-    ),
+    hintStyle: TextStyles.regular14(context).copyWith(color: theme.hintColor),
     filled: true,
-    fillColor: Colors.white,
+    fillColor: theme.cardColor,
     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    errorMaxLines: 3,
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(color: Color(0xFFDDE3EE)),
+      borderSide: BorderSide(color: theme.colorScheme.outline),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(color: Color(0xFF023E8A), width: 1.5),
+      borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.5),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(color: Colors.red),
+      borderSide: BorderSide(color: theme.colorScheme.error),
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(color: Colors.red, width: 1.5),
+      borderSide: BorderSide(color: theme.colorScheme.error, width: 1.5),
     ),
   );
 }

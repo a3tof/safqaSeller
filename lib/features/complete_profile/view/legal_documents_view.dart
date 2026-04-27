@@ -41,7 +41,10 @@ class _LegalDocumentsViewState extends State<LegalDocumentsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: buildAppBar(context: context, title: S.of(context).kLegalDocuments),
+      appBar: buildAppBar(
+        context: context,
+        title: S.of(context).kLegalDocuments,
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -51,10 +54,9 @@ class _LegalDocumentsViewState extends State<LegalDocumentsView> {
               SizedBox(height: 24.h),
               Text(
                 'Verify your business now to build buyer trust and boost your sales',
-                style: TextStyles.regular14(context).copyWith(
-                  color: const Color(0xFF444444),
-                  height: 1.5,
-                ),
+                style: TextStyles.regular14(
+                  context,
+                ).copyWith(color: Theme.of(context).hintColor, height: 1.5),
               ),
               SizedBox(height: 24.h),
               _DocumentTile(
@@ -75,16 +77,14 @@ class _LegalDocumentsViewState extends State<LegalDocumentsView> {
                 icon: Icons.camera_alt_outlined,
                 label: S.of(context).kUploadOwners,
                 uploaded: _nationalIdFrontFile != null,
-                onTap: () =>
-                    _pickFile((f) => _nationalIdFrontFile = f),
+                onTap: () => _pickFile((f) => _nationalIdFrontFile = f),
               ),
               SizedBox(height: 12.h),
               _DocumentTile(
                 icon: Icons.camera_alt_outlined,
                 label: S.of(context).kUploadOwners,
                 uploaded: _nationalIdBackFile != null,
-                onTap: () =>
-                    _pickFile((f) => _nationalIdBackFile = f),
+                onTap: () => _pickFile((f) => _nationalIdBackFile = f),
               ),
               const Spacer(),
               CustomButton(
@@ -95,9 +95,8 @@ class _LegalDocumentsViewState extends State<LegalDocumentsView> {
                       _nationalIdBackFile == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content:
-                            Text(S.of(context).kPleaseUploadAllFo),
-                        backgroundColor: Colors.red.shade600,
+                        content: Text(S.of(context).kPleaseUploadAllFo),
+                        backgroundColor: Theme.of(context).colorScheme.error,
                       ),
                     );
                     return;
@@ -115,7 +114,7 @@ class _LegalDocumentsViewState extends State<LegalDocumentsView> {
                   );
                 },
                 text: 'Save & Continue',
-                textColor: Colors.white,
+                textColor: Theme.of(context).colorScheme.onPrimary,
                 backgroundColor: Theme.of(context).colorScheme.primary,
               ),
               SizedBox(height: 24.h),
@@ -157,6 +156,8 @@ class _DocumentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -164,12 +165,12 @@ class _DocumentTile extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         decoration: BoxDecoration(
-          color: uploaded ? Theme.of(context).colorScheme.secondary : Colors.white,
+          color: uploaded ? theme.colorScheme.secondary : theme.cardColor,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
             color: uploaded
-                ? Theme.of(context).colorScheme.primary
-                : const Color(0xFFDDE3EE),
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outline,
             width: uploaded ? 1.5 : 1.0,
           ),
         ),
@@ -179,12 +180,12 @@ class _DocumentTile extends StatelessWidget {
               width: 40.w,
               height: 40.w,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
+                color: theme.colorScheme.secondary,
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 uploaded ? Icons.check_rounded : icon,
-                color: Theme.of(context).colorScheme.primary,
+                color: theme.colorScheme.primary,
                 size: 22.sp,
               ),
             ),
@@ -192,14 +193,17 @@ class _DocumentTile extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: TextStyles.medium15(context).copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                style: TextStyles.medium15(
+                  context,
+                ).copyWith(color: theme.colorScheme.primary),
               ),
             ),
             if (uploaded)
-              Icon(Icons.check_circle_rounded,
-                  color: Colors.green, size: 20.sp),
+              Icon(
+                Icons.check_circle_rounded,
+                color: theme.colorScheme.primary,
+                size: 20.sp,
+              ),
           ],
         ),
       ),

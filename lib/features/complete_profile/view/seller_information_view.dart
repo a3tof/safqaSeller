@@ -105,7 +105,7 @@ class _SellerInformationViewState extends State<SellerInformationView> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(S.of(context).kPleaseSelectACoun),
-          backgroundColor: Colors.red,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -151,7 +151,7 @@ class _SellerInformationViewState extends State<SellerInformationView> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
-                backgroundColor: Colors.red.shade600,
+                backgroundColor: Theme.of(context).colorScheme.error,
               ),
             );
           }
@@ -161,14 +161,18 @@ class _SellerInformationViewState extends State<SellerInformationView> {
 
           return Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            appBar:
-                buildAppBar(context: context, title: S.of(context).kSellerInformation),
+            appBar: buildAppBar(
+              context: context,
+              title: S.of(context).kSellerInformation,
+            ),
             body: SafeArea(
               child: Form(
                 key: _formKey,
                 child: SingleChildScrollView(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 12.h,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -180,10 +184,9 @@ class _SellerInformationViewState extends State<SellerInformationView> {
                         controller: _nameController,
                         hint: 'Store Name',
                         keyboardType: TextInputType.name,
-                        validator: (v) =>
-                            v == null || v.trim().isEmpty
-                                ? 'Store name is required'
-                                : null,
+                        validator: (v) => v == null || v.trim().isEmpty
+                            ? 'Store name is required'
+                            : null,
                       ),
                       SizedBox(height: 16.h),
 
@@ -203,7 +206,8 @@ class _SellerInformationViewState extends State<SellerInformationView> {
                       _FieldLabel(label: S.of(context).kCountry),
                       SizedBox(height: 6.h),
                       LocationPickerField(
-                        enabled: !_isLoadingLocations && _apiCountries.isNotEmpty,
+                        enabled:
+                            !_isLoadingLocations && _apiCountries.isNotEmpty,
                         hintText: S.of(context).kSelectCountry,
                         locations: _apiCountries,
                         selectedLocation: _selectedLocationCountry,
@@ -222,17 +226,15 @@ class _SellerInformationViewState extends State<SellerInformationView> {
                         hintText: S.of(context).kSelectCity,
                         locations: _apiCities,
                         selectedLocation: _selectedLocationCity,
-                        onChanged: (location) => setState(() => _selectedLocationCity = location),
+                        onChanged: (location) =>
+                            setState(() => _selectedLocationCity = location),
                       ),
                       SizedBox(height: 16.h),
 
                       // Logo
                       _FieldLabel(label: S.of(context).kLogoOptional),
                       SizedBox(height: 6.h),
-                      _ImagePickerBox(
-                        file: _logoFile,
-                        onTap: _pickLogo,
-                      ),
+                      _ImagePickerBox(file: _logoFile, onTap: _pickLogo),
                       SizedBox(height: 16.h),
 
                       // Description
@@ -240,10 +242,9 @@ class _SellerInformationViewState extends State<SellerInformationView> {
                       SizedBox(height: 6.h),
                       _DescriptionField(
                         controller: _descController,
-                        validator: (v) =>
-                            v == null || v.trim().isEmpty
-                                ? 'Description is required'
-                                : null,
+                        validator: (v) => v == null || v.trim().isEmpty
+                            ? 'Description is required'
+                            : null,
                       ),
                       SizedBox(height: 32.h),
 
@@ -255,12 +256,15 @@ class _SellerInformationViewState extends State<SellerInformationView> {
                             )
                           : CustomButton(
                               onPressed: () {
-                                _submit(
-                                    context.read<SellerViewModel>());
+                                _submit(context.read<SellerViewModel>());
                               },
                               text: 'Save & Continue',
-                              textColor: Colors.white,
-                              backgroundColor: Theme.of(context).colorScheme.primary,
+                              textColor: Theme.of(
+                                context,
+                              ).colorScheme.onPrimary,
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.primary,
                             ),
                       SizedBox(height: 16.h),
                     ],
@@ -285,9 +289,9 @@ class _FieldLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       label,
-      style: TextStyles.semiBold16(context).copyWith(
-        color: Theme.of(context).colorScheme.primary,
-      ),
+      style: TextStyles.semiBold16(
+        context,
+      ).copyWith(color: Theme.of(context).colorScheme.primary),
     );
   }
 }
@@ -311,8 +315,10 @@ class _InputField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
-      style: TextStyles.regular14(context).copyWith(color: Colors.black87),
-      decoration: _inputDecoration(hint),
+      style: TextStyles.regular14(
+        context,
+      ).copyWith(color: Theme.of(context).colorScheme.onSurface),
+      decoration: _inputDecoration(context, hint),
     );
   }
 }
@@ -332,21 +338,27 @@ class _PhoneField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
         Container(
           height: 48.h,
           padding: EdgeInsets.symmetric(horizontal: 8.w),
           decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFFDDE3EE)),
+            border: Border.all(color: theme.colorScheme.outline),
             borderRadius: BorderRadius.circular(8.r),
-            color: Colors.white,
+            color: theme.cardColor,
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: selectedCode,
-              icon:
-                  Icon(Icons.arrow_drop_down, size: 18.sp, color: Colors.grey),
+              dropdownColor: theme.cardColor,
+              icon: Icon(
+                Icons.arrow_drop_down,
+                size: 18.sp,
+                color: theme.hintColor,
+              ),
               items: countries.map((c) {
                 return DropdownMenuItem<String>(
                   value: c['code'],
@@ -357,8 +369,9 @@ class _PhoneField extends StatelessWidget {
                       SizedBox(width: 4.w),
                       Text(
                         c['code']!,
-                        style: TextStyles.regular13(context)
-                            .copyWith(color: Colors.black87),
+                        style: TextStyles.regular13(
+                          context,
+                        ).copyWith(color: theme.colorScheme.onSurface),
                       ),
                     ],
                   ),
@@ -375,19 +388,19 @@ class _PhoneField extends StatelessWidget {
           child: TextFormField(
             controller: phoneController,
             keyboardType: TextInputType.phone,
-            validator: (v) =>
-                v == null || v.trim().isEmpty ? 'Phone number is required' : null,
-            style:
-                TextStyles.regular14(context).copyWith(color: Colors.black87),
-            decoration: _inputDecoration('Phone Number'),
+            validator: (v) => v == null || v.trim().isEmpty
+                ? 'Phone number is required'
+                : null,
+            style: TextStyles.regular14(
+              context,
+            ).copyWith(color: theme.colorScheme.onSurface),
+            decoration: _inputDecoration(context, 'Phone Number'),
           ),
         ),
       ],
     );
   }
 }
-
-
 
 class _ImagePickerBox extends StatelessWidget {
   const _ImagePickerBox({this.file, required this.onTap});
@@ -397,6 +410,8 @@ class _ImagePickerBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -405,31 +420,36 @@ class _ImagePickerBox extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(
             color: file != null
-                ? Theme.of(context).colorScheme.primary
-                : const Color(0xFFDDE3EE),
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outline,
           ),
           borderRadius: BorderRadius.circular(8.r),
-          color: file != null ? Theme.of(context).colorScheme.secondary : Colors.white,
+          color: file != null ? theme.colorScheme.secondary : theme.cardColor,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (file != null) ...[
-              Icon(Icons.check_circle_rounded,
-                  size: 18.sp, color: Colors.green),
+              Icon(
+                Icons.check_circle_rounded,
+                size: 18.sp,
+                color: theme.colorScheme.primary,
+              ),
               SizedBox(width: 6.w),
               Text(
                 'Image selected',
-                style: TextStyles.regular14(context)
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
+                style: TextStyles.regular14(
+                  context,
+                ).copyWith(color: theme.colorScheme.primary),
               ),
             ] else ...[
               Text(
                 'Add Image ',
-                style: TextStyles.regular14(context)
-                    .copyWith(color: const Color(0xFF999999)),
+                style: TextStyles.regular14(
+                  context,
+                ).copyWith(color: theme.hintColor),
               ),
-              Icon(Icons.add, size: 18.sp, color: const Color(0xFF999999)),
+              Icon(Icons.add, size: 18.sp, color: theme.hintColor),
             ],
           ],
         ),
@@ -472,8 +492,10 @@ class _DescriptionFieldState extends State<_DescriptionField> {
           buildCounter:
               (_, {required currentLength, required isFocused, maxLength}) =>
                   const SizedBox.shrink(),
-          style: TextStyles.regular14(context).copyWith(color: Colors.black87),
-          decoration: _inputDecoration('').copyWith(
+          style: TextStyles.regular14(
+            context,
+          ).copyWith(color: Theme.of(context).colorScheme.onSurface),
+          decoration: _inputDecoration(context, '').copyWith(
             contentPadding: EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 28.h),
           ),
         ),
@@ -482,8 +504,9 @@ class _DescriptionFieldState extends State<_DescriptionField> {
           right: 10.w,
           child: Text(
             '$_charCount/$_maxChars',
-            style: TextStyles.regular12(context)
-                .copyWith(color: const Color(0xFF999999)),
+            style: TextStyles.regular12(
+              context,
+            ).copyWith(color: Theme.of(context).hintColor),
           ),
         ),
       ],
@@ -491,32 +514,31 @@ class _DescriptionFieldState extends State<_DescriptionField> {
   }
 }
 
-InputDecoration _inputDecoration(String hint) {
+InputDecoration _inputDecoration(BuildContext context, String hint) {
+  final theme = Theme.of(context);
+
   return InputDecoration(
     hintText: hint,
-    hintStyle: const TextStyle(
-      fontSize: 14,
-      color: Color(0xFF999999),
-      fontWeight: FontWeight.w400,
-    ),
+    hintStyle: TextStyles.regular14(context).copyWith(color: theme.hintColor),
     filled: true,
-    fillColor: Colors.white,
+    fillColor: theme.cardColor,
     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    errorMaxLines: 3,
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(color: Color(0xFFDDE3EE)),
+      borderSide: BorderSide(color: theme.colorScheme.outline),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(color: Color(0xFF023E8A), width: 1.5),
+      borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.5),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(color: Colors.red),
+      borderSide: BorderSide(color: theme.colorScheme.error),
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
-      borderSide: const BorderSide(color: Colors.red, width: 1.5),
+      borderSide: BorderSide(color: theme.colorScheme.error, width: 1.5),
     ),
   );
 }

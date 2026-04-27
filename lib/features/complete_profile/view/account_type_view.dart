@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
 import 'package:safqaseller/core/widgets/custom_app_bar.dart';
@@ -59,10 +59,12 @@ class _AccountTypeViewState extends State<AccountTypeView> {
                   }
                 },
                 text: 'Continue',
-                textColor: Colors.white,
+                textColor: Theme.of(context).colorScheme.onPrimary,
                 backgroundColor: _selected != null
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
+                    : Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.5),
               ),
               SizedBox(height: 24.h),
             ],
@@ -93,7 +95,10 @@ class _AccountTypeCard extends StatelessWidget {
     final description = isPersonal
         ? 'Designed for individuals selling personal belongings and used items. (Requires National ID only)'
         : 'Designed for registered companies and verified stores. (Requires submitting official documents: Commercial Register & Tax ID)';
-    final icon = isPersonal ? Icons.person_outline_rounded : Icons.business_outlined;
+    final icon = isPersonal
+        ? Icons.person_outline_rounded
+        : Icons.business_outlined;
+    final theme = Theme.of(context);
 
     return GestureDetector(
       onTap: onTap,
@@ -101,21 +106,19 @@ class _AccountTypeCard extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         decoration: BoxDecoration(
-          color: selected ? Theme.of(context).colorScheme.secondary : Colors.white,
+          color: selected ? theme.colorScheme.secondary : theme.cardColor,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: selected ? Theme.of(context).colorScheme.primary : Color(0xFFDDE3EE),
+            color: selected
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outline,
             width: selected ? 1.5 : 1.0,
           ),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              icon,
-              color: Theme.of(context).colorScheme.primary,
-              size: 32.sp,
-            ),
+            Icon(icon, color: theme.colorScheme.primary, size: 32.sp),
             SizedBox(width: 12.w),
             Expanded(
               child: Column(
@@ -123,14 +126,16 @@ class _AccountTypeCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyles.semiBold16(context)
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    style: TextStyles.semiBold16(
+                      context,
+                    ).copyWith(color: theme.colorScheme.primary),
                   ),
                   SizedBox(height: 4.h),
                   Text(
                     description,
-                    style: TextStyles.regular14(context)
-                        .copyWith(color: const Color(0xFF444444), height: 1.45),
+                    style: TextStyles.regular14(
+                      context,
+                    ).copyWith(color: theme.hintColor, height: 1.45),
                   ),
                 ],
               ),

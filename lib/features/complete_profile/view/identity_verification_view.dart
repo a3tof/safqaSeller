@@ -35,8 +35,10 @@ class _IdentityVerificationViewState extends State<IdentityVerificationView> {
 
   final ImagePicker _picker = ImagePicker();
 
-  Future<void> _pickImage(void Function(File) onPicked,
-      {ImageSource source = ImageSource.gallery}) async {
+  Future<void> _pickImage(
+    void Function(File) onPicked, {
+    ImageSource source = ImageSource.gallery,
+  }) async {
     final image = await _picker.pickImage(source: source, imageQuality: 80);
     if (image != null) {
       setState(() => onPicked(File(image.path)));
@@ -48,7 +50,7 @@ class _IdentityVerificationViewState extends State<IdentityVerificationView> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(S.of(context).kPleaseUploadAllTh),
-          backgroundColor: Colors.red.shade600,
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
@@ -83,10 +85,7 @@ class _IdentityVerificationViewState extends State<IdentityVerificationView> {
           if (state is PersonalVerificationSuccess) {
             if (widget.isBusinessFlow) {
               // Business flow: continue to Store Information
-              Navigator.pushNamed(
-                context,
-                StoreInformationView.routeName,
-              );
+              Navigator.pushNamed(context, StoreInformationView.routeName);
             } else {
               // Personal flow: mark profile complete and update role before navigating
               await getIt<ProfileViewModel>().completeProfile();
@@ -96,10 +95,8 @@ class _IdentityVerificationViewState extends State<IdentityVerificationView> {
 
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                    'Your profile has been submitted for review!',
-                  ),
-                  backgroundColor: Color(0xFF023E8A),
+                  content: Text('Your profile has been submitted for review!'),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                 ),
               );
 
@@ -113,7 +110,7 @@ class _IdentityVerificationViewState extends State<IdentityVerificationView> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
-                backgroundColor: Colors.red.shade600,
+                backgroundColor: Theme.of(context).colorScheme.error,
               ),
             );
           }
@@ -124,7 +121,9 @@ class _IdentityVerificationViewState extends State<IdentityVerificationView> {
           return Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             appBar: buildAppBar(
-                context: context, title: S.of(context).kIdentityVerificatio),
+              context: context,
+              title: S.of(context).kIdentityVerificatio,
+            ),
             body: SafeArea(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -135,23 +134,23 @@ class _IdentityVerificationViewState extends State<IdentityVerificationView> {
                     Text(
                       'To start selling, we need to confirm it\'s you',
                       style: TextStyles.regular16(context).copyWith(
-                          color: const Color(0xFF444444), height: 1.5),
+                        color: Theme.of(context).hintColor,
+                        height: 1.5,
+                      ),
                     ),
                     SizedBox(height: 24.h),
                     _UploadTile(
                       icon: Icons.camera_alt_outlined,
                       label: S.of(context).kUploadNationalId,
                       uploaded: _idFrontFile != null,
-                      onTap: () =>
-                          _pickImage((f) => _idFrontFile = f),
+                      onTap: () => _pickImage((f) => _idFrontFile = f),
                     ),
                     SizedBox(height: 12.h),
                     _UploadTile(
                       icon: Icons.camera_alt_outlined,
                       label: S.of(context).kUploadNationalId,
                       uploaded: _idBackFile != null,
-                      onTap: () =>
-                          _pickImage((f) => _idBackFile = f),
+                      onTap: () => _pickImage((f) => _idBackFile = f),
                     ),
                     SizedBox(height: 12.h),
                     _UploadTile(
@@ -177,8 +176,10 @@ class _IdentityVerificationViewState extends State<IdentityVerificationView> {
                             text: widget.isBusinessFlow
                                 ? 'Continue'
                                 : 'Submit for Review',
-                            textColor: Colors.white,
-                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            textColor: Theme.of(context).colorScheme.onPrimary,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
                           ),
                     SizedBox(height: 24.h),
                   ],
@@ -207,6 +208,8 @@ class _UploadTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -214,12 +217,12 @@ class _UploadTile extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         decoration: BoxDecoration(
-          color: uploaded ? Theme.of(context).colorScheme.secondary : Colors.white,
+          color: uploaded ? theme.colorScheme.secondary : theme.cardColor,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
             color: uploaded
-                ? Theme.of(context).colorScheme.primary
-                : const Color(0xFFDDE3EE),
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outline,
             width: uploaded ? 1.5 : 1.0,
           ),
         ),
@@ -229,12 +232,12 @@ class _UploadTile extends StatelessWidget {
               width: 40.w,
               height: 40.w,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
+                color: theme.colorScheme.secondary,
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 uploaded ? Icons.check_rounded : icon,
-                color: Theme.of(context).colorScheme.primary,
+                color: theme.colorScheme.primary,
                 size: 22.sp,
               ),
             ),
@@ -242,15 +245,15 @@ class _UploadTile extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: TextStyles.medium15(context).copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                style: TextStyles.medium15(
+                  context,
+                ).copyWith(color: theme.colorScheme.primary),
               ),
             ),
             if (uploaded)
               Icon(
                 Icons.check_circle_rounded,
-                color: Colors.green,
+                color: theme.colorScheme.primary,
                 size: 20.sp,
               ),
           ],
