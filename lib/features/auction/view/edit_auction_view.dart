@@ -15,6 +15,7 @@ import 'package:safqaseller/features/auction/view/lot_detail_route_args.dart';
 import 'package:safqaseller/features/auction/view_model/edit_auction/edit_auction_view_model.dart';
 import 'package:safqaseller/features/auction/view_model/edit_auction/edit_auction_view_model_state.dart';
 import 'package:safqaseller/generated/l10n.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class EditAuctionView extends StatefulWidget {
   const EditAuctionView({super.key, required this.args});
@@ -244,14 +245,10 @@ class _EditAuctionViewState extends State<EditAuctionView> {
           _ => cubit.detail,
         };
 
-        if (state is EditAuctionLoading && detail == null) {
-          return Scaffold(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
+        final isLoading = state is EditAuctionLoading;
+        final displayDetail = detail ?? _dummyDetail;
 
-        if (detail == null) {
+        if (!isLoading && detail == null) {
           return Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             appBar: AppBar(
@@ -277,30 +274,35 @@ class _EditAuctionViewState extends State<EditAuctionView> {
 
         final isSaving = state is EditAuctionSaving;
 
-        return Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          appBar: AppBar(
+        return Skeletonizer(
+          enabled: isLoading,
+          child: Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            surfaceTintColor: Colors.white,
-            leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: Icon(
-                Icons.arrow_back_ios_new,
-                color: Theme.of(context).colorScheme.primary,
-                size: 20.sp,
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              surfaceTintColor: Colors.white,
+              leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 20.sp,
+                ),
               ),
+              title: Text(
+                s.auctionEditTitle,
+                style: TextStyles.semiBold20(
+                  context,
+                ).copyWith(color: Theme.of(context).colorScheme.primary),
+              ),
+              centerTitle: true,
             ),
-            title: Text(
-              s.auctionEditTitle,
-              style: TextStyles.semiBold20(
-                context,
-              ).copyWith(color: Theme.of(context).colorScheme.primary),
-            ),
-            centerTitle: true,
-          ),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
+            body: SafeArea(
+              child: RefreshIndicator(
+                onRefresh: _loadInitialData,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -323,7 +325,7 @@ class _EditAuctionViewState extends State<EditAuctionView> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10.r),
                               child: _AuctionPreviewImage(
-                                imageUrl: detail.image ?? widget.args.item.imageUrl,
+                                imageUrl: displayDetail.image ?? widget.args.item.imageUrl,
                                 localImage: _headImage,
                                 width: 100.w,
                                 height: 76.h,
@@ -372,7 +374,7 @@ class _EditAuctionViewState extends State<EditAuctionView> {
                         },
                         imageUrl: _items[index].previewImages.isNotEmpty
                             ? _items[index].previewImages.first
-                            : detail.image ?? widget.args.item.imageUrl,
+                            : displayDetail.image ?? widget.args.item.imageUrl,
                       ),
                     ),
                   ),
@@ -409,10 +411,36 @@ class _EditAuctionViewState extends State<EditAuctionView> {
               ),
             ),
           ),
-        );
+        ),
+      ),
+    );
       },
     );
   }
+
+  static final _dummyDetail = AuctionDetailModel(
+    id: 0,
+    title: 'Loading Auction Title...',
+    description: 'Loading description...',
+    image: null,
+    startingPrice: 0,
+    bidIncrement: 0,
+    startDate: DateTime.now(),
+    endDate: DateTime.now().add(Duration(days: 1)),
+    items: [
+      AuctionDetailItemModel(
+        id: 0,
+        title: 'Loading Item Title...',
+        description: 'Loading item description...',
+        count: 1,
+        condition: 0,
+        warrantyInfo: 'Loading warranty...',
+        categoryId: 0,
+        attributes: [],
+        images: [],
+      ),
+    ],
+  );
 
   String _cleanError(Object error) {
     final message = error.toString();

@@ -14,6 +14,7 @@ import 'package:safqaseller/features/auction/view_model/auction_detail/auction_d
 import 'package:safqaseller/features/auction/view_model/auction_detail/auction_detail_view_model_state.dart';
 import 'package:safqaseller/features/history/model/models/history_models.dart';
 import 'package:safqaseller/generated/l10n.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class LotDetailView extends StatefulWidget {
   const LotDetailView({super.key, required this.args});
@@ -101,14 +102,10 @@ class _LotDetailViewState extends State<LotDetailView> {
           _ => cubit.detail,
         };
 
-        if (state is AuctionDetailLoading && detail == null) {
-          return Scaffold(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
+        final isLoading = state is AuctionDetailLoading;
+        final displayDetail = detail ?? _dummyDetail;
 
-        if (detail == null) {
+        if (!isLoading && detail == null) {
           return Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             appBar: AppBar(
@@ -148,11 +145,13 @@ class _LotDetailViewState extends State<LotDetailView> {
         }
 
         final isDeleting = state is AuctionDetailDeleting;
-        final displayPrice = detail.startingPrice > 0
-            ? detail.startingPrice
+        final displayPrice = displayDetail.startingPrice > 0
+            ? displayDetail.startingPrice
             : item.price;
 
-        return Scaffold(
+        return Skeletonizer(
+          enabled: isLoading,
+          child: Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -217,62 +216,68 @@ class _LotDetailViewState extends State<LotDetailView> {
             child: Column(
               children: [
                 Expanded(
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 16.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          detail.title,
-                          style: TextStyles.semiBold15(
-                            context,
-                          ).copyWith(color: Theme.of(context).colorScheme.onSurface),
-                        ),
-                        SizedBox(height: 8.h),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _DateInfo(
-                                title: s.auctionStartsIn,
-                                value: _formatDate(context, detail.startDate),
+                  child: RefreshIndicator(
+                    onRefresh: () => context.read<AuctionDetailViewModel>().loadAuction(
+                      widget.args.item.auctionId,
+                    ),
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 16.h),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            displayDetail.title,
+                            style: TextStyles.semiBold15(
+                              context,
+                            ).copyWith(color: Theme.of(context).colorScheme.onSurface),
+                          ),
+                          SizedBox(height: 8.h),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _DateInfo(
+                                  title: s.auctionStartsIn,
+                                  value: _formatDate(context, displayDetail.startDate),
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Expanded(
-                              child: _DateInfo(
-                                title: s.auctionEndsIn,
-                                value: _formatDate(context, detail.endDate),
+                              SizedBox(width: 10.w),
+                              Expanded(
+                                child: _DateInfo(
+                                  title: s.auctionEndsIn,
+                                  value: _formatDate(context, displayDetail.endDate),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 12.h),
-                        Text(
-                          s.auctionLotDescription,
-                          style: TextStyles.semiBold16(
-                            context,
-                          ).copyWith(color: Theme.of(context).colorScheme.onSurface),
-                        ),
-                        SizedBox(height: 6.h),
-                        Text(
-                          detail.description,
-                          style: TextStyles.regular12(
-                            context,
-                          ).copyWith(color: const Color(0xFF666666)),
-                        ),
-                        SizedBox(height: 12.h),
-                        ...List.generate(
-                          detail.items.length,
-                          (index) => Padding(
-                            padding: EdgeInsets.only(bottom: 12.h),
-                            child: _AuctionItemTile(
-                              index: index + 1,
-                              item: detail.items[index],
-                              auctionImage: detail.image ?? item.imageUrl,
+                            ],
+                          ),
+                          SizedBox(height: 12.h),
+                          Text(
+                            s.auctionLotDescription,
+                            style: TextStyles.semiBold16(
+                              context,
+                            ).copyWith(color: Theme.of(context).colorScheme.onSurface),
+                          ),
+                          SizedBox(height: 6.h),
+                          Text(
+                            displayDetail.description,
+                            style: TextStyles.regular12(
+                              context,
+                            ).copyWith(color: const Color(0xFF666666)),
+                          ),
+                          SizedBox(height: 12.h),
+                          ...List.generate(
+                            displayDetail.items.length,
+                            (index) => Padding(
+                              padding: EdgeInsets.only(bottom: 12.h),
+                              child: _AuctionItemTile(
+                                index: index + 1,
+                                item: displayDetail.items[index],
+                                auctionImage: displayDetail.image ?? item.imageUrl,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -334,10 +339,34 @@ class _LotDetailViewState extends State<LotDetailView> {
               ],
             ),
           ),
-        );
+        ));
       },
     );
   }
+
+  static final _dummyDetail = AuctionDetailModel(
+    id: 0,
+    title: 'Loading Auction Title...',
+    description: 'Loading description...',
+    image: null,
+    startingPrice: 0,
+    bidIncrement: 0,
+    startDate: DateTime.now(),
+    endDate: DateTime.now().add(Duration(days: 1)),
+    items: [
+      AuctionDetailItemModel(
+        id: 0,
+        title: 'Loading Item Title...',
+        description: 'Loading item description...',
+        count: 1,
+        condition: 0,
+        warrantyInfo: 'Loading warranty...',
+        categoryId: 0,
+        attributes: [],
+        images: [],
+      ),
+    ],
+  );
 
   String _formatLotNumber(BuildContext context, String raw) {
     final lotLabel = S.of(context).historyLotLabel;
