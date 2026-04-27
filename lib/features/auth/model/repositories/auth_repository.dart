@@ -107,7 +107,7 @@ class AuthRepository {
 
   Future<void> resendConfirmationOtp(String email) async {
     final r = await dioHelper.postData(
-      endPoint: 'Auth/resend',
+      endPoint: 'Auth/resendRegistrationOtp',
       data: {'email': email},
     );
     _requireSuccess(r);

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -197,11 +197,14 @@ class _PriceDurationViewState extends State<PriceDurationView> {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: buildAppBar(context: context, title: s.auctionPriceDuration),
           body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 16.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                   _SectionLabel(label: s.historyStartingPrice),
                   SizedBox(height: 6.h),
                   _InputField(
@@ -302,15 +305,20 @@ class _PriceDurationViewState extends State<PriceDurationView> {
                       ],
                     ),
                   ),
-                  const Spacer(),
-                  _PrimaryButton(
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 24.h),
+                  child: _PrimaryButton(
                     label: isSubmitting
                         ? s.auctionPublishing
                         : s.auctionBoostPublish,
                     onTap: isSubmitting ? null : _submitAuction,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         );
@@ -353,7 +361,7 @@ class _DateField extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4.r),
-          borderSide: const BorderSide(color: Color(0xFFE4E4E4)),
+          borderSide: BorderSide(color: Theme.of(context).dividerColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4.r),
@@ -373,7 +381,7 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       label,
-      style: TextStyles.regular12(context).copyWith(color: Colors.black),
+      style: TextStyles.regular12(context).copyWith(color: Theme.of(context).colorScheme.onSurface),
     );
   }
 }
@@ -399,7 +407,7 @@ class _InputField extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 9.h),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4.r),
-          borderSide: const BorderSide(color: Color(0xFFE4E4E4)),
+          borderSide: BorderSide(color: Theme.of(context).dividerColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4.r),
@@ -430,10 +438,10 @@ class _ChoiceChipBox extends StatelessWidget {
         height: 32.h,
         padding: EdgeInsets.symmetric(horizontal: 8.w),
         decoration: BoxDecoration(
-          color: selected ? Theme.of(context).colorScheme.secondary : Colors.white,
+          color: selected ? Theme.of(context).colorScheme.secondary : Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(4.r),
           border: Border.all(
-            color: selected ? Theme.of(context).colorScheme.primary : Color(0xFFE4E4E4),
+            color: selected ? Theme.of(context).colorScheme.primary : Theme.of(context).dividerColor,
           ),
         ),
         child: Text(
