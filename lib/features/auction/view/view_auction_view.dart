@@ -112,7 +112,7 @@ class _ViewAuctionViewState extends State<ViewAuctionView> {
         if (state is AuctionDetailFailure && detail == null) {
           return Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            appBar: _buildAppBar(context, null, isDeleting: false, isLoading: false),
+            appBar: _buildAppBar(context, null, isDeleting: false, isLoading: false, currentItemIndex: 0, totalItems: 0),
             body: Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -167,32 +167,35 @@ class _ViewAuctionViewState extends State<ViewAuctionView> {
           enabled: isLoading,
           child: Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            extendBodyBehindAppBar: true,
             appBar: _buildAppBar(
               context,
               detail,
               isDeleting: isDeleting,
               isLoading: isLoading,
+              currentItemIndex: _currentItemIndex,
+              totalItems: displayDetail.items.length,
             ),
-            body: SafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: RefreshIndicator(
-                      color: scheme.primary,
-                      onRefresh: () => cubit.loadAuction(widget.args.auctionId),
-                      child: SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // ── Image carousel ─────────────────────────────
-                            _ImageCarousel(
-                              images: displayImages,
-                              currentIndex: _currentImageIndex,
-                              pageController: _pageController,
-                              onPageChanged: (i) =>
-                                  setState(() => _currentImageIndex = i),
-                            ),
+            body: Column(
+              children: [
+                Expanded(
+                  child: RefreshIndicator(
+                    color: scheme.primary,
+                    onRefresh: () => cubit.loadAuction(widget.args.auctionId),
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // ── Image carousel (full-bleed hero) ───────────────
+                          _ImageCarousel(
+                            images: displayImages,
+                            currentIndex: _currentImageIndex,
+                            pageController: _pageController,
+                            onPageChanged: (i) =>
+                                setState(() => _currentImageIndex = i),
+                            height: MediaQuery.of(context).size.height * 0.47,
+                          ),
 
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -328,7 +331,6 @@ class _ViewAuctionViewState extends State<ViewAuctionView> {
                 ],
               ),
             ),
-          ),
         );
       },
     );
@@ -339,41 +341,44 @@ class _ViewAuctionViewState extends State<ViewAuctionView> {
     AuctionDetailModel? detail, {
     required bool isDeleting,
     required bool isLoading,
+    required int currentItemIndex,
+    required int totalItems,
   }) {
     final s = S.of(context);
     final scheme = Theme.of(context).colorScheme;
-    final title = widget.args.auctionTitle ??
-        (detail != null ? '#${widget.args.auctionId}' : '#${widget.args.auctionId}');
 
-    // Only show Edit/Delete for auctions with upcoming status (startDate in future)
+    // Title: "Item(1)" / "Item(2)" etc. — falls back to auction title when no items
+    final itemLabel = totalItems > 0
+        ? '${s.auctionItem}(${currentItemIndex + 1})'
+        : (widget.args.auctionTitle ?? '#${widget.args.auctionId}');
+
+    // Only show Edit/Delete for upcoming auctions (startDate in future)
     final now = DateTime.now();
     final isUpcoming = detail?.startDate != null && detail!.startDate!.isAfter(now);
     final canEdit = isUpcoming && !isLoading;
 
     return AppBar(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
+      centerTitle: true,
       leading: IconButton(
         onPressed: () => Navigator.pop(context),
         icon: Icon(
           Icons.arrow_back_ios_new,
           color: scheme.primary,
-          size: 20.sp,
+          size: 18.sp,
         ),
       ),
-      titleSpacing: 0,
       title: Text(
-        title,
+        itemLabel,
         style: TextStyles.semiBold16(context).copyWith(color: scheme.primary),
         overflow: TextOverflow.ellipsis,
       ),
       actions: [
         if (canEdit) ...[
-          GestureDetector(
-            onTap: () async {
-              // Build a minimal LotDetailRouteArgs with a dummy HistoryItem
-              // carrying the auction id so EditAuctionView can function.
+          IconButton(
+            onPressed: () async {
               final fakeItem = HistoryItem(
                 id: detail.id > 0 ? detail.id : widget.args.auctionId,
                 auctionId: detail.id > 0 ? detail.id : widget.args.auctionId,
@@ -398,26 +403,18 @@ class _ViewAuctionViewState extends State<ViewAuctionView> {
                 );
               }
             },
-            child: Text(
-              s.kEdit,
-              style: TextStyles.regular14(context).copyWith(
-                color: scheme.primary,
-                decoration: TextDecoration.underline,
-              ),
-            ),
+            icon: Icon(Icons.edit_outlined, color: scheme.primary, size: 22.sp),
+            tooltip: s.kEdit,
           ),
-          SizedBox(width: 16.w),
-          GestureDetector(
-            onTap: isDeleting ? null : () => _confirmDelete(detail),
-            child: Text(
-              s.auctionDeleteButton,
-              style: TextStyles.regular14(context).copyWith(
-                color: Colors.red,
-                decoration: TextDecoration.underline,
-              ),
+          IconButton(
+            onPressed: isDeleting ? null : () => _confirmDelete(detail),
+            icon: Icon(
+              Icons.delete_outline,
+              color: isDeleting ? scheme.outline : Colors.red,
+              size: 22.sp,
             ),
+            tooltip: s.auctionDeleteButton,
           ),
-          SizedBox(width: 16.w),
         ],
       ],
     );
@@ -469,25 +466,28 @@ class _ImageCarousel extends StatelessWidget {
     required this.currentIndex,
     required this.pageController,
     required this.onPageChanged,
+    this.height,
   });
 
   final List<String> images;
   final int currentIndex;
   final PageController pageController;
   final ValueChanged<int> onPageChanged;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
+    final h = height ?? MediaQuery.of(context).size.height * 0.42;
     final displayImages = images.isNotEmpty ? images : <String>[];
     final total = displayImages.length;
 
     return Stack(
       children: [
         SizedBox(
-          height: 280.h,
+          height: h,
           width: double.infinity,
           child: total == 0
-              ? _AuctionImage(imageSource: null, width: double.infinity, height: 280.h)
+              ? _AuctionImage(imageSource: null, width: double.infinity, height: h)
               : PageView.builder(
                   controller: pageController,
                   onPageChanged: onPageChanged,
@@ -495,21 +495,35 @@ class _ImageCarousel extends StatelessWidget {
                   itemBuilder: (_, i) => _AuctionImage(
                     imageSource: displayImages[i],
                     width: double.infinity,
-                    height: 280.h,
+                    height: h,
                   ),
                 ),
         ),
+        // Subtle top gradient so the floating AppBar items stay readable
+        Positioned(
+          top: 0, left: 0, right: 0,
+          child: Container(
+            height: 100,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.black26, Colors.transparent],
+              ),
+            ),
+          ),
+        ),
         if (total > 0)
           Positioned(
-            bottom: 10.h,
+            bottom: 14.h,
             left: 0,
             right: 0,
             child: Center(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
                 decoration: BoxDecoration(
                   color: Colors.black54,
-                  borderRadius: BorderRadius.circular(16.r),
+                  borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
