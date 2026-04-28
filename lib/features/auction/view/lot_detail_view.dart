@@ -475,6 +475,7 @@ class _AuctionItemTile extends StatelessWidget {
             arguments: ViewAuctionRouteArgs(
               auctionId: auctionId,
               auctionTitle: auctionTitle,
+              initialItemIndex: index > 0 ? index - 1 : 0,
             ),
           ),
           child: Container(

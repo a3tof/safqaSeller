@@ -18,6 +18,7 @@ class HistoryViewModel extends Cubit<HistoryState> {
         pageSize: _pageSize,
         status: status,
       );
+      if (isClosed) return;
       emit(
         HistorySuccess(
           items: response.items,
@@ -29,6 +30,7 @@ class HistoryViewModel extends Cubit<HistoryState> {
         ),
       );
     } catch (e) {
+      if (isClosed) return;
       emit(HistoryFailure(_clean(e)));
     }
   }

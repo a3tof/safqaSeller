@@ -38,6 +38,7 @@ class _ViewAuctionViewState extends State<ViewAuctionView> {
   @override
   void initState() {
     super.initState();
+    _currentItemIndex = widget.args.initialItemIndex;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AuctionDetailViewModel>().loadAuction(widget.args.auctionId);
     });
@@ -851,7 +852,9 @@ class _ItemNavBar extends StatelessWidget {
             child: ElevatedButton(
               onPressed: hasNext ? onNext : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: hasNext ? scheme.primary : const Color(0xFFCCCCCC),
+                backgroundColor: hasNext
+                    ? scheme.primary
+                    : const Color(0xFFCCCCCC),
                 foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
@@ -861,9 +864,9 @@ class _ItemNavBar extends StatelessWidget {
               ),
               child: Text(
                 s.auctionNextItem,
-                style: TextStyles.semiBold14(context).copyWith(
-                  color: Colors.white,
-                ),
+                style: TextStyles.semiBold14(
+                  context,
+                ).copyWith(color: Colors.white),
               ),
             ),
           ),
