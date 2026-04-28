@@ -1398,5 +1398,13 @@
   "withdrawalEmailMissing": "We couldn't find your account email. Please refresh your profile and try again.",
   "@withdrawalEmailMissing": {
     "description": "Shown when email is missing before starting withdrawal verification"
+  },
+  "auctionPreviousItem": "Previous item",
+  "@auctionPreviousItem": {
+    "description": "Navigate to previous item in view auction screen"
+  },
+  "auctionNextItem": "Next item",
+  "@auctionNextItem": {
+    "description": "Navigate to next item in view auction screen"
   }
 }

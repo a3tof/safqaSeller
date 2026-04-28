@@ -12,6 +12,8 @@ import 'package:safqaseller/features/auction/view/edit_auction_view.dart';
 import 'package:safqaseller/features/auction/view/lot_detail_route_args.dart';
 import 'package:safqaseller/features/auction/view_model/auction_detail/auction_detail_view_model.dart';
 import 'package:safqaseller/features/auction/view_model/auction_detail/auction_detail_view_model_state.dart';
+import 'package:safqaseller/features/auction/view/view_auction_route_args.dart';
+import 'package:safqaseller/features/auction/view/view_auction_view.dart';
 import 'package:safqaseller/features/history/model/models/history_models.dart';
 import 'package:safqaseller/generated/l10n.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -273,6 +275,8 @@ class _LotDetailViewState extends State<LotDetailView> {
                                 index: index + 1,
                                 item: displayDetail.items[index],
                                 auctionImage: displayDetail.image ?? item.imageUrl,
+                                auctionId: item.auctionId,
+                                auctionTitle: displayDetail.title,
                               ),
                             ),
                           ),
@@ -443,11 +447,15 @@ class _AuctionItemTile extends StatelessWidget {
     required this.index,
     required this.item,
     required this.auctionImage,
+    required this.auctionId,
+    required this.auctionTitle,
   });
 
   final int index;
   final AuctionDetailItemModel item;
   final String? auctionImage;
+  final int auctionId;
+  final String auctionTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -460,75 +468,85 @@ class _AuctionItemTile extends StatelessWidget {
           style: TextStyles.regular12(context).copyWith(color: Theme.of(context).colorScheme.onSurface),
         ),
         SizedBox(height: 6.h),
-        Container(
-          padding: EdgeInsets.all(8.w),
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(10.r),
-            border: Border.all(color: const Color(0xFFE6E6E6)),
+        GestureDetector(
+          onTap: () => Navigator.pushNamed(
+            context,
+            ViewAuctionView.routeName,
+            arguments: ViewAuctionRouteArgs(
+              auctionId: auctionId,
+              auctionTitle: auctionTitle,
+            ),
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.r),
-                child: _AuctionPreviewImage(
-                  imageUrl: imageUrl,
-                  width: 70.w,
-                  height: 64.h,
+          child: Container(
+            padding: EdgeInsets.all(8.w),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(10.r),
+              border: Border.all(color: const Color(0xFFE6E6E6)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: _AuctionPreviewImage(
+                    imageUrl: imageUrl,
+                    width: 70.w,
+                    height: 64.h,
+                  ),
                 ),
-              ),
-              SizedBox(width: 10.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.title,
-                      style: TextStyles.semiBold13(
-                        context,
-                      ).copyWith(color: Theme.of(context).colorScheme.onSurface),
-                    ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      _conditionLabel(context, item.condition),
-                      style: TextStyles.regular11(
-                        context,
-                      ).copyWith(color: const Color(0xFF919191)),
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      '${S.of(context).auctionCount}: ${item.count}',
-                      style: TextStyles.regular11(
-                        context,
-                      ).copyWith(color: const Color(0xFF919191)),
-                    ),
-                    if (item.warrantyInfo.trim().isNotEmpty) ...[
-                      SizedBox(height: 4.h),
+                SizedBox(width: 10.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        item.warrantyInfo,
+                        item.title,
+                        style: TextStyles.semiBold13(
+                          context,
+                        ).copyWith(color: Theme.of(context).colorScheme.onSurface),
+                      ),
+                      SizedBox(height: 2.h),
+                      Text(
+                        _conditionLabel(context, item.condition),
                         style: TextStyles.regular11(
                           context,
                         ).copyWith(color: const Color(0xFF919191)),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ],
-                    if (item.description.trim().isNotEmpty) ...[
                       SizedBox(height: 4.h),
                       Text(
-                        item.description,
+                        '${S.of(context).auctionCount}: ${item.count}',
                         style: TextStyles.regular11(
                           context,
-                        ).copyWith(color: const Color(0xFF666666)),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                        ).copyWith(color: const Color(0xFF919191)),
                       ),
+                      if (item.warrantyInfo.trim().isNotEmpty) ...[
+                        SizedBox(height: 4.h),
+                        Text(
+                          item.warrantyInfo,
+                          style: TextStyles.regular11(
+                            context,
+                          ).copyWith(color: const Color(0xFF919191)),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                      if (item.description.trim().isNotEmpty) ...[
+                        SizedBox(height: 4.h),
+                        Text(
+                          item.description,
+                          style: TextStyles.regular11(
+                            context,
+                          ).copyWith(color: const Color(0xFF666666)),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

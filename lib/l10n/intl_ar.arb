@@ -1398,5 +1398,13 @@
   "withdrawalEmailMissing": "تعذر العثور على البريد الإلكتروني للحساب. يرجى تحديث الملف الشخصي ثم المحاولة مرة أخرى.",
   "@withdrawalEmailMissing": {
     "description": "Shown when email is missing before starting withdrawal verification"
+  },
+  "auctionPreviousItem": "العنصر السابق",
+  "@auctionPreviousItem": {
+    "description": "Navigate to previous item in view auction screen"
+  },
+  "auctionNextItem": "العنصر التالي",
+  "@auctionNextItem": {
+    "description": "Navigate to next item in view auction screen"
   }
 }

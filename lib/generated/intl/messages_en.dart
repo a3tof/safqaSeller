@@ -623,6 +623,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "Enter the verification code sent to your email to continue your withdrawal."),
         "walletBalance": MessageLookupByLibrary.simpleMessage("Wallet balance"),
         "withdrawalEmailMissing": MessageLookupByLibrary.simpleMessage(
-            "We couldn\'t find your account email. Please refresh your profile and try again.")
+            "We couldn\'t find your account email. Please refresh your profile and try again."),
+        "auctionPreviousItem":
+            MessageLookupByLibrary.simpleMessage("Previous item"),
+        "auctionNextItem": MessageLookupByLibrary.simpleMessage("Next item")
       };
 }

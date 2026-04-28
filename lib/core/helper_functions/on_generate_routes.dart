@@ -10,6 +10,8 @@ import 'package:safqaseller/features/auction/view/lot_auction_view.dart';
 import 'package:safqaseller/features/auction/view/edit_auction_view.dart';
 import 'package:safqaseller/features/auction/view/lot_detail_route_args.dart';
 import 'package:safqaseller/features/auction/view/lot_detail_view.dart';
+import 'package:safqaseller/features/auction/view/view_auction_route_args.dart';
+import 'package:safqaseller/features/auction/view/view_auction_view.dart';
 import 'package:safqaseller/features/auction/view_model/auction_detail/auction_detail_view_model.dart';
 import 'package:safqaseller/features/auction/view/price_duration_view.dart';
 import 'package:safqaseller/features/auction/view_model/create_auction/create_auction_view_model.dart';
@@ -130,6 +132,17 @@ Route<dynamic> onGenerateRoutes(RouteSettings settings) {
         builder: (_) => BlocProvider(
           create: (_) => getIt<CreateAuctionViewModel>(),
           child: const PriceDurationView(),
+        ),
+      );
+    case ViewAuctionView.routeName:
+      final args = settings.arguments as ViewAuctionRouteArgs?;
+      if (args == null) {
+        return MaterialPageRoute(builder: (_) => const HistoryView());
+      }
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => getIt<AuctionDetailViewModel>(),
+          child: ViewAuctionView(args: args),
         ),
       );
     case LotDetailView.routeName:

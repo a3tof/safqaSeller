@@ -617,6 +617,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "أدخل رمز التحقق المرسل إلى بريدك الإلكتروني للمتابعة في عملية السحب."),
         "walletBalance": MessageLookupByLibrary.simpleMessage("رصيد المحفظة"),
         "withdrawalEmailMissing": MessageLookupByLibrary.simpleMessage(
-            "تعذر العثور على البريد الإلكتروني للحساب. يرجى تحديث الملف الشخصي ثم المحاولة مرة أخرى.")
+            "تعذر العثور على البريد الإلكتروني للحساب. يرجى تحديث الملف الشخصي ثم المحاولة مرة أخرى."),
+        "auctionPreviousItem":
+            MessageLookupByLibrary.simpleMessage("العنصر السابق"),
+        "auctionNextItem": MessageLookupByLibrary.simpleMessage("العنصر التالي")
       };
 }

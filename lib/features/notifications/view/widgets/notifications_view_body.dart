@@ -329,7 +329,13 @@ class _SelectionToolbar extends StatelessWidget {
         children: [
           IconButton(
             onPressed: onDismiss,
-            icon: Icon(Icons.close_rounded, color: scheme.error, size: 28.sp),
+            icon: Icon(
+              selectedCount > 0
+                  ? Icons.delete_outline_rounded
+                  : Icons.close_rounded,
+              color: scheme.error,
+              size: 28.sp,
+            ),
           ),
           Text(
             '$selectedCount',

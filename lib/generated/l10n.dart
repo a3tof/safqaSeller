@@ -3453,6 +3453,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Previous item`
+  String get auctionPreviousItem {
+    return Intl.message(
+      'Previous item',
+      name: 'auctionPreviousItem',
+      desc: 'Navigate to previous item in view auction screen',
+      args: [],
+    );
+  }
+
+  /// `Next item`
+  String get auctionNextItem {
+    return Intl.message(
+      'Next item',
+      name: 'auctionNextItem',
+      desc: 'Navigate to next item in view auction screen',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
