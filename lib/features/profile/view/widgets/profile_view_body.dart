@@ -155,7 +155,10 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                               ),
                               child: Text(
                                 actions[index].label,
-                                style: TextStyles.bold18(context).copyWith(
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyles.bold16(context).copyWith(
                                   color: actions[index].foregroundColor,
                                 ),
                               ),
