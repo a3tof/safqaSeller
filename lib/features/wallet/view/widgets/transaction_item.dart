@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
+import 'package:safqaseller/core/utils/currency_formatter.dart';
 import 'package:safqaseller/features/wallet/model/models/wallet_models.dart';
 
 /// Single row in the transaction history list.
@@ -33,14 +34,7 @@ class TransactionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context).toLanguageTag();
     final dateStr = DateFormat('d MMM, yyyy', locale).format(transaction.date);
-    final amountFormatter = NumberFormat.currency(
-      locale: locale,
-      symbol: 'EGP ',
-      decimalDigits: transaction.amount == transaction.amount.roundToDouble()
-          ? 0
-          : 2,
-    );
-    final amountStr = amountFormatter.format(transaction.amount);
+    final amountStr = CurrencyFormatter.format(transaction.amount);
 
     return Container(
       width: double.infinity,

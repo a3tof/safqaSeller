@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:safqaseller/core/utils/app_images.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
+import 'package:safqaseller/core/utils/currency_formatter.dart';
 import 'package:safqaseller/features/history/model/models/history_models.dart';
 import 'package:safqaseller/generated/l10n.dart';
 
@@ -231,7 +232,7 @@ class HistoryCard extends StatelessWidget {
   }
 
   String _formatPrice(double value) {
-    return '\$${NumberFormat('#,##0.##').format(value)}';
+    return CurrencyFormatter.format(value);
   }
 
   String _formatLotNumber(BuildContext context, String raw) {

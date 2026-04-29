@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
+import 'package:safqaseller/core/utils/currency_formatter.dart';
 import 'package:safqaseller/core/widgets/custom_app_bar.dart';
 import 'package:safqaseller/features/wallet/view/deposit_view.dart';
 import 'package:safqaseller/features/wallet/view/saved_cards_view.dart';
@@ -33,17 +34,7 @@ class _WalletViewBodyState extends State<WalletViewBody> {
   }
 
   String _formatBalance(double balance) {
-    if (!_isBalanceVisible) {
-      return 'EGP ••••';
-    }
-
-    final locale = Localizations.localeOf(context).toLanguageTag();
-    final formatter = NumberFormat.currency(
-      locale: locale,
-      symbol: 'EGP ',
-      decimalDigits: balance == balance.roundToDouble() ? 0 : 2,
-    );
-    return formatter.format(balance);
+    return CurrencyFormatter.format(balance, obscure: !_isBalanceVisible);
   }
 
   @override

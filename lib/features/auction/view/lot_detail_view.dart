@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:safqaseller/core/utils/app_images.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
+import 'package:safqaseller/core/utils/currency_formatter.dart';
 import 'package:safqaseller/features/auction/model/models/auction_detail_model.dart';
 import 'package:safqaseller/features/auction/view/edit_auction_view.dart';
 import 'package:safqaseller/features/auction/view/lot_detail_route_args.dart';
@@ -401,7 +402,7 @@ class _LotDetailViewState extends State<LotDetailView> {
   }
 
   String _formatPrice(double value) {
-    return '\$${NumberFormat('#,##0.##').format(value)}';
+    return CurrencyFormatter.format(value);
   }
 }
 

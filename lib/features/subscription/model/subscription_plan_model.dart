@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safqaseller/core/utils/currency_formatter.dart';
 import 'package:safqaseller/generated/l10n.dart';
 
 class SubscriptionPlanModel {
@@ -19,7 +20,7 @@ class SubscriptionPlanModel {
   static List<SubscriptionPlanModel> plans(BuildContext context) => [
     SubscriptionPlanModel(
       name: S.of(context).kBasic,
-      price: '99\$',
+      price: CurrencyFormatter.format(99),
       features: [
         S.of(context).kAppearsAtTheTop24,
         S.of(context).kFeaturedBadge,
@@ -30,7 +31,7 @@ class SubscriptionPlanModel {
     ),
     SubscriptionPlanModel(
       name: S.of(context).kPremium,
-      price: '499\$',
+      price: CurrencyFormatter.format(499),
       features: [
         S.of(context).kAppearsAtTheTop3D,
         S.of(context).kPushNotifications,
@@ -42,7 +43,7 @@ class SubscriptionPlanModel {
     ),
     SubscriptionPlanModel(
       name: S.of(context).kElite,
-      price: '999\$',
+      price: CurrencyFormatter.format(999),
       features: [
         S.of(context).kPinnedAsTopBanner,
         S.of(context).kInstantPushNotific,

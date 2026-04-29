@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/core/service_locator.dart';
 import 'package:safqaseller/core/utils/app_text_styles.dart';
+import 'package:safqaseller/core/utils/currency_formatter.dart';
 import 'package:safqaseller/core/widgets/custom_app_bar.dart';
 import 'package:safqaseller/features/wallet/model/models/wallet_models.dart';
 import 'package:safqaseller/features/wallet/model/repositories/wallet_repository.dart';
@@ -299,7 +300,7 @@ class _DepositViewBodyState extends State<DepositViewBody> {
                                     fontSize: 20.sp,
                                     color: Colors.grey[400],
                                   ),
-                                  prefixText: 'EGP ',
+                                  prefixText: '${CurrencyFormatter.getSymbol()} ',
                                   prefixStyle: TextStyle(
                                     fontSize: 20.sp,
                                     fontWeight: FontWeight.w500,

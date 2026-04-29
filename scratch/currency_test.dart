@@ -1,0 +1,1 @@
+import 'package:intl/intl.dart'; void main() { print(NumberFormat.simpleCurrency(locale: 'ar_EG', name: 'SAR').format(100)); print(NumberFormat.simpleCurrency(locale: 'en_US', name: 'EGP').format(100)); }
