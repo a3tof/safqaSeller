@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:safqaseller/core/services/notification_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:safqaseller/core/service_locator.dart';
 import 'package:safqaseller/core/storage/cache_helper.dart';
 import 'package:safqaseller/core/storage/cache_keys.dart';
@@ -429,7 +430,16 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                   ProfileMenuItem(
                     icon: Icons.bar_chart_outlined,
                     label: S.of(context).kStatistics,
-                    onTap: () {},
+                    onTap: () async {
+                      try {
+                        await launchUrl(
+                          Uri.parse('https://safqa-navy.vercel.app/seller-statistics'),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      } catch (e) {
+                        debugPrint('Could not launch URL: $e');
+                      }
+                    },
                   ),
                   SizedBox(height: 12.h),
                   ProfileMenuItem(
@@ -471,10 +481,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                               MediaQuery.platformBrightnessOf(context) == Brightness.dark);
                       return ProfileMenuItem(
                         icon: isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
-                        label: S.of(context).kChangeLanguage.replaceAll(
-                          S.of(context).kChangeLanguage,
-                          isDark ? 'Dark Mode' : 'Light Mode',
-                        ),
+                        label: isDark ? S.of(context).kDarkMode : S.of(context).kLightMode,
                         trailing: IgnorePointer(
                           child: Switch.adaptive(
                             value: isDark,

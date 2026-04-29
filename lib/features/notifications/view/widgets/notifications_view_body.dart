@@ -124,101 +124,114 @@ class _NotificationsViewBodyState extends State<NotificationsViewBody> {
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: _buildAppBar(context, scheme, isEnglish),
-        body: BlocBuilder<NotificationsViewModel, NotificationsState>(
-          builder: (context, state) {
-            if (state is NotificationsLoading) {
-              return Skeletonizer(
-                enabled: true,
-                child: _NotificationsList(
-                  notifications: List.generate(
-                    6,
-                    (index) => NotificationModel(
-                      id: index,
-                      title: 'Loading Title for Skeleton',
-                      message: 'Loading Message for Skeletonizer',
-                      timeAgo: 'Now',
-                      type: NotificationType.newAuction,
-                      isRead: true,
+        body: RefreshIndicator(
+          onRefresh: _loadNotifications,
+          child: BlocBuilder<NotificationsViewModel, NotificationsState>(
+            builder: (context, state) {
+              if (state is NotificationsLoading) {
+                return Skeletonizer(
+                  enabled: true,
+                  child: _NotificationsList(
+                    notifications: List.generate(
+                      6,
+                      (index) => NotificationModel(
+                        id: index,
+                        title: 'Loading Title for Skeleton',
+                        message: 'Loading Message for Skeletonizer',
+                        timeAgo: 'Now',
+                        type: NotificationType.newAuction,
+                        isRead: true,
+                      ),
+                    ),
+                    selectionMode: false,
+                    selectedIds: const {},
+                    onToggleItem: (_) {},
+                    onStartSelectionWith: (_) {},
+                  ),
+                );
+              }
+
+              if (state is NotificationsError) {
+                return LayoutBuilder(
+                  builder: (context, constraints) => SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.error_outline,
+                              size: 48.sp,
+                              color: Theme.of(context).hintColor,
+                            ),
+                            SizedBox(height: 12.h),
+                            Text(
+                              state.message,
+                              style: TextStyles.regular14(
+                                context,
+                              ).copyWith(color: Theme.of(context).hintColor),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 16.h),
+                            TextButton(
+                              onPressed: _loadNotifications,
+                              child: Text(
+                                S.of(context).retry,
+                                style: TextStyles.medium16(
+                                  context,
+                                ).copyWith(color: scheme.primary),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                  selectionMode: false,
-                  selectedIds: const {},
-                  onToggleItem: (_) {},
-                  onStartSelectionWith: (_) {},
-                ),
-              );
-            }
+                );
+              }
 
-            if (state is NotificationsError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              if (state is NotificationsSuccess) {
+                if (state.notifications.isEmpty) {
+                  if (_selectionMode) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) _exitSelection();
+                    });
+                  }
+                  return const _EmptyNotificationsPlaceholder();
+                }
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: 48.sp,
-                      color: Theme.of(context).hintColor,
-                    ),
-                    SizedBox(height: 12.h),
-                    Text(
-                      state.message,
-                      style: TextStyles.regular14(
-                        context,
-                      ).copyWith(color: Theme.of(context).hintColor),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 16.h),
-                    TextButton(
-                      onPressed: _loadNotifications,
-                      child: Text(
-                        S.of(context).retry,
-                        style: TextStyles.medium16(
-                          context,
-                        ).copyWith(color: scheme.primary),
+                    if (_selectionMode)
+                      _SelectionToolbar(
+                        selectedCount: _selectedIds.length,
+                        allSelected:
+                            _selectedIds.length == state.notifications.length,
+                        onDismiss: _onToolbarDismiss,
+                        onToggleSelectAll: () =>
+                            _toggleSelectAll(state.notifications),
+                      ),
+                    Expanded(
+                      child: _NotificationsList(
+                        notifications: state.notifications,
+                        selectionMode: _selectionMode,
+                        selectedIds: _selectedIds,
+                        onToggleItem: _toggleItemSelected,
+                        onStartSelectionWith: _startSelectionWith,
                       ),
                     ),
                   ],
-                ),
-              );
-            }
-
-            if (state is NotificationsSuccess) {
-              if (state.notifications.isEmpty) {
-                if (_selectionMode) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (mounted) _exitSelection();
-                  });
-                }
-                return const _EmptyNotificationsPlaceholder();
+                );
               }
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (_selectionMode)
-                    _SelectionToolbar(
-                      selectedCount: _selectedIds.length,
-                      allSelected:
-                          _selectedIds.length == state.notifications.length,
-                      onDismiss: _onToolbarDismiss,
-                      onToggleSelectAll: () =>
-                          _toggleSelectAll(state.notifications),
-                    ),
-                  Expanded(
-                    child: _NotificationsList(
-                      notifications: state.notifications,
-                      selectionMode: _selectionMode,
-                      selectedIds: _selectedIds,
-                      onToggleItem: _toggleItemSelected,
-                      onStartSelectionWith: _startSelectionWith,
-                    ),
-                  ),
-                ],
-              );
-            }
-
-            return const SizedBox.shrink();
-          },
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );
@@ -391,6 +404,7 @@ class _NotificationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       itemCount: notifications.length,
       separatorBuilder: (_, _) => SizedBox(height: 12.h),
@@ -442,23 +456,31 @@ class _EmptyNotificationsPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.notifications_off_outlined,
-            size: 64.sp,
-            color: Theme.of(context).hintColor.withValues(alpha: 0.45),
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.notifications_off_outlined,
+                  size: 64.sp,
+                  color: Theme.of(context).hintColor.withValues(alpha: 0.45),
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  S.of(context).notificationsEmpty,
+                  style: TextStyles.medium16(
+                    context,
+                  ).copyWith(color: Theme.of(context).hintColor),
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 16.h),
-          Text(
-            S.of(context).notificationsEmpty,
-            style: TextStyles.medium16(
-              context,
-            ).copyWith(color: Theme.of(context).hintColor),
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -101,7 +101,7 @@ class _HomeScreenViewBodyState extends State<HomeScreenViewBody> {
   Future<void> _openStatistics() async {
     try {
       final launched = await launchUrl(
-        Uri.parse('https://www.mohamedhamdy.dev/'),
+        Uri.parse('https://safqa-navy.vercel.app/seller-statistics'),
         mode: LaunchMode.externalApplication,
       );
       if (!launched) return;
